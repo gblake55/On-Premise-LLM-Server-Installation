@@ -1,0 +1,18 @@
+dnf install kernel-devel-matched kernel-headers
+
+subscription-manager repos --enable=rhel-10-for-x86_64-appstream-rpms
+subscription-manager repos --enable=rhel-10-for-x86_64-baseos-rpms
+subscription-manager repos --enable=codeready-builder-for-rhel-10-x86_64-rpms
+dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm
+
+wget https://developer.download.nvidia.com/compute/nvidia-driver/590.48.01/local_installers/nvidia-driver-local-repo-rhel10-590.48.01-1.0-1.x86_64.rpm 
+rpm -i nvidia-driver-local-repo-rhel10-590.48.01-1.0-1.x86_64.rpm
+dnf clean all
+
+dnf -y install nvidia-open-590
+
+wget https://developer.download.nvidia.com/compute/cuda/13.1.1/local_installers/cuda-repo-rhel10-13-1-local-13.1.1_590.48.01-1.x86_64.rpm
+rpm -i cuda-repo-rhel10-13-1-local-13.1.1_590.48.01-1.x86_64.rpm
+dnf clean all
+dnf -y install cuda-toolkit-13-1
+
