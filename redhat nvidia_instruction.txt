@@ -100,6 +100,8 @@ license:        NVIDIA
 rhelversion:    8.7
 srcversion:     EA9C7EF32617E104C8240C4
 
+MORE INFO
+https://chrispaquin.com/2025/03/25/step-by-step-nvidia-driver-cuda-toolkit-container-toolkit-install-for-rhel9/
 
 
 If there is any issue, collect to following logs for and contact Dell Support:
@@ -109,6 +111,7 @@ If there is any issue, collect to following logs for and contact Dell Support:
 Other information to know:
 * If the Red Hat Enterprise Linux installed and booted with graphical.target, you may see a black screen after reboot. The solution is to move /etc/X11/xorg.conf.d/10-nvidia.conf out of the X11 folder and reboot the server.
 * If you want to passthrough the GPU to a VM in KVM with graphical.target, it fails. The solution is to boot hypervisor Red Hat Enterprise Linux into multi-user.target because then graphical.target prevents the NVIDIA driver from unloading before passing through to VM.
+
 
 
 
