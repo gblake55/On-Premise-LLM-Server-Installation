@@ -1,14 +1,14 @@
 Instructions
 This article discusses how to compile and install an NVIDIA driver with DKMS in Red Hat Enterprise Linux that has "Secure Boot" disabled.
 
-Before getting started, ensure that the Secure Boot option is disabled in the BIOS. This is because this installation option is using DKMS to compile the NVIDIA driver from the source code for any current running kernel. There is no vendor signature for the compiled driver. If Secure Boot is enabled, the self-compiled driver fails to load with the error Required key not available. Verify the current status by command mokutil --sb-state in Red Hat Enterprise Linux, and change it in the BIOS by pressing F2 during server POST.
+Before getting started, ensure that theÂ Secure BootÂ option is disabled in the BIOS. This is because this installation option is using DKMS to compile the NVIDIA driver from the source code for any current running kernel. There is no vendor signature for the compiled driver. IfÂ Secure BootÂ is enabled, the self-compiled driver fails to load with the errorÂ Required key not available. Verify the current status by commandÂ mokutil --sb-stateÂ in Red Hat Enterprise Linux, and change it in the BIOS by pressing F2 during server POST.
 
-If Secure Boot is required, or if you prefer a pre-compiled driver, see the following article to install. How to Install NVIDIA Driver Online in Red Hat Enterprise Linux with Secure Boot Enabled.
-1. Download the required driver from the NVIDIA site. 
-a. Select the correct version of Red Hat Enterprise Linux, for example Red Hat Enterprise Linux 8.
-b. Select the correct Compute Unified Device Architecture (CUDA) version required with the CUDA toolkit that you are going to install, for example 12.2.
-c. The download package is an RPM, for example nvidia-driver-local-repo-rhel10-580.126.09.x86_64.rpm
-2. Install the RPM. That creates a local repository.
+IfÂ Secure BootÂ is required, or if you prefer a pre-compiled driver, see the following article to install.Â HowÂ to Install NVIDIA Driver Online in Red Hat Enterprise Linux with Secure Boot Enabled.
+1. DownloadÂ the required driver from theÂ NVIDIAÂ site.Â 
+a. Select the correct version of Red Hat Enterprise Linux, for exampleÂ Red Hat Enterprise Linux 10.
+b. Select the correct Compute Unified Device Architecture (CUDA) version required with the CUDA toolkit that you are going to install, for example 13.1.
+c. The download package isÂ an RPM, for exampleÂ nvidia-driver-local-repo-rhel10-580.126.09.x86_64.rpm
+2. InstallÂ the RPM. That creates a local repository.
 ---> sudo ls
 anaconda-ks.cfg  nvidia-driver-local-repo-rhel10-580.126.09.x86_64.rpm
 ---> sudo yum localinstall ./nvidia-driver-local-repo-rhel10-580.126.09.x86_64.rpm
@@ -19,86 +19,87 @@ Unable to read consumer identity
 
 This system is not registered with an entitlement server. You can use subscription-manager to register.
 
-repo id                              repo name
-my-rhel-87-AppStream-iso             my RHEL 87 AppStream iso
-my-rhel-87-BaseOS-iso                my RHEL 87 BaseOS iso
-my-rhel-extra-rpms                   my RHEL extra rpms
-nvidia-driver-local-rhel10-580.126.09  nvidia-driver-local-rhel10-580.126.09
+repo id Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â repo name
+my-rhel-87-AppStream-iso Â  Â  Â  Â  Â  Â  my RHEL 87 AppStream iso
+my-rhel-87-BaseOS-iso Â  Â  Â  Â  Â  Â  Â  Â my RHEL 87 BaseOS iso
+my-rhel-extra-rpms Â  Â  Â  Â  Â  Â  Â  Â  Â  my RHEL extra rpms
+nvidia-driver-local-rhel10-580.126.09 Â nvidia-driver-local-rhel10-580.126.09
 [root@rhel87 ~]#
-3. Install DKMS. DKMS is not in Red Hat Enterprise Linux. It is available in Extra Packages for Enterprise Linux (EPEL) . For more details about DKMS, see Red Hat article Is DKMS provided in Red Hat Enterprise Linux 
----> sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+3. InstallÂ DKMS. DKMS is not in Red Hat Enterprise Linux. It is available inÂ Extra Packages for Enterprise Linux (EPEL)Â . For more details about DKMS, seeÂ Red HatÂ articleÂ Is DKMS provided in Red Hat Enterprise LinuxÂ 
+---> sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm
 ---> sudo yum install dkms
-a. You may Disable or remove the EPEL if required.
+a. You mayÂ DisableÂ or remove the EPEL if required.
 # to disable epel, edit the following configuration and change to "enabled=0" 
 ---> sudo vi /etc/yum.repos.d/epel.repo 
 
 # to remove the epel 
 ---> sudo yum remove epel-release
-4. Install compilation tools and kernel header. Ensure that the Red Hat subscription is attached.
+4. InstallÂ compilation tools and kernel header. Ensure that the Red Hat subscription is attached.
 ---> sudo yum groupinstall "Development Tools"
 ---> sudo yum install kernel-devel-$(uname -r)
-5. Install the cuda-driver
+5. InstallÂ the cuda-driver
 ---> sudo yum install cuda-driver
 6. Confirm that the driver was installed successfully.
 ---> sudo dkms status
-nvidia/535.54.03, 4.18.0-425.3.1.el8.x86_64, x86_64: installed
+nvidia/580.126.09, 4.18.0-425.3.1.el8.x86_64, x86_64: installed
 [root@rhel87 ~]#
-a. If the status designated above is not installed, but instead it is Added, you may build it.
----> sudo dkms build nvidia/535.54.03
-b. If the designated status is built, you may install it.
----> sudo dkms install nvidia/535.54.03
+a. If the status designated above is notÂ installed,Â but instead it isÂ Added, you may build it.
+---> sudo dkms build nvidia/580.126.09
+b. If the designated status isÂ built,Â you may install it.
+---> sudo dkms install nvidia/580.126.09
 c. If the status failed in building or in installing, review the logs in the following path:
 ---> sudo ls /var/lib/dkms/nvidia/535.54.03/4.18.0-425.3.1.el8.x86_64/x86_64/log/make.log
 [root@rhel87 ~]#
-7. Reboot the server after NVIDIA driver is installed.
+7. RebootÂ the server after NVIDIA driver is installed.
 ---> sudo systemctl reboot
-8. Verify that the driver is up and running.
+8. VerifyÂ thatÂ the driver is up and running.
 ---> sudo lsmod | grep nvidia
-nvidia_drm             73728  0
-nvidia_modeset       1306624  1 nvidia_drm
-nvidia_uvm           1523712  0
-nvidia              56426496  2 nvidia_uvm,nvidia_modeset
-drm_kms_helper        176128  4 qxl,nvidia_drm
-drm                   565248  7 drm_kms_helper,qxl,nvidia,drm_ttm_helper,nvidia_drm,ttm
+nvidia_drm Â  Â  Â  Â  Â  Â  73728 Â 0
+nvidia_modeset Â  Â  Â  1306624 Â 1 nvidia_drm
+nvidia_uvm Â  Â  Â  Â  Â  1523712 Â 0
+nvidia Â  Â  Â  Â  Â  Â  Â 56426496 Â 2 nvidia_uvm,nvidia_modeset
+drm_kms_helper Â  Â  Â  Â 176128 Â 4 qxl,nvidia_drm
+drm Â  Â  Â  Â  Â  Â  Â  Â  Â  565248 Â 7 drm_kms_helper,qxl,nvidia,drm_ttm_helper,nvidia_drm,ttm
 ---> sudo nvidia-smi
 Tue Jul 25 12:00:29 2023
 +---------------------------------------------------------------------------------------+
-| NVIDIA-SMI 535.54.03              Driver Version: 535.54.03    CUDA Version: 12.2     |
+| NVIDIA-SMI 535.54.03 Â  Â  Â  Â  Â  Â  Â Driver Version: 535.54.03 Â  Â CUDA Version: 12.2 Â  Â  |
 |-----------------------------------------+----------------------+----------------------+
-| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
-| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
-|                                         |                      |               MIG M. |
+| GPU Â Name Â  Â  Â  Â  Â  Â  Â  Â  Persistence-M | Bus-Id Â  Â  Â  Â Disp.A | Volatile Uncorr. ECC |
+| Fan Â Temp Â  Perf Â  Â  Â  Â  Â Pwr:Usage/Cap | Â  Â  Â  Â  Memory-Usage | GPU-Util Â Compute M. |
+| Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  | Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â | Â  Â  Â  Â  Â  Â  Â  MIG M. |
 |=========================================+======================+======================|
-|   0  Tesla P100-PCIE-12GB           Off | 00000000:07:00.0 Off |                    0 |
-| N/A   33C    P0              29W / 250W |      0MiB / 12288MiB |      2%      Default |
-|                                         |                      |                  N/A |
+| Â  0 Â Tesla P100-PCIE-12GB Â  Â  Â  Â  Â  Off | 00000000:07:00.0 Off | Â  Â  Â  Â  Â  Â  Â  Â  Â  Â 0 |
+| N/A Â  33C Â  Â P0 Â  Â  Â  Â  Â  Â  Â 29W / 250W | Â  Â  Â 0MiB / 12288MiB | Â  Â  Â 2% Â  Â  Â Default |
+| Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  | Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â | Â  Â  Â  Â  Â  Â  Â  Â  Â N/A |
 +-----------------------------------------+----------------------+----------------------+
 
 +---------------------------------------------------------------------------------------+
-| Processes:                                                                            |
-|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
-|        ID   ID                                                             Usage      |
+| Processes: Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â |
+| Â GPU Â  GI Â  CI Â  Â  Â  Â PID Â  Type Â  Process name Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â GPU Memory |
+| Â  Â  Â  Â ID Â  ID Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Usage Â  Â  Â |
 |=======================================================================================|
-|  No running processes found                                                           |
+| Â No running processes found Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  Â  |
 +---------------------------------------------------------------------------------------+
 ---> sudo modinfo nvidia
-filename:       /lib/modules/4.18.0-425.3.1.el8.x86_64/extra/nvidia.ko.xz
-firmware:       nvidia/535.54.03/gsp_tu10x.bin
-firmware:       nvidia/535.54.03/gsp_ga10x.bin
-alias:          char-major-195-*
-version:        535.54.03
-supported:      external
-license:        NVIDIA
-rhelversion:    8.7
-srcversion:     EA9C7EF32617E104C8240C4
+filename: Â  Â  Â  /lib/modules/4.18.0-425.3.1.el8.x86_64/extra/nvidia.ko.xz
+firmware: Â  Â  Â  nvidia/535.54.03/gsp_tu10x.bin
+firmware: Â  Â  Â  nvidia/535.54.03/gsp_ga10x.bin
+alias: Â  Â  Â  Â  Â char-major-195-*
+version: Â  Â  Â  Â 535.54.03
+supported: Â  Â  Â external
+license: Â  Â  Â  Â NVIDIA
+rhelversion: Â  Â 8.7
+srcversion: Â  Â  EA9C7EF32617E104C8240C4
 
 
 
-If there is any issue, collect to following logs for and contact Dell Support:
+If there is any issue, collect to following logs for and contactÂ Dell Support:
 * sosreport
-* The logs files mentioned above in the built or make if the driver build failed
-* Any /var/log/nvidia-installer.log, or any logs mentioned in the output while installing
+* The logs files mentioned above in the built or make if the driver buildÂ failed
+* AnyÂ /var/log/nvidia-installer.log, or any logs mentioned in the output while installing
 Other information to know:
-* If the Red Hat Enterprise Linux installed and booted with graphical.target, you may see a black screen after reboot. The solution is to move /etc/X11/xorg.conf.d/10-nvidia.conf out of the X11 folder and reboot the server.
-* If you want to passthrough the GPU to a VM in KVM with graphical.target, it fails. The solution is to boot hypervisor Red Hat Enterprise Linux into multi-user.target because then graphical.target prevents the NVIDIA driver from unloading before passing through to VM.
+* If the Red Hat Enterprise Linux installed and booted withÂ graphical.target, you may see a black screen after reboot. The solution is to moveÂ /etc/X11/xorg.conf.d/10-nvidia.confÂ out of the X11 folder and reboot the server.
+* If you want to passthrough the GPU to a VM in KVM with graphical.target, it fails. The solution is to boot hypervisor Red Hat Enterprise Linux intoÂ multi-user.targetÂ because then graphical.target prevents the NVIDIA driver from unloading before passing through to VM.
+
 
