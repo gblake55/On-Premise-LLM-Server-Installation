@@ -1,3 +1,14 @@
+# fix the redhat bug Article "DNF transaction fails with error: "package GPG keys are already installed but they are not correct for this package" in RHEL"
+
+sudo dnf upgrade
+sudo dnf upgrade
+sudo dnf clean all
+dnf updateinfo list RHBA-2025:21017
+dnf repoquery --location redhat-release
+dnf update --advisory=RHBA-2025:21017 --nogpgcheck
+sudo dnf update --advisory=RHBA-2025:21017 --nogpgcheck
+
+
 dnf install kernel-devel-matched kernel-headers
 
 subscription-manager repos --enable=rhel-10-for-x86_64-appstream-rpms
