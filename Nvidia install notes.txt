@@ -27,3 +27,5 @@ rpm -i cuda-repo-rhel10-13-1-local-13.1.1_590.48.01-1.x86_64.rpm
 dnf clean all
 dnf -y install cuda-toolkit-13-1
 
+sudo nano /usr/lib/dracut/dracut.conf.d/99-nvidia.conf 
+sudo dracut -fv --add-drivers " nvidia nvidia-drm nvidia-modeset nvidia-uvm "
