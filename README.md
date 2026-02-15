@@ -50,7 +50,7 @@
 ### 🌟 Key Highlights
 
 - **🏢 Production Deployment**: Running 24/7 in enterprise environment since Q4 2025
-- **👥 Active Users**: 300+ employees across Engineering, Sales, Legal, and Operations
+- **👥 Active Users**: 500+ employees across IT, Sales, Legal, and Operations
 - **🤖 Primary Model**: Mistral-Large-2411 (14B) - Advanced reasoning and instruction-following
 - **🔒 Complete Privacy**: 100% on-premise, zero data leaves corporate network
 - **⚡ High Performance**: Sub-2-second response times, 95th percentile < 5 seconds
@@ -62,9 +62,9 @@
 | Department | Use Case | Daily Queries |
 |------------|----------|---------------|
 | 📊 **Engineering** | Code review, documentation, debugging | ~800 |
-| 📈 **Sales** | Proposal generation, email drafting | ~500 |
-| ⚖️ **Legal** | Contract analysis, policy drafting | ~200 |
-| 📋 **Operations** | Report summarization, data analysis | ~300 |
+| 📈 **Operations** | Proposal generation, email drafting | ~500 |
+| ⚖️ **Finance and HR ** | Contract analysis, policy drafting | ~200 |
+| 📋 **Homeownership** | Report summarization, data analysis | ~300 |
 | 🎨 **Marketing** | Content creation, campaign ideas | ~400 |
 
 **Total Daily Interactions**: ~2,200 queries  
@@ -91,19 +91,6 @@
 
 </div>
 
-### 📈 Usage Trends
-
-```
-Weekly Query Volume (Last 30 Days)
-
-2500 │                                    ╭─╮
-2300 │                          ╭─╮      │ │ ╭─╮
-2100 │                ╭─╮      │ │  ╭─╮ │ │ │ │
-1900 │          ╭─╮  │ │  ╭─╮ │ │  │ │ │ │ │ │
-1700 │    ╭─╮  │ │  │ │  │ │ │ │  │ │ │ │ │ │
-1500 │────┴─┴──┴─┴──┴─┴──┴─┴─┴─┴──┴─┴─┴─┴─┴─┴────
-     Week1  Week2  Week3  Week4  Week5  Week6  Week7
-```
 
 ### 🎯 User Satisfaction
 
@@ -818,50 +805,12 @@ All guides include comprehensive troubleshooting sections:
 
 ### Greg Blake
 
-**Chief Information Officer | AI Infrastructure Architect**
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin)](https://linkedin.com/in/gregblake)
-[![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?style=for-the-badge&logo=twitter)](https://twitter.com/gregblake_ai)
-[![Medium](https://img.shields.io/badge/Medium-Read-000000?style=for-the-badge&logo=medium)](https://medium.com/@gregblake)
+**Chief Information Officer | Vice President of Administration **
 
 </div>
 
-Greg Blake is a renowned artificial intelligence expert and Chief Information Officer with over 15 years of experience building enterprise AI infrastructure. He specializes in democratizing AI access through self-hosted, on-premise solutions that maintain data privacy and regulatory compliance.
+Greg Blake is a renowned artificial intelligence expert and Chief Information Officer at Idaho Housing with over 35 years of experience in Tech. He specializes in democratizing AI access through self-hosted, on-premise solutions that maintain data privacy and regulatory compliance.
 
-### Professional Background
-
-- 🎓 **Education**: MS in Computer Science (AI/ML), Stanford University
-- 💼 **Current Role**: CIO at Fortune 500 Technology Company
-- 🏆 **Recognition**: Featured in Forbes, TechCrunch, and Wired
-- 📚 **Publications**: 12 peer-reviewed papers on distributed AI systems
-- 🎤 **Speaking**: Regular keynote speaker at AI infrastructure conferences
-
-### Expertise
-
-- Enterprise AI Infrastructure Design
-- Large Language Model Deployment
-- GPU Cluster Architecture
-- Hybrid Cloud AI Solutions
-- AI Governance and Compliance
-- Cost Optimization for AI Workloads
-
-### Why I Created This Guide
-
-> "After spending months and hundreds of thousands of dollars on commercial LLM APIs, I realized that for most enterprises, self-hosting is not just viable—it's superior. IDA proves that a $8,000 investment can deliver better performance, complete privacy, and massive cost savings compared to SaaS alternatives. This guide is my gift to the community to democratize access to enterprise-grade AI infrastructure."
->
-> — Greg Blake
-
-### Other Projects
-
-- [**Enterprise RAG Framework**](https://github.com/gregblake/enterprise-rag) - Production RAG system
-- [**GPU Cluster Orchestrator**](https://github.com/gregblake/gpu-cluster) - Multi-node GPU management
-- [**AI Cost Optimizer**](https://github.com/gregblake/ai-cost-optimizer) - Cloud AI cost reduction
-
-### Get in Touch
-
-📧 Email: greg.blake@company.com  
-💬 Discord: [AI Infrastructure Community](https://discord.gg/ai-infrastructure)  
-📺 YouTube: [AI Infrastructure Channel](https://youtube.com/c/gregblake-ai)
 
 ---
 
@@ -935,17 +884,6 @@ If this project helped you deploy your own LLM infrastructure, consider:
 - 📝 **Write a blog post** about your deployment
 - 🎤 **Present at meetups** or conferences
 
-### Success Stories
-
-> "We deployed IDA following this guide and saved $47,000 in our first year. The documentation is phenomenal."  
-> — Sarah Chen, CTO, FinTech Startup
-
-> "Best AI infrastructure guide I've ever read. We went from concept to production in 3 weeks."  
-> — Michael Torres, VP Engineering, Healthcare Company
-
-> "The ROI was immediate. We're processing 10× more queries than we could afford with GPT-4."  
-> — Jennifer Park, Data Science Lead, Legal Firm
-
 ---
 
 <div align="center">
@@ -957,8 +895,6 @@ If this project helped you deploy your own LLM infrastructure, consider:
 [![Get Started](https://img.shields.io/badge/Get_Started-Hardware_Guide-success?style=for-the-badge&logo=rocket)](./LLM-Hardware-Needed.md)
 
 ---
-
-**Built with ❤️ by [Greg Blake](https://linkedin.com/in/gregblake)**
 
 **Powered by**: RHEL 10.1 | NVIDIA RTX | vLLM | Open WebUI | Docker
 
