@@ -6,7 +6,7 @@
 
 ![IDA Logo](https://via.placeholder.com/800x200/1a1a2e/16213e?text=IDA+-+Intelligent+Document+Assistant)
 
-**Production-Proven AI Infrastructure Serving 300+ Employees**
+**Production-Proven AI Infrastructure Serving 500+ Employees**
 
 [![RHEL](https://img.shields.io/badge/RHEL-10.1-EE0000?style=for-the-badge&logo=redhat)](https://www.redhat.com/)
 [![NVIDIA](https://img.shields.io/badge/NVIDIA-RTX_3090_|_5090-76B900?style=for-the-badge&logo=nvidia)](https://www.nvidia.com/)
