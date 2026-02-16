@@ -80,13 +80,13 @@ sudo dnf upgrade
 sudo dnf clean all
 
 # Check for the specific advisory
-dnf updateinfo list RHBA-2025:21017
+sudo dnf updateinfo list RHBA-2025:21017
 
 # Locate the redhat-release package
-dnf repoquery --location redhat-release
+sudo dnf repoquery --location redhat-release
 
 # Update with the advisory, bypassing GPG check
-sudo dnf update --advisory=RHBA-2025:21017 --nogpgcheck
+sudo sudo dnf update --advisory=RHBA-2025:21017 --nogpgcheck
 
 # Run upgrade again to ensure system is up to date
 sudo dnf upgrade
@@ -99,14 +99,14 @@ After this fix, DNF operations should work normally without GPG key errors.
 Enable the necessary Red Hat repositories for kernel development and additional packages.
 
 ```bash
-# Enable AppStream repository
-subscription-manager repos --enable=rhel-10-for-x86_64-appstream-rpms
+# Enable AppStream repository (will take a 5 minutes to respond)
+sudo subscription-manager repos --enable=rhel-10-for-x86_64-appstream-rpms
 
-# Enable BaseOS repository
-subscription-manager repos --enable=rhel-10-for-x86_64-baseos-rpms
+# Enable BaseOS repository (will take a 5 minutes to respond)
+sudo subscription-manager repos --enable=rhel-10-for-x86_64-baseos-rpms
 
-# Enable CodeReady Builder repository (for development packages)
-subscription-manager repos --enable=codeready-builder-for-rhel-10-x86_64-rpms
+# Enable CodeReady Builder repository (for development packages) (will take a 5 minutes to respond)
+sudo subscription-manager repos --enable=codeready-builder-for-rhel-10-x86_64-rpms
 ```
 
 **Verify repositories are enabled:**
@@ -120,17 +120,17 @@ dnf repolist
 Install the kernel headers and development packages that match your running kernel.
 
 ```bash
-dnf install kernel-devel-matched kernel-headers
+sudo dnf install kernel-devel-matched kernel-headers
 ```
 
 **Note:** The `kernel-devel-matched` package ensures compatibility with your current running kernel. If you encounter issues, you can install the specific version:
 
 ```bash
 # Check your current kernel version
-uname -r
+sudo uname -r
 
 # Install specific kernel development packages
-dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r)
+sudo dnf install kernel-devel-$(uname -r) kernel-headers-$(uname -r)
 ```
 
 This ensures the kernel modules can be built properly for your current kernel version.
@@ -140,7 +140,7 @@ This ensures the kernel modules can be built properly for your current kernel ve
 EPEL (Extra Packages for Enterprise Linux) provides additional packages not included in RHEL.
 
 ```bash
-dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm
+sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm
 ```
 
 ### 5. Download and Install NVIDIA Driver Repository
@@ -151,19 +151,19 @@ Download the NVIDIA driver local repository RPM and install it.
 
 ```bash
 # Driver version 590.48.01 (adjust version as needed)
-wget https://developer.download.nvidia.com/compute/nvidia-driver/590.48.01/local_installers/nvidia-driver-local-repo-rhel10-590.48.01-1.0-1.x86_64.rpm
+sudo wget https://developer.download.nvidia.com/compute/nvidia-driver/590.48.01/local_installers/nvidia-driver-local-repo-rhel10-590.48.01-1.0-1.x86_64.rpm
 ```
 
 **Install the repository:**
 
 ```bash
-rpm -i nvidia-driver-local-repo-rhel10-590.48.01-1.0-1.x86_64.rpm
+sudo rpm -i nvidia-driver-local-repo-rhel10-590.48.01-1.0-1.x86_64.rpm
 ```
 
 **Clean DNF cache:**
 
 ```bash
-dnf clean all
+sudo dnf clean all
 ```
 
 ### 6. Install NVIDIA Open Kernel Driver
@@ -188,25 +188,25 @@ Download and install the CUDA Toolkit (version 13.1.1 in this example).
 **Download CUDA repository:**
 
 ```bash
-wget https://developer.download.nvidia.com/compute/cuda/13.1.1/local_installers/cuda-repo-rhel10-13-1-local-13.1.1_590.48.01-1.x86_64.rpm
+sudo wget https://developer.download.nvidia.com/compute/cuda/13.1.1/local_installers/cuda-repo-rhel10-13-1-local-13.1.1_590.48.01-1.x86_64.rpm
 ```
 
 **Install CUDA repository:**
 
 ```bash
-rpm -i cuda-repo-rhel10-13-1-local-13.1.1_590.48.01-1.x86_64.rpm
+sudo rpm -i cuda-repo-rhel10-13-1-local-13.1.1_590.48.01-1.x86_64.rpm
 ```
 
 **Clean DNF cache:**
 
 ```bash
-dnf clean all
+sudo dnf clean all
 ```
 
 **Install CUDA Toolkit:**
 
 ```bash
-dnf -y install cuda-toolkit-13-1
+sudo dnf -y install cuda-toolkit-13-1
 ```
 
 This installs:
@@ -235,7 +235,7 @@ sudo nano /usr/lib/dracut/dracut.conf.d/99-nvidia.conf
 ```
 
 **Add the following content:**
-
+** and - Remove the Omit_drivers+= line so just the add driver is .conf file.
 ```bash
 add_drivers+=" nvidia nvidia-drm nvidia-modeset nvidia-uvm "
 ```
@@ -282,7 +282,7 @@ drm                   565248  7 drm_kms_helper,qxl,nvidia,drm_ttm_helper,nvidia_
 **Verify NVIDIA driver with nvidia-smi:**
 
 ```bash
-nvidia-smi
+sudo nvidia-smi
 ```
 
 **Expected output (example with multiple GPUs):**
