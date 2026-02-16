@@ -320,7 +320,7 @@ This repository contains **everything** you need to build your own enterprise-gr
 
 **Install NVIDIA drivers and CUDA toolkit with proper configuration for multi-GPU inference workloads.**
 
-[![NVIDIA Drivers](https://img.shields.io/badge/Read-NVIDIA_Driver_Guide-green?style=for-the-badge)](./NVIDIA-driver-installation(2).md)
+[![NVIDIA Drivers](https://img.shields.io/badge/Read-NVIDIA_Driver_Guide-green?style=for-the-badge)](./Step 3 - NVIDIA-driver-installation(2).md)
 
 <details>
 <summary><b>📋 What's Covered (Click to Expand)</b></summary>
