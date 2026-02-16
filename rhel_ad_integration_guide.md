@@ -20,7 +20,7 @@
 Before beginning, ensure you have:
 - Root or sudo access to the server
 - Network connectivity to the Active Directory domain controllers
-- DNS servers that can resolve the ihfa.org domain
+- DNS servers that can resolve the mycompany.org domain
 - Active Directory domain administrator credentials or delegated permissions
 
 ---
@@ -72,7 +72,7 @@ sudo nmcli connection modify <interface-name> \
 
 # Set DNS search domain
 sudo nmcli connection modify <interface-name> \
-  ipv4.dns-search ihfa.org
+  ipv4.dns-search mycompany.org
 
 # Bring down and up the connection to apply changes
 sudo nmcli connection down <interface-name>
@@ -92,7 +92,7 @@ ip route show
 ping -c 4 10.0.13.1
 
 # Test DNS resolution
-nslookup ihfa.org
+nslookup mycompany.org
 
 # Test internet connectivity
 ping -c 4 8.8.8.8
@@ -102,13 +102,13 @@ ping -c 4 8.8.8.8
 
 ```bash
 # Check domain controller discovery
-nslookup ihfa.org
+nslookup mycompany.org
 
 # Check for SRV records (essential for AD integration)
-nslookup -type=SRV _ldap._tcp.ihfa.org
+nslookup -type=SRV _ldap._tcp.mycompany.org
 
 # Check Kerberos SRV records
-nslookup -type=SRV _kerberos._tcp.ihfa.org
+nslookup -type=SRV _kerberos._tcp.mycompany.org
 ```
 
 **Important:** If DNS queries fail, verify your DNS server settings and ensure they point to Active Directory domain controllers.
@@ -145,10 +145,10 @@ sudo realm discover mycompany.org
 
 **Expected Output:**
 ```
-ihfa.org
+mycompany.org
   type: kerberos
   realm-name: MYCOMPANY.ORG
-  domain-name: ihfa.org
+  domain-name: mycompany.org
   configured: no
   server-software: active-directory
   client-software: sssd
@@ -204,7 +204,7 @@ When prompted, enter the password: `password123`
 sudo realm join --user=henryf \
   --computer-ou="OU=Servers,DC=mycompany,DC=org" \
   --verbose \
-  ihfa.org
+  mycompany.org
 ```
 
 **Note:** Replace the `--computer-ou` parameter with the appropriate Organizational Unit path if needed, or omit it to use the default Computers container.
@@ -238,19 +238,19 @@ Add or modify these settings:
 
 ```ini
 [sssd]
-domains = ihfa.org
+domains = mycompany.org
 config_file_version = 2
 services = nss, pam
 
-[domain/ihfa.org]
+[domain/mycompany.org]
 default_shell = /bin/bash
 krb5_store_password_if_offline = True
 cache_credentials = True
-krb5_realm = IHFA.ORG
+krb5_realm = mycompany.org
 realmd_tags = manages-system joined-with-adcli
 id_provider = ad
 fallback_homedir = /home/%u@%d
-ad_domain = ihfa.org
+ad_domain = mycompany.org
 use_fully_qualified_names = False
 ldap_id_mapping = True
 access_provider = ad
@@ -439,7 +439,7 @@ cat /etc/resolv.conf
 
 # Test DNS resolution
 nslookup mycompany.org
-nslookup -type=SRV _ldap._tcp.ihfa.org
+nslookup -type=SRV _ldap._tcp.mycompany.org
 
 # Manually set DNS servers if needed
 sudo nmcli connection modify <interface-name> ipv4.dns "AD_DNS_SERVER_IP"
@@ -517,7 +517,7 @@ sudo ls -la /etc/pam.d/
 - [ ] Gateway configured as 10.0.13.1
 - [ ] DNS resolves mycompany.org domain
 - [ ] Time synchronized with domain
-- [ ] Server joined to ihfa.org domain
+- [ ] Server joined to mycompany.org domain
 - [ ] `realm list` shows domain configuration
 - [ ] Domain user `henryf` can be resolved with `id` command
 - [ ] SSSD service is running and enabled
