@@ -301,6 +301,24 @@ sudo nvidia-smi
 | 30%   33C    P8              28W / 450W |      0MiB / 32768MiB |      0%      Default |
 +-----------------------------------------+----------------------+----------------------+
 ```
+### Add the path line into the .bashrc file.  (Important- this is needed for NVCC to work)
+
+**Set CUDA environment variables:**
+
+Add to `~/.bashrc`:
+
+```bash
+export PATH=/usr/local/cuda-13.1/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda-13.1/lib64:$LD_LIBRARY_PATH
+```
+
+Then reload:
+
+```bash
+source ~/.bashrc
+```
+
+You can also edit the .bashrc file directly and add "PATH=/usr/local/cuda/bin:$PATH" to the .bashrc file at the end of file.  Use sudo nano .bashrc
 
 **Verify CUDA compiler installation:**
 
