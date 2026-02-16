@@ -66,7 +66,7 @@ The method in this guide uses locally downloaded drivers that are not Red Hat si
 
 ## Installation Steps
 
-### 1. Fix RHEL 10 GPG Key Issue
+### 1. Fix RHEL 10 GPG Key Issue (this is super important)
 
 RHEL 10 has a known bug where DNF transactions fail with GPG key errors. This must be resolved first.
 
