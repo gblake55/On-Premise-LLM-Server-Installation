@@ -1,4 +1,4 @@
-# Next Steps: LLM Inference System Configuration
+# Step 4 - Install App Stacks
 
 Complete post-NVIDIA driver installation guide for setting up a production-ready LLM inference system on Red Hat Enterprise Linux 10.1.
 
