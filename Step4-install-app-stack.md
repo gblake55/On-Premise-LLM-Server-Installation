@@ -309,13 +309,15 @@ sudo systemctl status docker
 ### Add User to Docker Group
 
 **Important:** This allows running Docker without sudo.
-
+```
 # Add current user to docker group
 sudo usermod -aG docker $USER
-
+```
+```
 # Apply group changes (requires logout/login or use newgrp)
 newgrp docker
-
+```
+```
 # Verify
 groups
 ```
@@ -335,8 +337,8 @@ docker compose version
 
 **Expected output:**
 ```
-Docker version 27.x.x, build xxxxxxx
-Docker Compose version v2.x.x
+Docker version 29.2.1, build xxxxxxx
+Docker Compose version v5.0.2 - or something laters
 ```
 
 ### Configure Docker for Production
