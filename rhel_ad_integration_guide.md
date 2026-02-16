@@ -3,7 +3,7 @@
 ## Server Information
 - **Hostname:** bert
 - **Operating System:** Red Hat Enterprise Linux 10.1
-- **Target Domain:** ihfa.org
+- **Target Domain:** mycompany.org (pleaseholder for you company)
 - **Domain Account:** henryf
 - **Domain Password:** password123 *(placeholder for documentation)*
 
@@ -140,14 +140,14 @@ sudo dnf install -y \
 
 ```bash
 # Discover the domain
-sudo realm discover ihfa.org
+sudo realm discover mycompany.org
 ```
 
 **Expected Output:**
 ```
 ihfa.org
   type: kerberos
-  realm-name: IHFA.ORG
+  realm-name: MYCOMPANY.ORG
   domain-name: ihfa.org
   configured: no
   server-software: active-directory
@@ -193,7 +193,7 @@ sudo timedatectl status
 
 ```bash
 # Join the domain using the provided credentials
-sudo realm join --user=henryf ihfa.org
+sudo realm join --user=henryf mycompany.org
 ```
 
 When prompted, enter the password: `password123`
@@ -202,7 +202,7 @@ When prompted, enter the password: `password123`
 
 ```bash
 sudo realm join --user=henryf \
-  --computer-ou="OU=Servers,DC=ihfa,DC=org" \
+  --computer-ou="OU=Servers,DC=mycompany,DC=org" \
   --verbose \
   ihfa.org
 ```
@@ -219,10 +219,10 @@ sudo realm list
 sudo cat /etc/sssd/sssd.conf
 
 # Test domain connectivity
-sudo sssctl domain-status ihfa.org
+sudo sssctl domain-status mycompany.org
 
 # Verify Kerberos ticket
-sudo kinit henryf@IHFA.ORG
+sudo kinit henryf@MYCOMPANY.ORG
 sudo klist
 ```
 
@@ -360,7 +360,7 @@ id henryf
 getent passwd henryf
 
 # Check Kerberos ticket
-sudo kinit henryf@IHFA.ORG
+sudo kinit henryf@MYCOMPANY.ORG
 sudo klist
 
 # Test password authentication
@@ -377,7 +377,7 @@ Ensure the server's hostname is properly configured:
 
 ```bash
 # Set hostname
-sudo hostnamectl set-hostname bert.ihfa.org
+sudo hostnamectl set-hostname bert.mycompany.org
 
 # Verify hostname
 hostnamectl
@@ -386,7 +386,7 @@ hostnamectl
 sudo vi /etc/hosts
 
 # Add entry:
-10.0.13.35    bert.ihfa.org    bert
+10.0.13.35    bert.mycompany.org    bert
 ```
 
 ### Step 18: Configure SELinux (If Enabled)
@@ -438,7 +438,7 @@ sudo systemctl list-unit-files | grep enabled > /root/ad-integration-backup/enab
 cat /etc/resolv.conf
 
 # Test DNS resolution
-nslookup ihfa.org
+nslookup mycompany.org
 nslookup -type=SRV _ldap._tcp.ihfa.org
 
 # Manually set DNS servers if needed
@@ -459,7 +459,7 @@ ping <DC_IP>
 
 # Check for existing computer account in AD and remove if necessary
 # Attempt join with verbose output
-sudo realm join --user=henryf --verbose ihfa.org
+sudo realm join --user=henryf --verbose mycompany.org
 ```
 
 #### Issue: User Login Fails
@@ -515,7 +515,7 @@ sudo ls -la /etc/pam.d/
 
 - [ ] Network IP address changed to 10.0.13.35
 - [ ] Gateway configured as 10.0.13.1
-- [ ] DNS resolves ihfa.org domain
+- [ ] DNS resolves mycompany.org domain
 - [ ] Time synchronized with domain
 - [ ] Server joined to ihfa.org domain
 - [ ] `realm list` shows domain configuration
@@ -566,4 +566,4 @@ For issues or questions, contact:
 **Document Version:** 1.0  
 **Last Updated:** February 16, 2026  
 **Author:** System Administrator  
-**Server:** bert.ihfa.org
+**Server:** bert.mycompany.org
