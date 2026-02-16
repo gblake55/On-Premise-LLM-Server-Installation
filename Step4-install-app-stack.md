@@ -289,11 +289,30 @@ sudo systemctl enable docker
 sudo systemctl status docker
 ```
 
+### if docker errors... try this....
+```
+sudo firewall-cmd --get-zone-of-interface=docker0
+```
+# Remove docker0 from trusted zone
+```
+sudo firewall-cmd --permanent --zone=trusted --remove-interface=docker0
+```
+
+# Reload firewalld
+```
+sudo firewall-cmd --reload
+```
+
+# Restart Docker
+```
+sudo systemctl restart docker
+sudo systemctl status docker
+```
+
 ### Add User to Docker Group
 
 **Important:** This allows running Docker without sudo.
 
-```bash
 # Add current user to docker group
 sudo usermod -aG docker $USER
 
