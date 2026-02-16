@@ -350,6 +350,35 @@ EOF'
 ```
 
 ---
+# Steps to Enable Persistence Mode on RHEL 10.1
+Method 1: Using systemd Service (Recommended for Permanent Configuration)
+
+Install the nvidia-persistenced service (if not already installed):
+
+```bash
+sudo dnf install nvidia-persistenced
+```
+
+Enable the persistance
+```bash
+sudo systemctl enable nvidia-persistenced
+```
+
+Restart the nvidia persistance
+```bash
+sudo systemctl start nvidia-persistenced
+```
+
+Check the status of the persistance
+```bash
+sudo systemctl status nvidia-persistenced
+```
+
+You should see Persistance-m = "On" on all the Nvidia drives.
+```bash
+sudo nvidia-smi
+```
+
 
 ## Troubleshooting
 
