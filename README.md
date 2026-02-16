@@ -216,7 +216,7 @@ This repository contains **everything** you need to build your own enterprise-gr
 
 **Build your multi-GPU inference workstation with enterprise-grade components sourced cost-effectively from eBay.**
 
-[![Hardware Guide](https://img.shields.io/badge/Read-Hardware_Guide-blue?style=for-the-badge)](./LLM-Hardware-Needed.md)
+[![Hardware Guide](https://img.shields.io/badge/Read-Hardware_Guide-blue?style=for-the-badge)](./Step 1- The Server - Purchase the hardware.md)
 
 <details>
 <summary><b>📋 What's Covered (Click to Expand)</b></summary>
