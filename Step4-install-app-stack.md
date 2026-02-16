@@ -672,9 +672,11 @@ uv pip install -U "huggingface_hub[cli]"
 ### Authenticate with Hugging Face
 
 **Option 1: Interactive Login**
+please paste your hugging face login token to login.
+go to huggingface.co and register and create a token for your computer.
 
 ```bash
-huggingface-cli login
+hf auth login
 ```
 
 You'll be prompted to enter your Hugging Face token. Get your token from:  
