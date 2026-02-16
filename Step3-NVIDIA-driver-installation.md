@@ -1,6 +1,6 @@
-# NVIDIA Driver Installation Guide for RHEL 10
+# NVIDIA Driver Installation Guide for RHEL 10.1
 
-Complete guide for installing NVIDIA drivers and CUDA Toolkit on Red Hat Enterprise Linux 10 for multi-GPU configurations (RTX 3090, RTX 5090, and other modern NVIDIA GPUs).
+Complete guide for installing NVIDIA drivers and CUDA Toolkit on Red Hat Enterprise Linux 10.1 for multi-GPU configurations (RTX 3090, RTX 5090, and other modern NVIDIA GPUs).
 
 ## Table of Contents
 
@@ -25,7 +25,7 @@ Complete guide for installing NVIDIA drivers and CUDA Toolkit on Red Hat Enterpr
 
 ## Prerequisites
 
-- Fresh installation of Red Hat Enterprise Linux 10
+- Fresh installation of Red Hat Enterprise Linux 10.1
 - Active Red Hat subscription (required)
 - Root or sudo access
 - Internet connectivity
@@ -350,7 +350,7 @@ EOF'
 ```
 
 ---
-# Steps to Enable Persistence Mode on RHEL 10.1
+## Steps to Enable Persistence Mode on RHEL 10.1
 Method 1: Using systemd Service (Recommended for Permanent Configuration)
 
 Install the nvidia-persistenced service (if not already installed):
@@ -380,7 +380,7 @@ sudo nvidia-smi
 ```
 
 
-## Troubleshooting
+# Troubleshooting
 
 ### GPG Key Errors Persist
 
@@ -698,7 +698,7 @@ nvidia-smi topo -m
 
 ## License
 
-This guide is provided as-is for educational and informational purposes.
+This guide is provided as-is for educational and informational purposes. Written by Greg Blake.
 
 ## Contributing
 
