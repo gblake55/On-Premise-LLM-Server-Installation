@@ -288,22 +288,19 @@ sudo systemctl enable docker
 # Verify Docker is running
 sudo systemctl status docker
 ```
-
 ### if docker errors... try this....
 ```
 sudo firewall-cmd --get-zone-of-interface=docker0
 ```
-# Remove docker0 from trusted zone
+Remove docker0 from trusted zone
 ```
 sudo firewall-cmd --permanent --zone=trusted --remove-interface=docker0
 ```
-
-# Reload firewalld
+Reload firewalld
 ```
 sudo firewall-cmd --reload
 ```
-
-# Restart Docker
+Restart Docker
 ```
 sudo systemctl restart docker
 sudo systemctl status docker
