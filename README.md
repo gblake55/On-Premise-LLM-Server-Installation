@@ -4,7 +4,6 @@
 
 <div align="center">
 
-![IDA Logo](https://via.placeholder.com/800x200/1a1a2e/16213e?text=IDA+-+Intelligent+Document+Assistant)
 
 **Production-Proven AI Infrastructure Serving 500+ Employees**
 
@@ -142,7 +141,7 @@
                     └────────┬────────┘
                              │
                              │ OpenAI-Compatible API
-                             │ http://vllm:8000/v1
+                             │ http://vllm:8090/v1
                              │
                     ┌────────▼────────┐
                     │      vLLM       │
@@ -213,7 +212,7 @@ This repository contains **everything** you need to build your own enterprise-gr
 
 ---
 
-### 📦 Step 1: Hardware Procurement and Assembly
+### 📦 Step 1: The Server - Hardware Procurement and Assembly
 
 **Build your multi-GPU inference workstation with enterprise-grade components sourced cost-effectively from eBay.**
 
@@ -260,11 +259,11 @@ This repository contains **everything** you need to build your own enterprise-gr
 
 ---
 
-### 💿 Step 2: Red Hat Enterprise Linux Installation
+### 💿 Step 2: Red Hat Enterprise V10.1 Linux Installation
 
 **Install and configure RHEL 10.1 with optimized partitioning for Docker workloads and Active Directory integration.**
 
-[![RHEL Installation](https://img.shields.io/badge/Read-RHEL_Installation_Guide-red?style=for-the-badge)](./Install-RedHat-Linux-V10.1.md)
+[![RHEL Installation](https://img.shields.io/badge/Read-RHEL_Installation_Guide-red?style=for-the-badge)](./.md)
 
 <details>
 <summary><b>📋 What's Covered (Click to Expand)</b></summary>
@@ -321,7 +320,7 @@ This repository contains **everything** you need to build your own enterprise-gr
 
 **Install NVIDIA drivers and CUDA toolkit with proper configuration for multi-GPU inference workloads.**
 
-[![NVIDIA Drivers](https://img.shields.io/badge/Read-NVIDIA_Driver_Guide-green?style=for-the-badge)](./NVIDIA-driver-installation.md)
+[![NVIDIA Drivers](https://img.shields.io/badge/Read-NVIDIA_Driver_Guide-green?style=for-the-badge)](./NVIDIA-driver-installation(2).md)
 
 <details>
 <summary><b>📋 What's Covered (Click to Expand)</b></summary>
@@ -366,7 +365,7 @@ This repository contains **everything** you need to build your own enterprise-gr
 
 ---
 
-### 🐳 Step 4: Software Stack Deployment
+### 🐳 Step 4: Install Apps and Utilities Deployment
 
 **Deploy the complete software stack including Docker, monitoring tools, vLLM, and supporting infrastructure.**
 
@@ -424,7 +423,7 @@ sudo ./step2.sh
 
 ---
 
-### 🌐 Step 5: Open WebUI & vLLM Deployment
+### 🌐 Step 5: Install Dockers OpenWebUI & vLLM Deployment
 
 **Deploy the web interface and inference engine using Docker Compose for production-grade LLM serving.**
 
@@ -507,7 +506,7 @@ docker compose up -d
 
 ## 🤖 Production Model Configuration
 
-### Current Model: Mistral-Large-2411 (14B)
+### Current Model: Mistralai/Mistral-Large-2411 (14B)
 
 **Why we chose Mistral-Large for IDA:**
 
@@ -616,10 +615,10 @@ P99               8.3s         <10s      ✅ Acceptable
 | Category | Cost | Notes |
 |----------|------|-------|
 | **Hardware** | $8,000 | Used components from eBay |
-| **RHEL License** | $0 | Free developer subscription |
+| **RHEL License** | $350 | Enterprise subscription |
 | **Software** | $0 | All open-source |
-| **Labor (Setup)** | $1,200 | ~15 hours @ $80/hr (optional) |
-| **Total Initial** | **$9,200** | One-time investment |
+| **Labor (Setup)** | $0 | ~16 hours |
+| **Total Initial** | **$8,350** | One-time investment |
 
 ### Operating Costs (Monthly)
 
@@ -809,31 +808,11 @@ All guides include comprehensive troubleshooting sections:
 
 </div>
 
-Greg Blake is a renowned artificial intelligence expert and Chief Information Officer at Idaho Housing with over 35 years of experience in Tech. He specializes in democratizing AI access through self-hosted, on-premise solutions that maintain data privacy and regulatory compliance.
+Greg Blake is the Chief Information Officer at Idaho Housing with over 35 years of experience in tech specializing in IT governance, cybersecurity, and artificial intelligence. 
 
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! This project thrives on community input and real-world production experience.
-
-### How to Contribute
-
-1. **Fork the repository**
-2. **Create a feature branch** (`git checkout -b feature/AmazingFeature`)
-3. **Commit your changes** (`git commit -m 'Add some AmazingFeature'`)
-4. **Push to the branch** (`git push origin feature/AmazingFeature`)
-5. **Open a Pull Request**
-
-### Contribution Guidelines
-
-- **Documentation**: Improve guides, fix typos, add clarity
-- **Scripts**: Enhance automation, add error handling
-- **Configurations**: Share optimized docker-compose files
-- **Performance**: Document benchmarks and optimizations
-- **Troubleshooting**: Add solutions to common problems
-- **Alternative Hardware**: Test on different GPU configurations
 
 ### Code of Conduct
 
@@ -843,7 +822,7 @@ We follow the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). Please
 
 ## 📄 License
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **Greg Blake License** - see the [LICENSE](LICENSE) file for details.
 
 ### What This Means
 
