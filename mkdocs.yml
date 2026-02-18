@@ -7,13 +7,13 @@ theme:
   name: material
   palette:
     - scheme: default
-      primary: deep purple
+      primary: indigo
       accent: amber
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
     - scheme: slate
-      primary: deep purple
+      primary: indigo
       accent: amber
       toggle:
         icon: material/brightness-4
