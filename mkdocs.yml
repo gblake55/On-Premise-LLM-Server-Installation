@@ -1,0 +1,56 @@
+site_name: IDA — On-Premise LLM Server Installation
+site_description: Enterprise-Grade On-Premise LLM Inference Platform Installation Guide
+site_author: Greg Blake
+repo_url: https://github.com/gblake55/On-Premise-LLM-Server-Installation
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - content.code.copy
+
+markdown_extensions:
+  - tables
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Deployment Guide:
+    - guide/index.md
+    - "Step 1: Hardware": guide/step1-hardware.md
+    - "Step 2: RHEL Install": guide/step2-rhel.md
+    - "Step 3: NVIDIA Drivers": guide/step3-nvidia.md
+    - "Step 4: App Stack": guide/step4-apps.md
+    - "Step 5: WebUI & vLLM": guide/step5-webui.md
+    - "Step 6: AD Integration": guide/step6-ad.md
+  - Appendix:
+    - appendix/index.md
+    - NVIDIA Notes: appendix/nvidia-notes.md
+    - "NVIDIA Old Driver": appendix/nvidia-old-driver.md
+    - "RHEL NVIDIA Instructions": appendix/redhat-nvidia.md
