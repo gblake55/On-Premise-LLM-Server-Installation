@@ -2,6 +2,8 @@
 
 ## Enterprise-Grade On-Premise LLM Inference Platform
 
+<div align="center">
+
 **Production-Proven AI Infrastructure Serving 500+ Employees**
 
 [![RHEL](https://img.shields.io/badge/RHEL-10.1-EE0000?style=for-the-badge&logo=redhat)](https://www.redhat.com/)
@@ -9,9 +11,9 @@
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker)](https://www.docker.com/)
 [![vLLM](https://img.shields.io/badge/vLLM-Inference_Engine-FF6B6B?style=for-the-badge)](https://vllm.ai/)
 
----
+**128GB GPU Memory | 24-Core EPYC | 256GB RAM | Private & Secure**
 
-### 128GB GPU Memory | 24-Core EPYC | 256GB RAM | Private & Secure
+</div>
 
 ---
 
@@ -21,13 +23,15 @@
 
 ### Key Highlights
 
-- **Production Deployment**: Running 24/7 in enterprise environment since Q4 2025
-- **Active Users**: 500+ employees across IT, Sales, Legal, and Operations
-- **Primary Model**: Mistral-Large-2411 (14B) - Advanced reasoning and instruction-following
-- **Complete Privacy**: 100% on-premise, zero data leaves corporate network
-- **High Performance**: Sub-2-second response times, 95th percentile < 5 seconds
-- **Cost Effective**: $8,000 hardware investment vs $100,000+ annual SaaS costs
-- **Self-Hosted**: Full control over updates, models, and configurations
+| | |
+|---|---|
+| **Production Deployment** | Running 24/7 in enterprise environment since Q4 2025 |
+| **Active Users** | 500+ employees across IT, Sales, Legal, and Operations |
+| **Primary Model** | Mistral-Large-2411 (14B) — Advanced reasoning and instruction-following |
+| **Complete Privacy** | 100% on-premise, zero data leaves corporate network |
+| **High Performance** | Sub-2-second response times, 95th percentile < 5 seconds |
+| **Cost Effective** | $8,000 hardware investment vs $100,000+ annual SaaS costs |
+| **Self-Hosted** | Full control over updates, models, and configurations |
 
 ### Use Cases in Production
 
