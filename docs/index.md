@@ -4,10 +4,10 @@
 
 **Production-Proven AI Infrastructure Serving 500+ Employees**
 
-![RHEL](https://img.shields.io/badge/RHEL-10.1-EE0000?style=for-the-badge&logo=redhat)
-![NVIDIA](https://img.shields.io/badge/NVIDIA-RTX_3090_|_5090-76B900?style=for-the-badge&logo=nvidia)
-![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker)
-![vLLM](https://img.shields.io/badge/vLLM-Inference_Engine-FF6B6B?style=for-the-badge)
+![RHEL](https://img.shields.io/badge/RHEL-10.1-EE0000?logo=redhat)
+![NVIDIA](https://img.shields.io/badge/NVIDIA-RTX_3090_|_5090-76B900?logo=nvidia)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker)
+![vLLM](https://img.shields.io/badge/vLLM-Inference_Engine-FF6B6B)
 
 **128GB GPU Memory | 24-Core EPYC | 256GB RAM | Private & Secure**
 
