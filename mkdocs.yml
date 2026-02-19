@@ -41,6 +41,7 @@ markdown_extensions:
 
 nav:
   - Home: index.md
+  - Architecture: architecture.md
   - Deployment Guide:
     - guide/index.md
     - "Step 1: Hardware": guide/step1-hardware.md
@@ -49,6 +50,9 @@ nav:
     - "Step 4: App Stack": guide/step4-apps.md
     - "Step 5: WebUI & vLLM": guide/step5-webui.md
     - "Step 6: AD Integration": guide/step6-ad.md
+  - Production: production.md
+  - Security: security.md
+  - Maintenance: maintenance.md
   - Appendix:
     - appendix/index.md
     - NVIDIA Notes: appendix/nvidia-notes.md

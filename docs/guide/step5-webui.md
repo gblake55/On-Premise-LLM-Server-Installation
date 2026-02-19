@@ -11,15 +11,17 @@ This deployment combines two powerful components:
 - **vLLM**: High-performance LLM inference engine with OpenAI-compatible API
 - **Open WebUI**: Modern, ChatGPT-like web interface for interacting with language models
 
-**Key Benefits:**
-- 🚀 GPU-accelerated inference with vLLM
-- 🌐 User-friendly ChatGPT-like interface
-- 🔒 Completely private and self-hosted
-- 🐳 Containerized for easy deployment and portability
-- 📊 Support for multiple models and users
-- 💾 Persistent storage for conversations and settings
+### Key Benefits
 
-**Use Cases:**
+- GPU-accelerated inference with vLLM
+- User-friendly ChatGPT-like interface
+- Completely private and self-hosted
+- Containerized for easy deployment and portability
+- Support for multiple models and users
+- Persistent storage for conversations and settings
+
+### Use Cases
+
 - Development and testing of LLM applications
 - Private AI assistant for teams
 - Research and experimentation with open-source models
@@ -30,42 +32,42 @@ This deployment combines two powerful components:
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                   User Browser                      │
-│              http://localhost:3000                  │
-└───────────────────┬─────────────────────────────────┘
-                    │
-                    │ Port 3000
-                    │
-┌───────────────────▼─────────────────────────────────┐
-│            Open WebUI Container                     │
-│         (ghcr.io/open-webui/open-webui)            │
-│                                                     │
-│  • Web Interface                                    │
-│  • User Management                                  │
-│  • Conversation History                             │
-│  • Document Upload & RAG                            │
-└───────────────────┬─────────────────────────────────┘
-                    │
-                    │ Internal Network
-                    │ http://vllm:8000/v1
-                    │
-┌───────────────────▼─────────────────────────────────┐
-│              vLLM Container                         │
-│           (vllm/vllm-openai)                       │
-│                                                     │
-│  • LLM Inference Engine                             │
-│  • OpenAI-Compatible API                            │
-│  • GPU Acceleration                                 │
-│  • Model Loading & Caching                          │
-└───────────────────┬─────────────────────────────────┘
-                    │
-                    │ GPU Access
-                    │
-┌───────────────────▼─────────────────────────────────┐
-│           NVIDIA GPU(s)                             │
-│        (RTX 3090, RTX 5090, etc.)                  │
-└─────────────────────────────────────────────────────┘
++-----------------------------------------------------+
+|                    User Browser                     |
+|               http://localhost:3000                 |
++-------------------------+---------------------------+
+                          |
+                          | Port 3000
+                          |
++-------------------------v---------------------------+
+|               Open WebUI Container                  |
+|          (ghcr.io/open-webui/open-webui)            |
+|                                                     |
+|    - Web Interface                                  |
+|    - User Management                                |
+|    - Conversation History                           |
+|    - Document Upload & RAG                          |
++-------------------------+---------------------------+
+                          |
+                          | Internal Network
+                          | http://vllm:8000/v1
+                          |
++-------------------------v---------------------------+
+|                  vLLM Container                     |
+|               (vllm/vllm-openai)                    |
+|                                                     |
+|    - LLM Inference Engine                           |
+|    - OpenAI-Compatible API                          |
+|    - GPU Acceleration                               |
+|    - Model Loading & Caching                        |
++-------------------------+---------------------------+
+                          |
+                          | GPU Access
+                          |
++-------------------------v---------------------------+
+|                   NVIDIA GPU(s)                     |
+|            (RTX 3090, RTX 5090, etc.)               |
++-----------------------------------------------------+
 ```
 
 ---
@@ -1366,7 +1368,7 @@ curl http://localhost:3000             # Check Open WebUI
 
 ---
 
-**Deployment Complete!** 🎉
+**Deployment Complete!**
 
 Your containerized LLM inference platform is now ready. Access Open WebUI at `http://localhost:3000` and start chatting with your local AI models.
 

@@ -265,20 +265,26 @@ sudo systemctl enable docker
 # Verify Docker is running
 sudo systemctl status docker
 ```
-### if docker errors... try this....
-```
+### Docker Firewall Troubleshooting
+
+If Docker fails to start properly, check the firewall configuration:
+
+**Check docker0 zone assignment:**
+
+```bash
 sudo firewall-cmd --get-zone-of-interface=docker0
 ```
-Remove docker0 from trusted zone
-```
+
+**Remove docker0 from trusted zone (if needed):**
+
+```bash
 sudo firewall-cmd --permanent --zone=trusted --remove-interface=docker0
 ```
-Reload firewalld
-```
+
+**Reload firewalld and restart Docker:**
+
+```bash
 sudo firewall-cmd --reload
-```
-Restart Docker
-```
 sudo systemctl restart docker
 sudo systemctl status docker
 ```
@@ -286,15 +292,14 @@ sudo systemctl status docker
 ### Add User to Docker Group
 
 **Important:** This allows running Docker without sudo.
-```
+
+```bash
 # Add current user to docker group
 sudo usermod -aG docker $USER
-```
-```
+
 # Apply group changes (requires logout/login or use newgrp)
 newgrp docker
-```
-```
+
 # Verify
 groups
 ```
@@ -671,7 +676,7 @@ uv python list                            # List Python versions
 
 ---
 
-**Configuration Complete!** 🎉
+**Configuration Complete!**
 
 Your RHEL 10.1 system is now fully configured for production LLM inference workloads.
 

@@ -8,23 +8,31 @@ Complete hardware specification and assembly guide for building a high-performan
 
 This guide provides detailed instructions for building a professional-grade LLM inference workstation optimized for running large language models with multiple GPU configurations. The system leverages enterprise server components purchased used from eBay to provide exceptional performance at a fraction of the cost of new equipment.
 
-**System Highlights:**
-- 🖥️ **5 GPUs Total**: 4× RTX 3090 (24GB each) + 1× RTX 5090 (32GB) = 128GB total GPU memory
-- 🚀 **AMD EPYC 7443P**: 24 cores / 48 threads unlocked processor
-- 💾 **256GB DDR4 RAM**: Massive system memory for large model handling
-- 📊 **7× PCIe 4.0 x16 Slots**: ASRock ROMED8-2T motherboard
-- ⚡ **3200W Total PSU Power**: Dual 1600W power supplies
-- 💿 **4TB NVMe Storage**: High-speed model and cache storage
+### System Highlights
 
-**Target Use Cases:**
+| Component | Specification |
+|-----------|---------------|
+| **GPUs** | 5 total: 4x RTX 3090 (24GB each) + 1x RTX 5090 (32GB) = 128GB GPU memory |
+| **CPU** | AMD EPYC 7443P, 24 cores / 48 threads, unlocked |
+| **RAM** | 256GB DDR4 ECC |
+| **PCIe** | 7x PCIe 4.0 x16 slots (ASRock ROMED8-2T) |
+| **Power** | 3200W total (dual 1600W PSUs) |
+| **Storage** | 4TB NVMe Gen4 |
+
+### Target Use Cases
+
 - Large language model inference (Llama 3.1 70B, Mixtral 8x22B, etc.)
 - Multi-model serving
 - Fine-tuning and training medium-sized models
 - Research and development
 - Production LLM deployment
 
-**Estimated Total Cost:** $7,000 - $9,000 (used parts from eBay)  
-**New Equivalent Cost:** $18,000 - $25,000
+### Cost Summary
+
+| | Price Range |
+|---|---|
+| **Used Parts (eBay)** | $7,000 - $9,000 |
+| **New Equivalent** | $18,000 - $25,000 |
 
 ---
 
@@ -1331,8 +1339,8 @@ PSU2:
 
 ### Temperature Targets
 
-**Component:** | **Idle** | **Load** | **Max Safe** |
-|-------------|----------|----------|--------------|
+| Component | Idle | Load | Max Safe |
+|-----------|------|------|----------|
 | EPYC 7443P | 35-45°C | 60-75°C | 95°C |
 | RTX 5090 | 30-40°C | 70-80°C | 90°C |
 | RTX 3090 | 30-40°C | 75-85°C | 93°C |
@@ -1859,7 +1867,7 @@ iperf3 -c <server-ip>
 
 ---
 
-**Build Complete!** 🎉
+**Build Complete!**
 
 You now have a professional-grade, multi-GPU LLM inference workstation capable of running the largest open-source language models.
 
