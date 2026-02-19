@@ -2,25 +2,6 @@
 
 Complete guide for installing NVIDIA drivers and CUDA Toolkit on Red Hat Enterprise Linux 10.1 for multi-GPU configurations (RTX 3090, RTX 5090, and other modern NVIDIA GPUs).
 
-## Table of Contents
-
-- [Prerequisites](#prerequisites)
-- [Important Notes](#important-notes)
-- [Installation Steps](#installation-steps)
-  - [1. Fix RHEL 10 GPG Key Issue](#1-fix-rhel-10-gpg-key-issue)
-  - [2. Enable Required Repositories](#2-enable-required-repositories)
-  - [3. Install Kernel Development Packages](#3-install-kernel-development-packages)
-  - [4. Install EPEL Repository](#4-install-epel-repository)
-  - [5. Download and Install NVIDIA Driver Repository](#5-download-and-install-nvidia-driver-repository)
-  - [6. Install NVIDIA Open Kernel Driver](#6-install-nvidia-open-kernel-driver)
-  - [7. Download and Install CUDA Toolkit](#7-download-and-install-cuda-toolkit)
-  - [8. Configure Dracut for NVIDIA Modules](#8-configure-dracut-for-nvidia-modules)
-  - [9. Reboot System](#9-reboot-system)
-  - [10. Post-Installation Verification](#10-post-installation-verification)
-- [Troubleshooting](#troubleshooting)
-- [Known Issues](#known-issues)
-- [Additional Resources](#additional-resources)
-
 ---
 
 ## Prerequisites

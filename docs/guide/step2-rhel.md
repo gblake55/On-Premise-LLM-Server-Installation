@@ -2,22 +2,6 @@
 
 Complete step-by-step guide for installing Red Hat Enterprise Linux 10.1 on your LLM inference workstation, including account creation, ISO preparation, installation with custom partitioning for Docker workloads, and Active Directory domain integration.
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Prerequisites](#prerequisites)
-- [Part 1: Red Hat Account and Subscription](#part-1-red-hat-account-and-subscription)
-- [Part 2: Download RHEL 10.1 ISO](#part-2-download-rhel-101-iso)
-- [Part 3: Create Bootable USB with Balena Etcher](#part-3-create-bootable-usb-with-balena-etcher)
-- [Part 4: BIOS/UEFI Configuration](#part-4-biosuefi-configuration)
-- [Part 5: RHEL 10.1 Installation](#part-5-rhel-101-installation)
-- [Part 6: Post-Installation Configuration](#part-6-post-installation-configuration)
-- [Part 7: Red Hat Subscription Attachment](#part-7-red-hat-subscription-attachment)
-- [Part 8: Active Directory Integration](#part-8-active-directory-integration)
-- [Part 9: Verification and Testing](#part-9-verification-and-testing)
-- [Troubleshooting](#troubleshooting)
-- [Additional Resources](#additional-resources)
-
 ---
 
 ## Overview

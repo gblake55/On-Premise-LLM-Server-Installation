@@ -2,30 +2,6 @@
 
 Complete guide for deploying Open WebUI and vLLM in containerized environments using Docker Compose. This setup provides a ChatGPT-like web interface powered by your local GPU-accelerated LLM inference engine.
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
-- [Directory Structure](#directory-structure)
-- [Configuration Files](#configuration-files)
-  - [Docker Compose File](#docker-compose-file)
-  - [Environment Variables](#environment-variables)
-- [Deployment Options](#deployment-options)
-  - [Option 1: Basic Deployment](#option-1-basic-deployment)
-  - [Option 2: Multi-GPU Deployment](#option-2-multi-gpu-deployment)
-  - [Option 3: Production Deployment with NGINX](#option-3-production-deployment-with-nginx)
-- [Step-by-Step Deployment](#step-by-step-deployment)
-- [Model Management](#model-management)
-- [Accessing the Interface](#accessing-the-interface)
-- [Configuration and Customization](#configuration-and-customization)
-- [Monitoring and Maintenance](#monitoring-and-maintenance)
-- [Troubleshooting](#troubleshooting)
-- [Performance Optimization](#performance-optimization)
-- [Security Considerations](#security-considerations)
-- [Backup and Recovery](#backup-and-recovery)
-- [Additional Resources](#additional-resources)
-
 ---
 
 ## Overview

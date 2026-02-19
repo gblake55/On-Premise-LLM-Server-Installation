@@ -2,24 +2,6 @@
 
 Complete post-NVIDIA driver installation guide for setting up a production-ready LLM inference system on Red Hat Enterprise Linux 10.1.
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Prerequisites](#prerequisites)
-- [Installation Roadmap](#installation-roadmap)
-- [Step 1: System Utilities and Tools](#step-1-system-utilities-and-tools)
-- [Step 2: Version Control with Git](#step-2-version-control-with-git)
-- [Step 3: Python Environment Manager (UV)](#step-3-python-environment-manager-uv)
-- [Step 4: Python 3.13 Installation](#step-4-python-313-installation)
-- [Step 5: Docker Installation](#step-5-docker-installation)
-- [Step 6: NVIDIA Container Toolkit](#step-6-nvidia-container-toolkit)
-- [Step 7: System Monitoring Tools](#step-7-system-monitoring-tools)
-- [Step 8: Hugging Face CLI and Authentication](#step-9-hugging-face-cli-and-authentication)
-- [Verification and Testing](#verification-and-testing)
-- [Troubleshooting](#troubleshooting)
-- [Performance Optimization](#performance-optimization)
-- [Additional Resources](#additional-resources)
-
 ---
 
 ## Overview
