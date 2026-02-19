@@ -2,24 +2,6 @@
 
 Complete guide for installing NVIDIA drivers with DKMS support on Red Hat Enterprise Linux 10 for multi-GPU configurations (RTX 3090, RTX 5090, and other modern NVIDIA GPUs).
 
-## Table of Contents
-
-- [Prerequisites](#prerequisites)
-- [Important Notes](#important-notes)
-- [Installation Steps](#installation-steps)
-  - [1. Disable Secure Boot](#1-disable-secure-boot)
-  - [2. Download NVIDIA Driver](#2-download-nvidia-driver)
-  - [3. Install Driver Repository](#3-install-driver-repository)
-  - [4. Install DKMS](#4-install-dkms)
-  - [5. Install Development Tools](#5-install-development-tools)
-  - [6. Install CUDA Driver](#6-install-cuda-driver)
-  - [7. Verify Installation](#7-verify-installation)
-  - [8. Reboot System](#8-reboot-system)
-  - [9. Post-Installation Verification](#9-post-installation-verification)
-- [Troubleshooting](#troubleshooting)
-- [Known Issues](#known-issues)
-- [Additional Resources](#additional-resources)
-
 ---
 
 ## Prerequisites

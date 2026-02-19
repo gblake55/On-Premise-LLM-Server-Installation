@@ -3,7 +3,7 @@
 ## Server Information
 - **Hostname:** bert
 - **Operating System:** Red Hat Enterprise Linux 10.1
-- **Target Domain:** mycompany.org (pleaseholder for you company)
+- **Target Domain:** mycompany.org (placeholder for your company)
 - **Domain Account:** henryf
 - **Domain Password:** password123 *(placeholder for documentation)*
 

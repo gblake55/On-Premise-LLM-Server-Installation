@@ -47,7 +47,9 @@ The method in this guide uses locally downloaded drivers that are not Red Hat si
 
 ## Installation Steps
 
-### 1. Fix RHEL 10 GPG Key Issue (this is super important)
+### 1. Fix RHEL 10 GPG Key Issue
+
+**Important:** This step must be completed before proceeding with driver installation.
 
 RHEL 10 has a known bug where DNF transactions fail with GPG key errors. This must be resolved first.
 
@@ -216,10 +218,12 @@ sudo nano /usr/lib/dracut/dracut.conf.d/99-nvidia.conf
 ```
 
 **Add the following content:**
-** and - Remove the Omit_drivers+= line so just the add driver is .conf file.
+
 ```bash
 add_drivers+=" nvidia nvidia-drm nvidia-modeset nvidia-uvm "
 ```
+
+**Note:** Only include the `add_drivers` line. Do not add an `omit_drivers` line.
 
 **Save and exit** (Ctrl+X, then Y, then Enter)
 
@@ -282,9 +286,9 @@ sudo nvidia-smi
 | 30%   33C    P8              28W / 450W |      0MiB / 32768MiB |      0%      Default |
 +-----------------------------------------+----------------------+----------------------+
 ```
-### Add the path line into the .bashrc file.  (Important- this is needed for NVCC to work)
+### 11. Set CUDA Environment Variables
 
-**Set CUDA environment variables:**
+**Important:** This configuration is required for `nvcc` to work properly.
 
 Add to `~/.bashrc`:
 
@@ -298,8 +302,6 @@ Then reload:
 ```bash
 source ~/.bashrc
 ```
-
-You can also edit the .bashrc file directly and add "PATH=/usr/local/cuda/bin:$PATH" to the .bashrc file at the end of file.  Use sudo nano .bashrc
 
 **Verify CUDA compiler installation:**
 
@@ -349,37 +351,36 @@ EOF'
 ```
 
 ---
-## Steps to Enable Persistence Mode on RHEL 10.1
-Method 1: Using systemd Service (Recommended for Permanent Configuration)
 
-Install the nvidia-persistenced service (if not already installed):
+## Enable Persistence Mode
+
+Persistence mode keeps the NVIDIA driver loaded, reducing initialization time for subsequent GPU operations.
+
+### Install nvidia-persistenced
 
 ```bash
 sudo dnf install nvidia-persistenced
 ```
 
-Enable the persistance
+### Enable and Start the Service
+
 ```bash
 sudo systemctl enable nvidia-persistenced
-```
-
-Restart the nvidia persistance
-```bash
 sudo systemctl start nvidia-persistenced
 ```
 
-Check the status of the persistance
+### Verify Persistence Mode
+
 ```bash
 sudo systemctl status nvidia-persistenced
-```
-
-You should see Persistance-m = "On" on all the Nvidia drives.
-```bash
 sudo nvidia-smi
 ```
 
+You should see `Persistence-M: On` for all NVIDIA GPUs in the nvidia-smi output.
 
-# Troubleshooting
+---
+
+## Troubleshooting
 
 ### GPG Key Errors Persist
 
