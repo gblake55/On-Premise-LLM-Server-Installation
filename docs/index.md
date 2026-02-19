@@ -2,8 +2,6 @@
 
 ## Enterprise-Grade On-Premise LLM Inference Platform
 
-<center>
-
 **Production-Proven AI Infrastructure Serving 500+ Employees**
 
 ![RHEL](https://img.shields.io/badge/RHEL-10.1-EE0000?style=for-the-badge&logo=redhat)
@@ -12,8 +10,6 @@
 ![vLLM](https://img.shields.io/badge/vLLM-Inference_Engine-FF6B6B?style=for-the-badge)
 
 **128GB GPU Memory | 24-Core EPYC | 256GB RAM | Private & Secure**
-
-</center>
 
 ---
 
