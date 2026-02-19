@@ -2,24 +2,6 @@
 
 Complete hardware specification and assembly guide for building a high-performance, cost-effective multi-GPU LLM inference workstation using enterprise-grade components sourced from eBay.
 
-## Table of Contents
-
-- [Overview](#overview)
-- [System Specifications](#system-specifications)
-- [Complete Parts List](#complete-parts-list)
-- [Sourcing Components on eBay](#sourcing-components-on-ebay)
-- [Cost Breakdown](#cost-breakdown)
-- [Pre-Build Preparation](#pre-build-preparation)
-- [Assembly Instructions](#assembly-instructions)
-- [BIOS Configuration](#bios-configuration)
-- [Power Distribution Strategy](#power-distribution-strategy)
-- [Cooling and Thermal Management](#cooling-and-thermal-management)
-- [Cable Management](#cable-management)
-- [Testing and Validation](#testing-and-validation)
-- [Troubleshooting](#troubleshooting)
-- [Upgrade Path](#upgrade-path)
-- [Additional Resources](#additional-resources)
-
 ---
 
 ## Overview
