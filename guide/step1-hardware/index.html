@@ -1,0 +1,5551 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Enterprise-Grade On-Premise LLM Inference Platform Installation Guide">
+      
+      
+        <meta name="author" content="Greg Blake">
+      
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../step2-rhel/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.2">
+    
+    
+      
+        <title>Step 1: Hardware - IDA — On-Premise LLM Server Installation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#llm-hardware-requirements-and-build-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="IDA — On-Premise LLM Server Installation" class="md-header__button md-logo" aria-label="IDA — On-Premise LLM Server Installation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            IDA — On-Premise LLM Server Installation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Step 1: Hardware
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gblake55/On-Premise-LLM-Server-Installation" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../architecture/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Architecture
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Deployment Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../production/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Production
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../security/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Security
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../maintenance/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Maintenance
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../appendix/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Appendix
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="IDA — On-Premise LLM Server Installation" class="md-nav__button md-logo" aria-label="IDA — On-Premise LLM Server Installation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    IDA — On-Premise LLM Server Installation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gblake55/On-Premise-LLM-Server-Installation" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment Guide
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Deployment Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 1: Hardware
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 1: Hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#system-highlights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Highlights
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#target-use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target Use Cases
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cost-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-specifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Specifications
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-parts-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complete Parts List
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Complete Parts List">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required Components
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Required Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-motherboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Motherboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-cpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. CPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cpu-cooler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. CPU Cooler
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-graphics-cards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Graphics Cards
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Storage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-power-supplies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Power Supplies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-pcie-riser-cables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. PCIe Riser Cables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-open-air-mining-rig-frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Open-Air Mining Rig Frame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-monitor-keyboard-mouse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Monitor, Keyboard, Mouse
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additional-required-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional Required Components
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Additional Required Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-thermal-paste" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Thermal Paste
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-additional-fans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Additional Fans
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-power-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Power Distribution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-cable-ties-and-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Cable Ties and Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-anti-static-wrist-strap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Anti-Static Wrist Strap
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-toolkit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Toolkit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sourcing-components-on-ebay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sourcing Components on eBay
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sourcing Components on eBay">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#general-ebay-shopping-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General eBay Shopping Tips
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#component-specific-sourcing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Component-Specific Sourcing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Component-Specific Sourcing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#motherboard-romed8-2t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motherboard (ROMED8-2T)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpu-epyc-7443p" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CPU (EPYC 7443P)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpus-rtx-30905090" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPUs (RTX 3090/5090)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-256gb-ddr4-ecc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memory (256GB DDR4 ECC)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cost-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost Breakdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cost Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#detailed-budget-used-parts-from-ebay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detailed Budget (Used Parts from eBay)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-build-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-Build Preparation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre-Build Preparation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-workspace-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Workspace Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-inventory-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Inventory Check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-component-testing-optional-but-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Component Testing (Optional but Recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assembly-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assembly Instructions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Assembly Instructions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-assemble-mining-rig-frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Assemble Mining Rig Frame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-install-cpu-and-cooler-on-motherboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Install CPU and Cooler on Motherboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-install-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Install Memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-install-nvme-drive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Install NVMe Drive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-mount-motherboard-in-frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Mount Motherboard in Frame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-install-power-supplies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Install Power Supplies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-7-connect-power-to-motherboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7: Connect Power to Motherboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-8-install-gpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8: Install GPUs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-9-power-gpu-connections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9: Power GPU Connections
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-10-install-additional-fans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 10: Install Additional Fans
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-11-cable-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 11: Cable Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-12-connect-peripherals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 12: Connect Peripherals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-13-pre-power-on-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 13: Pre-Power-On Checklist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-14-first-power-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 14: First Power-On
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bios-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BIOS Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BIOS Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initial-bios-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initial BIOS Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-1-load-defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Load Defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-update-bios-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Update BIOS (Recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-configure-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Configure Memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-configure-pcie" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Configure PCIe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-configure-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Configure Boot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-configure-cpu-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Configure CPU (Optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-7-configure-fans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7: Configure Fans
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-8-verify-all-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8: Verify All Components
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-9-save-and-exit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9: Save and Exit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#power-distribution-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power Distribution Strategy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Power Distribution Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#detailed-power-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detailed Power Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power-supply-load-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power Supply Load Distribution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power-sequencing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power Sequencing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#surge-protection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Surge Protection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cooling-and-thermal-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cooling and Thermal Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cooling and Thermal Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#temperature-targets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Temperature Targets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#airflow-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Airflow Optimization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpu-cooling-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPU Cooling Considerations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#thermal-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thermal Monitoring
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cable-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cable Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cable Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cable-organization-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cable Organization Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-and-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing and Validation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing and Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#post-assembly-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post-Assembly Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-1-bios-post" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 1: BIOS POST
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-2-memory-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 2: Memory Test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-3-cpu-stress-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 3: CPU Stress Test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-4-gpu-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 4: GPU Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-5-gpu-stress-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 5: GPU Stress Test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-6-multi-gpu-stress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 6: Multi-GPU Stress
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-7-storage-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 7: Storage Performance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-8-network-if-configured" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 8: Network (If Configured)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-issues-and-solutions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Issues and Solutions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Issues and Solutions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#issue-system-wont-post" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: System Won't POST
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-memory-not-detected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Memory Not Detected
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-gpu-not-detected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: GPU Not Detected
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-high-gpu-temperatures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: High GPU Temperatures
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-system-crashes-under-load" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: System Crashes Under Load
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-pcie-riser-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: PCIe Riser Problems
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upgrade-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrade Path
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Upgrade Path">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#future-upgrade-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Future Upgrade Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compatibility-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compatibility Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional Resources
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Additional Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#useful-links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Useful Links
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final Checklist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Final Checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre-purchase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-Purchase
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purchasing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purchasing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assembly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assembly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Software (Next Steps)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step2-rhel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 2: RHEL Install
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step3-nvidia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 3: NVIDIA Drivers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step4-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 4: App Stack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step5-webui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 5: WebUI & vLLM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step6-ad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 6: AD Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Production
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../appendix/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendix
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/nvidia-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/nvidia-old-driver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA Old Driver
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/redhat-nvidia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RHEL NVIDIA Instructions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#system-highlights" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Highlights
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#target-use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target Use Cases
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cost-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost Summary
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-specifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Specifications
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-parts-list" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complete Parts List
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Complete Parts List">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#required-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required Components
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Required Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-motherboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Motherboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-cpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. CPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-cpu-cooler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. CPU Cooler
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-graphics-cards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Graphics Cards
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Storage
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-power-supplies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Power Supplies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-pcie-riser-cables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. PCIe Riser Cables
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-open-air-mining-rig-frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Open-Air Mining Rig Frame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-monitor-keyboard-mouse" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Monitor, Keyboard, Mouse
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additional-required-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional Required Components
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Additional Required Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-thermal-paste" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Thermal Paste
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-additional-fans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Additional Fans
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-power-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Power Distribution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-cable-ties-and-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Cable Ties and Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-anti-static-wrist-strap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Anti-Static Wrist Strap
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-toolkit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Toolkit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sourcing-components-on-ebay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sourcing Components on eBay
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Sourcing Components on eBay">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#general-ebay-shopping-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General eBay Shopping Tips
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#component-specific-sourcing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Component-Specific Sourcing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Component-Specific Sourcing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#motherboard-romed8-2t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Motherboard (ROMED8-2T)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cpu-epyc-7443p" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CPU (EPYC 7443P)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpus-rtx-30905090" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPUs (RTX 3090/5090)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-256gb-ddr4-ecc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memory (256GB DDR4 ECC)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cost-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cost Breakdown
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cost Breakdown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#detailed-budget-used-parts-from-ebay" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detailed Budget (Used Parts from eBay)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-build-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-Build Preparation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre-Build Preparation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-workspace-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Workspace Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-inventory-check" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Inventory Check
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-component-testing-optional-but-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Component Testing (Optional but Recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assembly-instructions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assembly Instructions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Assembly Instructions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-assemble-mining-rig-frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Assemble Mining Rig Frame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-install-cpu-and-cooler-on-motherboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Install CPU and Cooler on Motherboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-install-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Install Memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-install-nvme-drive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Install NVMe Drive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-mount-motherboard-in-frame" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Mount Motherboard in Frame
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-install-power-supplies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Install Power Supplies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-7-connect-power-to-motherboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7: Connect Power to Motherboard
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-8-install-gpus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8: Install GPUs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-9-power-gpu-connections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9: Power GPU Connections
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-10-install-additional-fans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 10: Install Additional Fans
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-11-cable-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 11: Cable Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-12-connect-peripherals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 12: Connect Peripherals
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-13-pre-power-on-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 13: Pre-Power-On Checklist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-14-first-power-on" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 14: First Power-On
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bios-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        BIOS Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BIOS Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initial-bios-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initial BIOS Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-1-load-defaults" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Load Defaults
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-update-bios-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Update BIOS (Recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-configure-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Configure Memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-configure-pcie" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Configure PCIe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-configure-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Configure Boot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-6-configure-cpu-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Configure CPU (Optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-7-configure-fans" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7: Configure Fans
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-8-verify-all-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8: Verify All Components
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-9-save-and-exit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9: Save and Exit
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#power-distribution-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power Distribution Strategy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Power Distribution Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#detailed-power-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Detailed Power Analysis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power-supply-load-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power Supply Load Distribution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power-sequencing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power Sequencing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#surge-protection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Surge Protection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cooling-and-thermal-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cooling and Thermal Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cooling and Thermal Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#temperature-targets" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Temperature Targets
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#airflow-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Airflow Optimization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gpu-cooling-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPU Cooling Considerations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#thermal-monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thermal Monitoring
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cable-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cable Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cable Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cable-organization-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cable Organization Strategy
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-and-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing and Validation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing and Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#post-assembly-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post-Assembly Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-1-bios-post" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 1: BIOS POST
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-2-memory-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 2: Memory Test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-3-cpu-stress-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 3: CPU Stress Test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-4-gpu-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 4: GPU Detection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-5-gpu-stress-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 5: GPU Stress Test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-6-multi-gpu-stress" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 6: Multi-GPU Stress
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-7-storage-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 7: Storage Performance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-8-network-if-configured" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test 8: Network (If Configured)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-issues-and-solutions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common Issues and Solutions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Issues and Solutions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#issue-system-wont-post" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: System Won't POST
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-memory-not-detected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Memory Not Detected
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-gpu-not-detected" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: GPU Not Detected
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-high-gpu-temperatures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: High GPU Temperatures
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-system-crashes-under-load" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: System Crashes Under Load
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-pcie-riser-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: PCIe Riser Problems
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#upgrade-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Upgrade Path
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Upgrade Path">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#future-upgrade-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Future Upgrade Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compatibility-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Compatibility Notes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional Resources
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Additional Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#useful-links" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Useful Links
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final Checklist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Final Checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pre-purchase" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-Purchase
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#purchasing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purchasing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#assembly" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Assembly
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Software (Next Steps)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="llm-hardware-requirements-and-build-guide">LLM Hardware Requirements and Build Guide<a class="headerlink" href="#llm-hardware-requirements-and-build-guide" title="Permanent link">&para;</a></h1>
+<p>Complete hardware specification and assembly guide for building a high-performance, cost-effective multi-GPU LLM inference workstation using enterprise-grade components sourced from eBay.</p>
+<hr />
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>This guide provides detailed instructions for building a professional-grade LLM inference workstation optimized for running large language models with multiple GPU configurations. The system leverages enterprise server components purchased used from eBay to provide exceptional performance at a fraction of the cost of new equipment.</p>
+<h3 id="system-highlights">System Highlights<a class="headerlink" href="#system-highlights" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Specification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GPUs</strong></td>
+<td>5 total: 4x RTX 3090 (24GB each) + 1x RTX 5090 (32GB) = 128GB GPU memory</td>
+</tr>
+<tr>
+<td><strong>CPU</strong></td>
+<td>AMD EPYC 7443P, 24 cores / 48 threads, unlocked</td>
+</tr>
+<tr>
+<td><strong>RAM</strong></td>
+<td>256GB DDR4 ECC</td>
+</tr>
+<tr>
+<td><strong>PCIe</strong></td>
+<td>7x PCIe 4.0 x16 slots (ASRock ROMED8-2T)</td>
+</tr>
+<tr>
+<td><strong>Power</strong></td>
+<td>3200W total (dual 1600W PSUs)</td>
+</tr>
+<tr>
+<td><strong>Storage</strong></td>
+<td>4TB NVMe Gen4</td>
+</tr>
+</tbody>
+</table>
+<h3 id="target-use-cases">Target Use Cases<a class="headerlink" href="#target-use-cases" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Large language model inference (Llama 3.1 70B, Mixtral 8x22B, etc.)</li>
+<li>Multi-model serving</li>
+<li>Fine-tuning and training medium-sized models</li>
+<li>Research and development</li>
+<li>Production LLM deployment</li>
+</ul>
+<h3 id="cost-summary">Cost Summary<a class="headerlink" href="#cost-summary" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Price Range</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Used Parts (eBay)</strong></td>
+<td>$7,000 - $9,000</td>
+</tr>
+<tr>
+<td><strong>New Equivalent</strong></td>
+<td>$18,000 - $25,000</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="system-specifications">System Specifications<a class="headerlink" href="#system-specifications" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Specification</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Motherboard</strong></td>
+<td>ASRock ROMED8-2T</td>
+<td>7× PCIe 4.0 x16 slots for multi-GPU</td>
+</tr>
+<tr>
+<td><strong>CPU</strong></td>
+<td>AMD EPYC 7443P (unlocked)</td>
+<td>24C/48T, 2.85GHz base, 4.0GHz boost</td>
+</tr>
+<tr>
+<td><strong>CPU Cooler</strong></td>
+<td>Noctua NH-U14S TR4-SP3 or Dynatron A26</td>
+<td>SP3 socket compatible</td>
+</tr>
+<tr>
+<td><strong>RAM</strong></td>
+<td>256GB DDR4-3200 ECC (8× 32GB)</td>
+<td>Large model loading and caching</td>
+</tr>
+<tr>
+<td><strong>GPU Primary</strong></td>
+<td>4× NVIDIA RTX 3090 24GB</td>
+<td>Main inference workhorses</td>
+</tr>
+<tr>
+<td><strong>GPU Secondary</strong></td>
+<td>1× NVIDIA RTX 5090 32GB</td>
+<td>Latest architecture, highest performance</td>
+</tr>
+<tr>
+<td><strong>Storage</strong></td>
+<td>4TB NVMe Gen4 (Samsung 980 Pro or similar)</td>
+<td>Models, datasets, cache</td>
+</tr>
+<tr>
+<td><strong>PSU</strong></td>
+<td>2× 1600W 80+ Platinum/Titanium</td>
+<td>Dual PSU for 5 GPUs</td>
+</tr>
+<tr>
+<td><strong>PCIe Risers</strong></td>
+<td>5× PCIe 4.0 x16 Riser Cables</td>
+<td>Flexible GPU placement</td>
+</tr>
+<tr>
+<td><strong>Case</strong></td>
+<td>Open-air mining rig frame</td>
+<td>Optimal cooling and accessibility</td>
+</tr>
+<tr>
+<td><strong>Monitor</strong></td>
+<td>24" 1080p or 27" 1440p</td>
+<td>System management</td>
+</tr>
+<tr>
+<td><strong>Keyboard/Mouse</strong></td>
+<td>Standard USB</td>
+<td>Basic I/O</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="complete-parts-list">Complete Parts List<a class="headerlink" href="#complete-parts-list" title="Permanent link">&para;</a></h2>
+<h3 id="required-components">Required Components<a class="headerlink" href="#required-components" title="Permanent link">&para;</a></h3>
+<h4 id="1-motherboard">1. Motherboard<a class="headerlink" href="#1-motherboard" title="Permanent link">&para;</a></h4>
+<p><strong>ASRock ROMED8-2T</strong></p>
+<p><strong>Specifications:</strong>
+- Socket: AMD SP3 (EPYC 7001/7002/7003 series)
+- PCIe Slots: 7× PCIe 4.0 x16 (full electrical x16)
+- Memory: 8× DDR4 DIMM slots, up to 2TB, ECC support
+- M.2 Slots: 2× M.2 (PCIe 4.0 x4)
+- Network: Dual 10GbE
+- Form Factor: EEB (12" × 13")</p>
+<p><strong>eBay Search Terms:</strong>
+- "ASRock ROMED8-2T motherboard"
+- "ROMED8-2T SP3"
+- "ASRock EPYC 7 PCIe motherboard"</p>
+<p><strong>What to Look For:</strong>
+- ✅ All PCIe slots intact
+- ✅ No bent pins in SP3 socket
+- ✅ Includes I/O shield
+- ✅ BIOS version 1.40 or higher
+- ✅ Seller offers returns</p>
+<p><strong>Expected Price:</strong> $400 - $700 used</p>
+<hr />
+<h4 id="2-cpu">2. CPU<a class="headerlink" href="#2-cpu" title="Permanent link">&para;</a></h4>
+<p><strong>AMD EPYC 7443P (Unlocked)</strong></p>
+<p><strong>Specifications:</strong>
+- Cores/Threads: 24C/48T
+- Base Clock: 2.85 GHz
+- Boost Clock: 4.0 GHz
+- Cache: 128MB L3
+- TDP: 200W
+- Memory Support: DDR4-3200, 8-channel
+- PCIe Lanes: 128× PCIe 4.0</p>
+<p><strong>Why This CPU:</strong>
+- Unlocked multiplier for overclocking
+- Excellent single-thread and multi-thread performance
+- 128 PCIe 4.0 lanes (enough for 7 GPUs at full x16)
+- Strong price/performance ratio used</p>
+<p><strong>eBay Search Terms:</strong>
+- "AMD EPYC 7443P"
+- "EPYC 7443P unlocked"
+- "7443P Milan processor"</p>
+<p><strong>What to Look For:</strong>
+- ✅ OPN: 100-000000340
+- ✅ Verify "P" suffix (unlocked)
+- ✅ No bent pins
+- ✅ Thermal paste not hardened/crusted
+- ✅ Comes from reputable seller</p>
+<p><strong>Expected Price:</strong> $800 - $1,200 used</p>
+<hr />
+<h4 id="3-cpu-cooler">3. CPU Cooler<a class="headerlink" href="#3-cpu-cooler" title="Permanent link">&para;</a></h4>
+<p><strong>Noctua NH-U14S TR4-SP3 or Dynatron A26</strong></p>
+<p><strong>Option 1: Noctua NH-U14S TR4-SP3 (Recommended for quiet operation)</strong>
+- Height: 165mm
+- Noise: 19.2 - 24.6 dB(A)
+- Includes SecuFirm2 SP3 mounting kit
+- Premium quality, 6-year warranty</p>
+<p><strong>Option 2: Dynatron A26 (Server-grade, higher airflow)</strong>
+- 2U height compatible
+- High-static pressure fan
+- Designed for EPYC 7003 series
+- Louder but better for open-air rigs</p>
+<p><strong>eBay Search Terms:</strong>
+- "Noctua NH-U14S TR4-SP3"
+- "SP3 CPU cooler EPYC"
+- "Dynatron A26"
+- "Threadripper SP3 cooler"</p>
+<p><strong>Expected Price:</strong> $60 - $120 used</p>
+<hr />
+<h4 id="4-memory">4. Memory<a class="headerlink" href="#4-memory" title="Permanent link">&para;</a></h4>
+<p><strong>256GB DDR4 ECC (8× 32GB DIMMs)</strong></p>
+<p><strong>Specifications:</strong>
+- Type: DDR4 ECC RDIMM or LRDIMM
+- Speed: 3200MHz (PC4-25600)
+- Configuration: 8× 32GB sticks
+- Rank: 2Rx4 or 4Rx4
+- Voltage: 1.2V</p>
+<p><strong>Recommended Brands:</strong>
+- Samsung (M393A4K40DB3-CWE)
+- Micron
+- SK Hynix
+- Kingston Server Premier</p>
+<p><strong>eBay Search Terms:</strong>
+- "32GB DDR4 3200 ECC RDIMM"
+- "Samsung 32GB DDR4 server memory"
+- "DDR4 ECC 3200 EPYC"</p>
+<p><strong>What to Look For:</strong>
+- ✅ Match speeds (all 3200MHz)
+- ✅ Match types (all RDIMM or all LRDIMM)
+- ✅ Same manufacturer (preferred for stability)
+- ✅ Tested/working condition</p>
+<p><strong>Expected Price:</strong> $400 - $650 for 256GB set</p>
+<p><strong>Pro Tip:</strong> You can start with 128GB (4× 32GB) and add more later. Populate all 8 channels for best performance (8× 16GB or 8× 32GB).</p>
+<hr />
+<h4 id="5-graphics-cards">5. Graphics Cards<a class="headerlink" href="#5-graphics-cards" title="Permanent link">&para;</a></h4>
+<p><strong>Primary GPUs: 4× NVIDIA RTX 3090 (24GB)</strong></p>
+<p><strong>Specifications:</strong>
+- CUDA Cores: 10,496
+- Memory: 24GB GDDR6X
+- Memory Bandwidth: 936 GB/s
+- TDP: 350W
+- Power Connectors: 2× 8-pin or 3× 8-pin</p>
+<p><strong>Recommended Models:</strong>
+- Founders Edition (best cooling)
+- ASUS TUF Gaming
+- EVGA FTW3
+- MSI Gaming X Trio</p>
+<p><strong>Avoid:</strong>
+- Single-fan blower models (poor cooling)
+- Cards with obvious physical damage
+- Cards used for mining 24/7 (if disclosed)</p>
+<p><strong>eBay Search Terms:</strong>
+- "RTX 3090 24GB"
+- "NVIDIA RTX 3090 Founders Edition"
+- "RTX 3090 ASUS TUF"</p>
+<p><strong>Expected Price:</strong> $650 - $900 each × 4 = $2,600 - $3,600</p>
+<hr />
+<p><strong>Secondary GPU: 1× NVIDIA RTX 5090 (32GB)</strong></p>
+<p><strong>Specifications:</strong>
+- CUDA Cores: 21,760
+- Memory: 32GB GDDR7
+- Memory Bandwidth: 1,792 GB/s
+- TDP: 575W
+- Power Connectors: 1× 12VHPWR (600W)</p>
+<p><strong>Note:</strong> RTX 5090 is brand new as of 2025, so used prices may not be available yet. Consider new or refurbished.</p>
+<p><strong>Alternatives if RTX 5090 too expensive:</strong>
+- RTX 4090 (24GB) - still excellent
+- 5th RTX 3090 for uniformity</p>
+<p><strong>eBay Search Terms:</strong>
+- "RTX 5090 32GB"
+- "NVIDIA GeForce RTX 5090"</p>
+<p><strong>Expected Price:</strong> $1,500 - $2,000 (may need to buy new)</p>
+<hr />
+<h4 id="6-storage">6. Storage<a class="headerlink" href="#6-storage" title="Permanent link">&para;</a></h4>
+<p><strong>4TB NVMe Gen4 SSD</strong></p>
+<p><strong>Recommended Models:</strong>
+- Samsung 990 Pro 4TB
+- WD Black SN850X 4TB
+- Crucial T700 4TB
+- Seagate FireCuda 530 4TB</p>
+<p><strong>Specifications:</strong>
+- Interface: M.2 2280, PCIe 4.0 x4
+- Sequential Read: 7,000+ MB/s
+- Sequential Write: 6,000+ MB/s
+- Endurance: 2,400+ TBW</p>
+<p><strong>eBay Search Terms:</strong>
+- "4TB NVMe Gen4"
+- "Samsung 990 Pro 4TB"
+- "M.2 4TB PCIe 4.0"</p>
+<p><strong>What to Look For:</strong>
+- ✅ Check SMART health data
+- ✅ Low power-on hours
+- ✅ Good endurance remaining (&gt;90%)
+- ✅ Includes heatsink or buy separately</p>
+<p><strong>Expected Price:</strong> $200 - $350 used</p>
+<p><strong>Alternative:</strong> Start with 2TB and add second drive later.</p>
+<hr />
+<h4 id="7-power-supplies">7. Power Supplies<a class="headerlink" href="#7-power-supplies" title="Permanent link">&para;</a></h4>
+<p><strong>2× 1600W 80+ Platinum or Titanium PSUs</strong></p>
+<p><strong>Why Dual PSU:</strong>
+- Total GPU power: ~2,125W (4× 350W + 1× 575W)
+- CPU: 200W
+- System: ~100W
+- Total: ~2,425W
+- 2× 1600W = 3,200W capacity (good headroom)</p>
+<p><strong>Recommended Server PSUs:</strong>
+- HP 1600W 80+ Platinum (DPS-1600AB A, 750504-001)
+- Delta 1600W 80+ Platinum
+- Cisco UCSC-PSU2-1600W
+- IBM 1600W</p>
+<p><strong>eBay Search Terms:</strong>
+- "1600W server PSU platinum"
+- "HP 1600W power supply"
+- "Dell 1600W PSU"</p>
+<p><strong>What to Look For:</strong>
+- ✅ 80+ Platinum or Titanium efficiency
+- ✅ Includes breakout board or buy X11 board
+- ✅ All cables included
+- ✅ Tested working</p>
+<p><strong>Expected Price:</strong> $80 - $150 each × 2 = $160 - $300</p>
+<p><strong>Also Need:</strong>
+- 2× X11 or X12 PSU Breakout Boards ($15-30 each)
+- PCIe 6-pin to 8-pin cables (for GPUs)
+- 24-pin ATX adapter for motherboard</p>
+<hr />
+<h4 id="8-pcie-riser-cables">8. PCIe Riser Cables<a class="headerlink" href="#8-pcie-riser-cables" title="Permanent link">&para;</a></h4>
+<p><strong>5× PCIe 4.0 x16 Riser Cables</strong></p>
+<p><strong>Specifications:</strong>
+- Standard: PCIe 4.0
+- Length: 30cm - 50cm (depending on case layout)
+- Connectors: x16 to x16
+- Shielding: Required for PCIe 4.0 speeds</p>
+<p><strong>Recommended Brands:</strong>
+- Thermaltake TT Premium PCIe 4.0
+- LINKUP Ultra PCIe 4.0
+- ASUS ROG Strix Riser Cable</p>
+<p><strong>eBay Search Terms:</strong>
+- "PCIe 4.0 riser cable x16"
+- "PCIe Gen4 extender 40cm"
+- "mining riser cable PCIe 4.0"</p>
+<p><strong>What to Look For:</strong>
+- ✅ PCIe 4.0 certified (not 3.0)
+- ✅ Proper shielding
+- ✅ Correct length for your frame
+- ✅ Angled connectors (helpful for tight spaces)</p>
+<p><strong>Expected Price:</strong> $25 - $50 each × 5 = $125 - $250</p>
+<p><strong>Note:</strong> You can mount 2 GPUs directly on motherboard and use 3 risers to save cost.</p>
+<hr />
+<h4 id="9-open-air-mining-rig-frame">9. Open-Air Mining Rig Frame<a class="headerlink" href="#9-open-air-mining-rig-frame" title="Permanent link">&para;</a></h4>
+<p><strong>8-GPU Compatible Frame</strong></p>
+<p><strong>Specifications:</strong>
+- Material: Steel or aluminum
+- GPU Capacity: 8-12 GPUs
+- Dimensions: ~90cm × 45cm × 45cm
+- Includes: GPU mounting brackets, PSU mounting</p>
+<p><strong>Recommended Features:</strong>
+- Adjustable GPU spacing
+- Sturdy construction (steel preferred)
+- Stackable design
+- Cable management provisions</p>
+<p><strong>eBay Search Terms:</strong>
+- "8 GPU mining rig frame"
+- "open air mining case 12 GPU"
+- "cryptocurrency mining frame"
+- "GPU rig chassis steel"</p>
+<p><strong>What to Look For:</strong>
+- ✅ Heavy-duty construction
+- ✅ All mounting hardware included
+- ✅ Motherboard mounting tray
+- ✅ PSU mounting brackets (for 2 PSUs)</p>
+<p><strong>Expected Price:</strong> $80 - $150 used</p>
+<p><strong>Alternative:</strong> Build your own with aluminum extrusion.</p>
+<hr />
+<h4 id="10-monitor-keyboard-mouse">10. Monitor, Keyboard, Mouse<a class="headerlink" href="#10-monitor-keyboard-mouse" title="Permanent link">&para;</a></h4>
+<p><strong>Monitor:</strong>
+- 24" 1080p or 27" 1440p
+- IPS panel preferred
+- HDMI or DisplayPort input
+- <strong>Expected Price:</strong> $80 - $150 used</p>
+<p><strong>Keyboard:</strong>
+- Standard USB keyboard
+- Mechanical or membrane
+- <strong>Expected Price:</strong> $15 - $40 used</p>
+<p><strong>Mouse:</strong>
+- USB wired or wireless
+- Basic optical mouse sufficient
+- <strong>Expected Price:</strong> $10 - $25 used</p>
+<p><strong>eBay Search Terms:</strong>
+- "24 inch monitor 1080p"
+- "Dell monitor P2419H"
+- "USB keyboard"
+- "Logitech wireless mouse"</p>
+<hr />
+<h3 id="additional-required-components">Additional Required Components<a class="headerlink" href="#additional-required-components" title="Permanent link">&para;</a></h3>
+<h4 id="11-thermal-paste">11. Thermal Paste<a class="headerlink" href="#11-thermal-paste" title="Permanent link">&para;</a></h4>
+<p><strong>High-Performance Thermal Compound</strong></p>
+<ul>
+<li>Noctua NT-H1 or NT-H2</li>
+<li>Thermal Grizzly Kryonaut</li>
+<li>Arctic MX-5</li>
+</ul>
+<p><strong>Expected Price:</strong> $8 - $15</p>
+<hr />
+<h4 id="12-additional-fans">12. Additional Fans<a class="headerlink" href="#12-additional-fans" title="Permanent link">&para;</a></h4>
+<p><strong>Case Fans for GPU Cooling</strong></p>
+<p><strong>Recommended:</strong>
+- 3-5× 120mm or 140mm fans
+- High static pressure fans
+- PWM control preferred</p>
+<p><strong>Models:</strong>
+- Noctua NF-P12 redux
+- Arctic P12 PWM
+- be quiet! Pure Wings 2</p>
+<p><strong>Expected Price:</strong> $10 - $20 each × 3-5 = $30 - $100</p>
+<hr />
+<h4 id="13-power-distribution">13. Power Distribution<a class="headerlink" href="#13-power-distribution" title="Permanent link">&para;</a></h4>
+<p><strong>PSU Breakout Boards and Cables</strong></p>
+<p><strong>Required:</strong>
+- 2× X11/X12 Server PSU Breakout Boards
+- ATX 24-pin adapter
+- Multiple PCIe 8-pin cables
+- SATA power cables</p>
+<p><strong>Expected Price:</strong> $50 - $100 total</p>
+<hr />
+<h4 id="14-cable-ties-and-management">14. Cable Ties and Management<a class="headerlink" href="#14-cable-ties-and-management" title="Permanent link">&para;</a></h4>
+<p><strong>Organization Supplies</strong></p>
+<ul>
+<li>100pk Velcro cable ties</li>
+<li>Zip ties (various sizes)</li>
+<li>Cable sleeves (optional)</li>
+<li>Label maker or labels</li>
+</ul>
+<p><strong>Expected Price:</strong> $15 - $30</p>
+<hr />
+<h4 id="15-anti-static-wrist-strap">15. Anti-Static Wrist Strap<a class="headerlink" href="#15-anti-static-wrist-strap" title="Permanent link">&para;</a></h4>
+<p><strong>ESD Protection</strong></p>
+<p>Essential for handling components safely.</p>
+<p><strong>Expected Price:</strong> $5 - $10</p>
+<hr />
+<h4 id="16-toolkit">16. Toolkit<a class="headerlink" href="#16-toolkit" title="Permanent link">&para;</a></h4>
+<p><strong>Screwdriver Set</strong></p>
+<ul>
+<li>Phillips #1 and #2</li>
+<li>Magnetic tip preferred</li>
+<li>Hex drivers (if needed)</li>
+</ul>
+<p><strong>Expected Price:</strong> $15 - $30</p>
+<hr />
+<h2 id="sourcing-components-on-ebay">Sourcing Components on eBay<a class="headerlink" href="#sourcing-components-on-ebay" title="Permanent link">&para;</a></h2>
+<h3 id="general-ebay-shopping-tips">General eBay Shopping Tips<a class="headerlink" href="#general-ebay-shopping-tips" title="Permanent link">&para;</a></h3>
+<p><strong>1. Search Strategies:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Use multiple search terms:
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>- &quot;ASRock ROMED8-2T&quot; + &quot;SP3&quot;
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>- &quot;RTX 3090&quot; + &quot;ASUS&quot; + &quot;working&quot;
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>- &quot;EPYC 7443P&quot; + &quot;unlocked&quot;
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Set alerts for new listings
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>Use &quot;Sold Listings&quot; to gauge market price
+</code></pre></div></p>
+<p><strong>2. Seller Evaluation:</strong>
+- ✅ 98%+ positive feedback
+- ✅ &gt;100 transactions
+- ✅ Returns accepted (14-30 days)
+- ✅ "Top Rated Seller" badge
+- ✅ Detailed photos of actual item
+- ✅ Clear description of condition</p>
+<p><strong>3. Listing Red Flags:</strong>
+- ❌ Stock photos only
+- ❌ Vague description ("untested", "as-is")
+- ❌ New seller with expensive items
+- ❌ No returns accepted
+- ❌ Suspiciously low price</p>
+<p><strong>4. Best Offers:</strong>
+- Most sellers accept 10-15% off asking price
+- Start at 20% below asking
+- Be polite and reasonable
+- Bundle multiple items for better deals</p>
+<p><strong>5. Timing:</strong>
+- Best deals: Tuesday-Thursday evenings
+- Avoid: Weekend bidding wars
+- End of month: Sellers more motivated</p>
+<hr />
+<h3 id="component-specific-sourcing">Component-Specific Sourcing<a class="headerlink" href="#component-specific-sourcing" title="Permanent link">&para;</a></h3>
+<h4 id="motherboard-romed8-2t">Motherboard (ROMED8-2T)<a class="headerlink" href="#motherboard-romed8-2t" title="Permanent link">&para;</a></h4>
+<p><strong>Questions to Ask Seller:</strong>
+- "Has this been tested? What CPU/RAM?"
+- "Are all PCIe slots working?"
+- "What BIOS version is installed?"
+- "Any included accessories (SATA cables, etc.)?"</p>
+<p><strong>Test Before Purchase:</strong>
+Request seller to test with CPU if possible.</p>
+<hr />
+<h4 id="cpu-epyc-7443p">CPU (EPYC 7443P)<a class="headerlink" href="#cpu-epyc-7443p" title="Permanent link">&para;</a></h4>
+<p><strong>Questions to Ask Seller:</strong>
+- "What was this CPU used for?"
+- "How many hours of runtime?"
+- "Was it overclocked?"
+- "Confirm OPN: 100-000000340"</p>
+<p><strong>Verification:</strong>
+OPN marking on CPU IHS should read 100-000000340.</p>
+<hr />
+<h4 id="gpus-rtx-30905090">GPUs (RTX 3090/5090)<a class="headerlink" href="#gpus-rtx-30905090" title="Permanent link">&para;</a></h4>
+<p><strong>Questions to Ask Seller:</strong>
+- "Was this used for mining?"
+- "What are the temps under load?"
+- "Any coil whine or artifacts?"
+- "Will you provide GPU-Z screenshot?"</p>
+<p><strong>Red Flags:</strong>
+- Mining operation sales (24/7 usage)
+- Repasted recently (may indicate overheating issues)
+- Missing backplate or shroud</p>
+<hr />
+<h4 id="memory-256gb-ddr4-ecc">Memory (256GB DDR4 ECC)<a class="headerlink" href="#memory-256gb-ddr4-ecc" title="Permanent link">&para;</a></h4>
+<p><strong>Questions to Ask Seller:</strong>
+- "Has this been tested with MemTest86?"
+- "Any errors in BIOS detection?"
+- "What server/motherboard was this used in?"</p>
+<p><strong>Tip:</strong> Buy all from same seller if possible for matched set.</p>
+<hr />
+<h2 id="cost-breakdown">Cost Breakdown<a class="headerlink" href="#cost-breakdown" title="Permanent link">&para;</a></h2>
+<h3 id="detailed-budget-used-parts-from-ebay">Detailed Budget (Used Parts from eBay)<a class="headerlink" href="#detailed-budget-used-parts-from-ebay" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Quantity</th>
+<th>Unit Price</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ASRock ROMED8-2T</td>
+<td>1</td>
+<td>$400-700</td>
+<td>$550</td>
+</tr>
+<tr>
+<td>AMD EPYC 7443P</td>
+<td>1</td>
+<td>$800-1,200</td>
+<td>$1,000</td>
+</tr>
+<tr>
+<td>SP3 CPU Cooler</td>
+<td>1</td>
+<td>$60-120</td>
+<td>$90</td>
+</tr>
+<tr>
+<td>32GB DDR4 ECC</td>
+<td>8</td>
+<td>$50-80</td>
+<td>$560</td>
+</tr>
+<tr>
+<td>RTX 3090 24GB</td>
+<td>4</td>
+<td>$650-900</td>
+<td>$3,000</td>
+</tr>
+<tr>
+<td>RTX 5090 32GB</td>
+<td>1</td>
+<td>$1,500-2,000</td>
+<td>$1,750</td>
+</tr>
+<tr>
+<td>4TB NVMe Gen4</td>
+<td>1</td>
+<td>$200-350</td>
+<td>$275</td>
+</tr>
+<tr>
+<td>1600W PSU</td>
+<td>2</td>
+<td>$80-150</td>
+<td>$240</td>
+</tr>
+<tr>
+<td>PCIe 4.0 Riser</td>
+<td>5</td>
+<td>$25-50</td>
+<td>$175</td>
+</tr>
+<tr>
+<td>Mining Rig Frame</td>
+<td>1</td>
+<td>$80-150</td>
+<td>$115</td>
+</tr>
+<tr>
+<td>Monitor 24"</td>
+<td>1</td>
+<td>$80-150</td>
+<td>$115</td>
+</tr>
+<tr>
+<td>Keyboard</td>
+<td>1</td>
+<td>$15-40</td>
+<td>$25</td>
+</tr>
+<tr>
+<td>Mouse</td>
+<td>1</td>
+<td>$10-25</td>
+<td>$15</td>
+</tr>
+<tr>
+<td>PSU Breakout Boards</td>
+<td>2</td>
+<td>$15-30</td>
+<td>$45</td>
+</tr>
+<tr>
+<td>Case Fans</td>
+<td>4</td>
+<td>$10-20</td>
+<td>$60</td>
+</tr>
+<tr>
+<td>Thermal Paste</td>
+<td>1</td>
+<td>$8-15</td>
+<td>$12</td>
+</tr>
+<tr>
+<td>Cables/Accessories</td>
+<td>-</td>
+<td>-</td>
+<td>$75</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td></td>
+<td></td>
+<td><strong>$8,102</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Budget Range:</strong> $7,000 - $9,000 depending on deals</p>
+<p><strong>Cost Savings vs New:</strong> ~$12,000 - $16,000</p>
+<hr />
+<h2 id="pre-build-preparation">Pre-Build Preparation<a class="headerlink" href="#pre-build-preparation" title="Permanent link">&para;</a></h2>
+<h3 id="1-workspace-setup">1. Workspace Setup<a class="headerlink" href="#1-workspace-setup" title="Permanent link">&para;</a></h3>
+<p><strong>Requirements:</strong>
+- Large work surface (6ft × 3ft minimum)
+- Good lighting (overhead + task light)
+- Anti-static mat (or cardboard)
+- Organize parts by category</p>
+<p><strong>Checklist:</strong>
+- [ ] Clear, clean workspace
+- [ ] Anti-static protection
+- [ ] Tools laid out
+- [ ] All parts unboxed and verified
+- [ ] Assembly instructions printed</p>
+<hr />
+<h3 id="2-inventory-check">2. Inventory Check<a class="headerlink" href="#2-inventory-check" title="Permanent link">&para;</a></h3>
+<p><strong>Verify you have:</strong>
+- [ ] Motherboard with I/O shield
+- [ ] CPU with no bent pins
+- [ ] CPU cooler with mounting hardware
+- [ ] All 8 RAM sticks
+- [ ] All 5 GPUs
+- [ ] NVMe drive
+- [ ] 2× PSUs with cables
+- [ ] 5× PCIe risers
+- [ ] Mining frame with all brackets
+- [ ] Monitor, keyboard, mouse
+- [ ] Thermal paste
+- [ ] Cable ties
+- [ ] Screwdriver set</p>
+<hr />
+<h3 id="3-component-testing-optional-but-recommended">3. Component Testing (Optional but Recommended)<a class="headerlink" href="#3-component-testing-optional-but-recommended" title="Permanent link">&para;</a></h3>
+<p><strong>Motherboard + CPU + RAM Test:</strong>
+Before full assembly, test core components:</p>
+<ol>
+<li>Place motherboard on anti-static surface</li>
+<li>Install CPU and cooler</li>
+<li>Install 1 stick of RAM in slot A1</li>
+<li>Connect PSU (24-pin + 8-pin CPU)</li>
+<li>Connect monitor to onboard video (if available) or install 1 GPU</li>
+<li>Power on and enter BIOS</li>
+<li>Verify CPU and RAM detected</li>
+<li>Power off and proceed with full build</li>
+</ol>
+<hr />
+<h2 id="assembly-instructions">Assembly Instructions<a class="headerlink" href="#assembly-instructions" title="Permanent link">&para;</a></h2>
+<h3 id="step-1-assemble-mining-rig-frame">Step 1: Assemble Mining Rig Frame<a class="headerlink" href="#step-1-assemble-mining-rig-frame" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 30-45 minutes</p>
+<ol>
+<li><strong>Lay out all frame parts</strong></li>
+<li>Base rails</li>
+<li>Vertical supports</li>
+<li>GPU mounting bars</li>
+<li>Motherboard tray</li>
+<li>
+<p>PSU brackets</p>
+</li>
+<li>
+<p><strong>Assemble base frame</strong></p>
+</li>
+<li>Connect base rails with vertical supports</li>
+<li>Use provided bolts/screws</li>
+<li>
+<p>Ensure frame is square and level</p>
+</li>
+<li>
+<p><strong>Install motherboard tray</strong></p>
+</li>
+<li>Mount tray to frame</li>
+<li>Position for cable access from bottom</li>
+<li>
+<p>Leave space for PSU(s) below</p>
+</li>
+<li>
+<p><strong>Install GPU mounting bars</strong></p>
+</li>
+<li>Space bars 2-3 slots apart (depends on GPU thickness)</li>
+<li>Allow 40-50mm between GPUs for airflow</li>
+<li>
+<p>Position for riser cable routing</p>
+</li>
+<li>
+<p><strong>Install PSU mounting brackets</strong></p>
+</li>
+<li>Bottom of frame or rear mounting</li>
+<li>Ensure both PSUs fit</li>
+<li>
+<p>Fan orientation: intake from outside</p>
+</li>
+<li>
+<p><strong>Verify stability</strong></p>
+</li>
+<li>Frame should not wobble</li>
+<li>All connections tight</li>
+<li>Ready for component installation</li>
+</ol>
+<hr />
+<h3 id="step-2-install-cpu-and-cooler-on-motherboard">Step 2: Install CPU and Cooler on Motherboard<a class="headerlink" href="#step-2-install-cpu-and-cooler-on-motherboard" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 20-30 minutes</p>
+<p><strong>⚠️ CRITICAL: Use anti-static protection throughout!</strong></p>
+<ol>
+<li><strong>Place motherboard on anti-static surface</strong></li>
+<li>Use motherboard box or anti-static mat</li>
+<li>
+<p>Ensure good lighting</p>
+</li>
+<li>
+<p><strong>Install CPU</strong>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>SP3 Socket Installation:
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>a. Lift CPU socket lever (may require significant force)
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>b. Remove protective cover
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>c. Align CPU triangle marker with socket triangle
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>d. Gently place CPU - DO NOT FORCE
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>e. CPU should drop into place with no pressure
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>f. Close socket lever (requires firm pressure)
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>g. Verify CPU is flush and secure
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Apply thermal paste</strong></p>
+</li>
+<li>Clean CPU IHS with isopropyl alcohol</li>
+<li>Apply pea-sized dot in center</li>
+<li>
+<p>Or use spread method for large EPYC die</p>
+</li>
+<li>
+<p><strong>Install CPU cooler</strong>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>For Noctua NH-U14S TR4-SP3:
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>a. Install backplate on rear of motherboard
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>b. Align mounting brackets over CPU
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>c. Attach retention clips
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>d. Lower heatsink onto CPU
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>e. Secure with spring-loaded screws
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>f. Tighten in cross pattern (don&#39;t over-tighten)
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>g. Connect fan to CPU_FAN header
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Verify installation</strong></p>
+</li>
+<li>Cooler is firmly mounted</li>
+<li>No gaps between heatsink and CPU</li>
+<li>Fan spins freely</li>
+<li>Fan cable routed cleanly</li>
+</ol>
+<hr />
+<h3 id="step-3-install-memory">Step 3: Install Memory<a class="headerlink" href="#step-3-install-memory" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 10-15 minutes</p>
+<p><strong>ROMED8-2T Memory Configuration:</strong>
+- 8× DIMM slots (4 channels × 2 DIMMs)
+- Channels: A, B, C, D
+- Slots per channel: 1, 2</p>
+<p><strong>Population Order for 8× 32GB:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Install in this order for 8-channel operation:
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>1. A1 (furthest from CPU)
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>2. B1
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>3. C1
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>4. D1
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>5. A2
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>6. B2
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>7. C2
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>8. D2
+</code></pre></div></p>
+<p><strong>Installation Procedure:</strong>
+1. Open DIMM slot latches
+2. Align DIMM notch with slot key
+3. Press down firmly until latches click (requires force)
+4. Verify both latches are locked
+5. Repeat for all 8 DIMMs</p>
+<p><strong>Pro Tip:</strong> Install in pairs (A1+A2, B1+B2, etc.) for better organization.</p>
+<hr />
+<h3 id="step-4-install-nvme-drive">Step 4: Install NVMe Drive<a class="headerlink" href="#step-4-install-nvme-drive" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 5 minutes</p>
+<p><strong>ROMED8-2T has 2× M.2 slots:</strong>
+- M.2_1: Near CPU (primary)
+- M.2_2: Near bottom (secondary)</p>
+<p><strong>Installation:</strong>
+1. Locate M.2_1 slot (check motherboard manual)
+2. Remove retention screw
+3. Insert NVMe drive at 30° angle
+4. Press down gently
+5. Secure with retention screw
+6. Install heatsink if included</p>
+<hr />
+<h3 id="step-5-mount-motherboard-in-frame">Step 5: Mount Motherboard in Frame<a class="headerlink" href="#step-5-mount-motherboard-in-frame" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 15-20 minutes</p>
+<ol>
+<li><strong>Install I/O shield</strong></li>
+<li>Snap I/O shield into motherboard tray</li>
+<li>Ensure tight fit</li>
+<li>
+<p>Metal tabs face inward</p>
+</li>
+<li>
+<p><strong>Position motherboard standoffs</strong></p>
+</li>
+<li>ROMED8-2T is EEB (12" × 13")</li>
+<li>Install standoffs in all matching holes</li>
+<li>
+<p>Typically 9-10 standoffs for EEB</p>
+</li>
+<li>
+<p><strong>Place motherboard on standoffs</strong></p>
+</li>
+<li>Align with I/O shield</li>
+<li>Line up standoff holes</li>
+<li>
+<p>DO NOT force</p>
+</li>
+<li>
+<p><strong>Secure motherboard</strong></p>
+</li>
+<li>Install screws in cross pattern</li>
+<li>Finger-tight first, then snug</li>
+<li>
+<p>Don't over-tighten (risk of cracking)</p>
+</li>
+<li>
+<p><strong>Verify installation</strong></p>
+</li>
+<li>Motherboard is level</li>
+<li>No flex when pressing on corners</li>
+<li>I/O ports align with shield</li>
+</ol>
+<hr />
+<h3 id="step-6-install-power-supplies">Step 6: Install Power Supplies<a class="headerlink" href="#step-6-install-power-supplies" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 20 minutes</p>
+<ol>
+<li><strong>Mount first PSU (PSU1 - Motherboard/CPU)</strong></li>
+<li>Position fan facing outward for intake</li>
+<li>Secure with mounting screws</li>
+<li>
+<p>Route cables toward motherboard</p>
+</li>
+<li>
+<p><strong>Mount second PSU (PSU2 - GPUs)</strong></p>
+</li>
+<li>Position next to PSU1</li>
+<li>Same fan orientation</li>
+<li>
+<p>Route cables toward GPU area</p>
+</li>
+<li>
+<p><strong>Install PSU breakout boards</strong></p>
+</li>
+<li>Connect to 12V output on server PSUs</li>
+<li>Secure breakout boards to frame</li>
+<li>
+<p>Label: "PSU1 - MOBO" and "PSU2 - GPU"</p>
+</li>
+<li>
+<p><strong>Cable preparation</strong></p>
+</li>
+<li>Organize cables by function</li>
+<li>Don't connect to motherboard yet</li>
+<li>Keep extra cables bundled</li>
+</ol>
+<hr />
+<h3 id="step-7-connect-power-to-motherboard">Step 7: Connect Power to Motherboard<a class="headerlink" href="#step-7-connect-power-to-motherboard" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 10 minutes</p>
+<p><strong>PSU1 Connections (Motherboard PSU):</strong></p>
+<ol>
+<li><strong>24-pin ATX power</strong></li>
+<li>Locate ATX_PWR1 on motherboard</li>
+<li>Connect 24-pin from PSU breakout</li>
+<li>
+<p>Ensure latch clicks</p>
+</li>
+<li>
+<p><strong>8-pin CPU power (×2)</strong></p>
+</li>
+<li>ROMED8-2T requires 2× 8-pin CPU power</li>
+<li>Locate CPU_PWR1 and CPU_PWR2 near CPU socket</li>
+<li>Connect both 8-pin EPS connectors</li>
+<li>
+<p>Essential for high CPU power delivery</p>
+</li>
+<li>
+<p><strong>SATA/Peripheral power</strong></p>
+</li>
+<li>Connect to NVMe heatsink fan (if applicable)</li>
+<li>Reserve for additional drives later</li>
+</ol>
+<p><strong>Verify all connections are secure before proceeding.</strong></p>
+<hr />
+<h3 id="step-8-install-gpus">Step 8: Install GPUs<a class="headerlink" href="#step-8-install-gpus" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 45-60 minutes</p>
+<p><strong>GPU Installation Strategy:</strong></p>
+<p><strong>Direct PCIe Slots (No Riser):</strong>
+- GPU 1: PCIe Slot 1 (closest to CPU) - RTX 5090
+- GPU 2: PCIe Slot 3 (skip slot 2 for spacing) - RTX 3090</p>
+<p><strong>With PCIe Risers:</strong>
+- GPU 3: Riser to Slot 4 - RTX 3090
+- GPU 4: Riser to Slot 5 - RTX 3090
+- GPU 5: Riser to Slot 6 - RTX 3090</p>
+<p><strong>Installation Procedure:</strong></p>
+<p><strong>For Direct PCIe Installation:</strong>
+1. Remove PCIe slot covers from motherboard I/O area
+2. Align GPU with PCIe slot
+3. Press down firmly until click
+4. Secure GPU bracket with screw
+5. Leave power cables disconnected for now</p>
+<p><strong>For Riser Installation:</strong>
+1. Connect riser to PCIe slot on motherboard
+2. Mount GPU on frame's GPU bars
+3. Connect riser to GPU
+4. Secure GPU to mounting bar
+5. Ensure riser cable not twisted or kinked</p>
+<p><strong>GPU Spacing:</strong>
+- Maintain 40-50mm between GPUs
+- Avoid blocking fan intakes
+- Stagger heights if needed for airflow</p>
+<hr />
+<h3 id="step-9-power-gpu-connections">Step 9: Power GPU Connections<a class="headerlink" href="#step-9-power-gpu-connections" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 30 minutes</p>
+<p><strong>PSU2 Dedicated to GPUs:</strong></p>
+<p><strong>Power Requirements:</strong>
+- RTX 5090: 600W (1× 12VHPWR connector)
+- RTX 3090: 350W each (2× 8-pin or 3× 8-pin per GPU)</p>
+<p><strong>Connection Strategy:</strong></p>
+<p><strong>Option A: Server PSU with Breakout Board</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>X12 Breakout Board provides:
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>- Multiple PCIe 8-pin outputs
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>- Direct 12V power
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>Connect:
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>GPU1 (RTX 5090): Use 12VHPWR adapter or 3× 8-pin to 12VHPWR
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>GPU2 (RTX 3090): 2× 8-pin PCIe
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>GPU3 (RTX 3090): 2× 8-pin PCIe
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>GPU4 (RTX 3090): 2× 8-pin PCIe
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>GPU5 (RTX 3090): 2× 8-pin PCIe
+</code></pre></div></p>
+<p><strong>Load Balancing:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>PSU1 (1600W): Motherboard (150W) + CPU (200W) = 350W used
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>PSU2 (1600W): 5 GPUs (2125W total) - OVERLOAD!
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>SOLUTION: Split GPU power across both PSUs
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>PSU1: RTX 5090 (600W) + 1× RTX 3090 (350W) = 950W + overhead
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>PSU2: 3× RTX 3090 (1050W)
+</code></pre></div></p>
+<p><strong>Revised Connection:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>PSU1 (After mobo/CPU):
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>- GPU1: RTX 5090 (3× 8-pin or 12VHPWR)
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>- GPU2: RTX 3090 (2× 8-pin)
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>PSU2:
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>- GPU3: RTX 3090 (2× 8-pin)
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>- GPU4: RTX 3090 (2× 8-pin)  
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>- GPU5: RTX 3090 (2× 8-pin)
+</code></pre></div></p>
+<p><strong>Cable Management:</strong>
+- Use separate PCIe cables per GPU (don't daisy-chain)
+- Route cables cleanly
+- Label each GPU and its power source
+- Secure with velcro ties</p>
+<hr />
+<h3 id="step-10-install-additional-fans">Step 10: Install Additional Fans<a class="headerlink" href="#step-10-install-additional-fans" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 15 minutes</p>
+<p><strong>Fan Placement Strategy:</strong>
+1. <strong>Front fans (intake):</strong> 2× 120mm or 140mm
+   - Push cool air toward GPUs
+   - Low-medium speed</p>
+<ol>
+<li><strong>Rear fans (exhaust):</strong> 2× 120mm</li>
+<li>Pull hot air away from GPUs</li>
+<li>
+<p>Medium-high speed</p>
+</li>
+<li>
+<p><strong>Side fans (optional):</strong> 1× 140mm</p>
+</li>
+<li>Direct airflow between GPU rows</li>
+</ol>
+<p><strong>Fan Connections:</strong>
+- Connect to motherboard fan headers
+- Or use PSU SATA to 4-pin adapters
+- Set to 40-60% speed initially</p>
+<p><strong>Airflow Direction:</strong>
+- Front to back
+- Bottom to top
+- Create positive pressure (more intake than exhaust)</p>
+<hr />
+<h3 id="step-11-cable-management">Step 11: Cable Management<a class="headerlink" href="#step-11-cable-management" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 30 minutes</p>
+<p><strong>Organize cables by type:</strong></p>
+<ol>
+<li><strong>Power cables:</strong></li>
+<li>Route along frame edges</li>
+<li>Use cable ties every 6-8 inches</li>
+<li>
+<p>Keep away from fans</p>
+</li>
+<li>
+<p><strong>PCIe risers:</strong></p>
+</li>
+<li>Avoid sharp bends (&gt;90°)</li>
+<li>Secure to prevent sagging</li>
+<li>
+<p>Don't cross power cables if possible</p>
+</li>
+<li>
+<p><strong>Front panel connections:</strong></p>
+</li>
+<li>Power button</li>
+<li>Power LED</li>
+<li>HDD LED</li>
+<li>
+<p>USB headers (if needed)</p>
+</li>
+<li>
+<p><strong>Label everything:</strong></p>
+</li>
+<li>GPU numbers (GPU1-GPU5)</li>
+<li>PSU assignments</li>
+<li>Fan connections</li>
+</ol>
+<p><strong>Pro Tips:</strong>
+- Use velcro ties (reusable)
+- Leave slack for maintenance
+- Take photos for reference</p>
+<hr />
+<h3 id="step-12-connect-peripherals">Step 12: Connect Peripherals<a class="headerlink" href="#step-12-connect-peripherals" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 5 minutes</p>
+<ol>
+<li><strong>Monitor:</strong></li>
+<li>Connect to RTX 5090 DisplayPort/HDMI</li>
+<li>
+<p>Use GPU1 for primary display</p>
+</li>
+<li>
+<p><strong>Keyboard and Mouse:</strong></p>
+</li>
+<li>
+<p>USB 2.0 or 3.0 ports on rear I/O</p>
+</li>
+<li>
+<p><strong>Network:</strong></p>
+</li>
+<li>Connect Ethernet to onboard 10GbE (optional)</li>
+<li>Or use Wi-Fi if installing card later</li>
+</ol>
+<hr />
+<h3 id="step-13-pre-power-on-checklist">Step 13: Pre-Power-On Checklist<a class="headerlink" href="#step-13-pre-power-on-checklist" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 15 minutes</p>
+<p><strong>⚠️ CRITICAL: Verify before first power-on!</strong></p>
+<p><strong>Motherboard:</strong>
+- [ ] CPU installed correctly
+- [ ] Cooler mounted securely
+- [ ] All 8 RAM sticks installed
+- [ ] 24-pin ATX power connected
+- [ ] 2× 8-pin CPU power connected
+- [ ] NVMe drive installed</p>
+<p><strong>GPUs:</strong>
+- [ ] All 5 GPUs seated properly
+- [ ] All GPUs have power connected
+- [ ] Risers connected firmly
+- [ ] No loose cables near fans</p>
+<p><strong>Power Supplies:</strong>
+- [ ] Both PSUs plugged in
+- [ ] PSU switches OFF
+- [ ] All cables connected
+- [ ] No short circuits visible</p>
+<p><strong>Cooling:</strong>
+- [ ] CPU fan connected
+- [ ] Case fans connected
+- [ ] All fans spin freely
+- [ ] No obstructions</p>
+<p><strong>Peripherals:</strong>
+- [ ] Monitor connected to GPU1
+- [ ] Keyboard connected
+- [ ] Mouse connected</p>
+<p><strong>Safety:</strong>
+- [ ] No loose screws in system
+- [ ] No metal touching motherboard
+- [ ] Cable management complete
+- [ ] Frame stable and level</p>
+<hr />
+<h3 id="step-14-first-power-on">Step 14: First Power-On<a class="headerlink" href="#step-14-first-power-on" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 10 minutes</p>
+<p><strong>Procedure:</strong></p>
+<ol>
+<li><strong>Turn on PSU switches</strong></li>
+<li>PSU1 first (motherboard)</li>
+<li>PSU2 second (GPUs)</li>
+<li>
+<p>Wait 5 seconds</p>
+</li>
+<li>
+<p><strong>Press power button</strong></p>
+</li>
+<li>Short press</li>
+<li>
+<p>Watch for:</p>
+<ul>
+<li>CPU fan spinning</li>
+<li>GPU fans spinning</li>
+<li>Monitor signal</li>
+<li>POST beep (if speaker installed)</li>
+</ul>
+</li>
+<li>
+<p><strong>Expected behavior:</strong></p>
+</li>
+<li>Fans start spinning</li>
+<li>LEDs light up</li>
+<li>Monitor shows BIOS splash screen</li>
+<li>
+<p>System may reboot once (training memory)</p>
+</li>
+<li>
+<p><strong>If no display:</strong></p>
+</li>
+<li>Wait 60-90 seconds (EPYC POST is slow)</li>
+<li>Check debug LEDs on motherboard</li>
+<li>Verify monitor input source</li>
+<li>
+<p>Reseat GPU if needed</p>
+</li>
+<li>
+<p><strong>If successful:</strong></p>
+</li>
+<li>Proceed to BIOS configuration</li>
+<li>Do not install OS yet</li>
+</ol>
+<hr />
+<h2 id="bios-configuration">BIOS Configuration<a class="headerlink" href="#bios-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="initial-bios-setup">Initial BIOS Setup<a class="headerlink" href="#initial-bios-setup" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 20-30 minutes</p>
+<p><strong>Access BIOS:</strong>
+- Press <code>DEL</code> or <code>F2</code> during POST
+- May take 60+ seconds to appear on first boot</p>
+<hr />
+<h3 id="step-1-load-defaults">Step 1: Load Defaults<a class="headerlink" href="#step-1-load-defaults" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Press F9 or find "Load Optimized Defaults"</li>
+<li>Select "Yes"</li>
+<li>Press F10 to save and reboot</li>
+</ol>
+<hr />
+<h3 id="step-2-update-bios-recommended">Step 2: Update BIOS (Recommended)<a class="headerlink" href="#step-2-update-bios-recommended" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Download latest BIOS from ASRock website</li>
+<li>Copy to USB drive (FAT32)</li>
+<li>Enter BIOS</li>
+<li>Go to "Tool" → "Instant Flash"</li>
+<li>Select BIOS file</li>
+<li>Follow prompts (do NOT power off)</li>
+<li>Reboot after completion</li>
+</ol>
+<p><strong>Current recommended version:</strong> 2.10 or higher</p>
+<hr />
+<h3 id="step-3-configure-memory">Step 3: Configure Memory<a class="headerlink" href="#step-3-configure-memory" title="Permanent link">&para;</a></h3>
+<p><strong>Location:</strong> Advanced → AMD CBS → UMC Common Options</p>
+<ol>
+<li><strong>Enable XMP/DOCP:</strong></li>
+<li>AMD CBS → NBIO Common Options</li>
+<li>Memory Clock Speed: 3200MHz</li>
+<li>
+<p>Or use "Auto" for auto-detection</p>
+</li>
+<li>
+<p><strong>Verify memory configuration:</strong></p>
+</li>
+<li>Main screen shows: 256GB DDR4-3200</li>
+<li>All 8 channels populated</li>
+</ol>
+<hr />
+<h3 id="step-4-configure-pcie">Step 4: Configure PCIe<a class="headerlink" href="#step-4-configure-pcie" title="Permanent link">&para;</a></h3>
+<p><strong>Location:</strong> Advanced → PCI Subsystem Settings</p>
+<ol>
+<li><strong>PCIe Speed:</strong></li>
+<li>Set to "Gen4" or "Auto"</li>
+<li>
+<p>Enables PCIe 4.0 for GPUs</p>
+</li>
+<li>
+<p><strong>Above 4G Decoding:</strong></p>
+</li>
+<li>Enable: Yes</li>
+<li>
+<p>Required for multiple GPUs</p>
+</li>
+<li>
+<p><strong>Re-Size BAR Support:</strong></p>
+</li>
+<li>Enable: Yes</li>
+<li>
+<p>Improves GPU performance</p>
+</li>
+<li>
+<p><strong>SR-IOV Support:</strong></p>
+</li>
+<li>Auto or Disabled (not needed for LLM use)</li>
+</ol>
+<hr />
+<h3 id="step-5-configure-boot">Step 5: Configure Boot<a class="headerlink" href="#step-5-configure-boot" title="Permanent link">&para;</a></h3>
+<p><strong>Location:</strong> Boot Menu</p>
+<ol>
+<li><strong>Boot Mode:</strong></li>
+<li>
+<p>UEFI only (disable Legacy)</p>
+</li>
+<li>
+<p><strong>Boot Priority:</strong></p>
+</li>
+<li>
+<p>Set NVMe drive as first boot device</p>
+</li>
+<li>
+<p><strong>Fast Boot:</strong></p>
+</li>
+<li>Disabled (easier troubleshooting)</li>
+</ol>
+<hr />
+<h3 id="step-6-configure-cpu-optional">Step 6: Configure CPU (Optional)<a class="headerlink" href="#step-6-configure-cpu-optional" title="Permanent link">&para;</a></h3>
+<p><strong>Location:</strong> Advanced → AMD CBS → CPU Common Options</p>
+<p><strong>For stock operation:</strong>
+- Leave all at Auto</p>
+<p><strong>For overclocking (advanced):</strong>
+- Adjust Core Frequency
+- Adjust voltage (carefully!)
+- Monitor temperatures</p>
+<hr />
+<h3 id="step-7-configure-fans">Step 7: Configure Fans<a class="headerlink" href="#step-7-configure-fans" title="Permanent link">&para;</a></h3>
+<p><strong>Location:</strong> Monitor → Fan Settings</p>
+<ol>
+<li><strong>CPU Fan:</strong></li>
+<li>Mode: PWM or DC (match your cooler)</li>
+<li>Profile: Performance or Silent</li>
+<li>
+<p>Target temp: 70°C</p>
+</li>
+<li>
+<p><strong>Chassis Fans:</strong></p>
+</li>
+<li>Mode: PWM or DC</li>
+<li>Speed: 40-60%</li>
+<li>Increase if GPU temps high</li>
+</ol>
+<hr />
+<h3 id="step-8-verify-all-components">Step 8: Verify All Components<a class="headerlink" href="#step-8-verify-all-components" title="Permanent link">&para;</a></h3>
+<p><strong>Location:</strong> Main BIOS Screen</p>
+<p><strong>Verify detected:</strong>
+- [ ] CPU: AMD EPYC 7443P, 24C/48T
+- [ ] Memory: 256GB DDR4-3200
+- [ ] NVMe: 4TB drive detected
+- [ ] All 5 GPUs in PCIe Configuration page</p>
+<p><strong>Check PCIe Configuration:</strong>
+- Advanced → Chipset Configuration → PCIe Configuration
+- Should show 5 GPUs in slots
+- Each running at PCIe 4.0 x16 or x8</p>
+<hr />
+<h3 id="step-9-save-and-exit">Step 9: Save and Exit<a class="headerlink" href="#step-9-save-and-exit" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Press F10</li>
+<li>Select "Save Changes and Reset"</li>
+<li>System will reboot</li>
+</ol>
+<hr />
+<h2 id="power-distribution-strategy">Power Distribution Strategy<a class="headerlink" href="#power-distribution-strategy" title="Permanent link">&para;</a></h2>
+<h3 id="detailed-power-analysis">Detailed Power Analysis<a class="headerlink" href="#detailed-power-analysis" title="Permanent link">&para;</a></h3>
+<p><strong>Component Power Draw:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Power Draw</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EPYC 7443P</td>
+<td>200W</td>
+<td>TDP, can spike to 240W</td>
+</tr>
+<tr>
+<td>Motherboard</td>
+<td>50W</td>
+<td>Chipset, fans, peripherals</td>
+</tr>
+<tr>
+<td>256GB DDR4</td>
+<td>80W</td>
+<td>~10W per 32GB stick</td>
+</tr>
+<tr>
+<td>NVMe 4TB</td>
+<td>10W</td>
+<td>Peak during writes</td>
+</tr>
+<tr>
+<td>RTX 5090</td>
+<td>575W</td>
+<td>TDP, can spike to 600W+</td>
+</tr>
+<tr>
+<td>RTX 3090 #1</td>
+<td>350W</td>
+<td>TDP per card</td>
+</tr>
+<tr>
+<td>RTX 3090 #2</td>
+<td>350W</td>
+<td>TDP per card</td>
+</tr>
+<tr>
+<td>RTX 3090 #3</td>
+<td>350W</td>
+<td>TDP per card</td>
+</tr>
+<tr>
+<td>RTX 3090 #4</td>
+<td>350W</td>
+<td>TDP per card</td>
+</tr>
+<tr>
+<td>Case Fans (4×)</td>
+<td>20W</td>
+<td>~5W each</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>2,335W</strong></td>
+<td>Peak power draw</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="power-supply-load-distribution">Power Supply Load Distribution<a class="headerlink" href="#power-supply-load-distribution" title="Permanent link">&para;</a></h3>
+<p><strong>PSU1 (1600W) - Primary System:</strong>
+- 24-pin ATX: Motherboard (50W)
+- 2× 8-pin EPS: CPU (200W)
+- SATA: NVMe, Fans (30W)
+- PCIe: RTX 5090 (600W)
+- PCIe: RTX 3090 #1 (350W)
+- <strong>Total: 1,230W (77% load)</strong></p>
+<p><strong>PSU2 (1600W) - GPUs:</strong>
+- PCIe: RTX 3090 #2 (350W)
+- PCIe: RTX 3090 #3 (350W)
+- PCIe: RTX 3090 #4 (350W)
+- <strong>Total: 1,050W (66% load)</strong></p>
+<p><strong>Efficiency Sweet Spot:</strong> Both PSUs running at 65-80% load (optimal for 80+ Platinum)</p>
+<hr />
+<h3 id="power-sequencing">Power Sequencing<a class="headerlink" href="#power-sequencing" title="Permanent link">&para;</a></h3>
+<p><strong>Startup:</strong>
+1. Turn on PSU2 (GPUs) first
+2. Wait 3 seconds
+3. Turn on PSU1 (motherboard)
+4. Press power button</p>
+<p><strong>Shutdown:</strong>
+1. OS shutdown command
+2. Wait for complete power down
+3. Turn off PSU1
+4. Turn off PSU2</p>
+<p><strong>Why this order:</strong>
+- Prevents motherboard from trying to power GPUs during boot
+- Reduces inrush current to motherboard
+- Extends PSU lifespan</p>
+<hr />
+<h3 id="surge-protection">Surge Protection<a class="headerlink" href="#surge-protection" title="Permanent link">&para;</a></h3>
+<p><strong>Recommended:</strong>
+- Use 2× separate surge protectors (1 per PSU)
+- Or 1× high-capacity UPS (2000VA+)
+- Avoid daisy-chaining power strips</p>
+<p><strong>UPS Recommendations:</strong>
+- APC Smart-UPS 2200VA
+- CyberPower CP1500PFCLCD
+- Tripp Lite SMART3000RM2U</p>
+<hr />
+<h2 id="cooling-and-thermal-management">Cooling and Thermal Management<a class="headerlink" href="#cooling-and-thermal-management" title="Permanent link">&para;</a></h2>
+<h3 id="temperature-targets">Temperature Targets<a class="headerlink" href="#temperature-targets" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Idle</th>
+<th>Load</th>
+<th>Max Safe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EPYC 7443P</td>
+<td>35-45°C</td>
+<td>60-75°C</td>
+<td>95°C</td>
+</tr>
+<tr>
+<td>RTX 5090</td>
+<td>30-40°C</td>
+<td>70-80°C</td>
+<td>90°C</td>
+</tr>
+<tr>
+<td>RTX 3090</td>
+<td>30-40°C</td>
+<td>75-85°C</td>
+<td>93°C</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>35-45°C</td>
+<td>50-60°C</td>
+<td>85°C</td>
+</tr>
+<tr>
+<td>NVMe SSD</td>
+<td>35-45°C</td>
+<td>60-70°C</td>
+<td>85°C</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="airflow-optimization">Airflow Optimization<a class="headerlink" href="#airflow-optimization" title="Permanent link">&para;</a></h3>
+<p><strong>Ideal Setup:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>[Front Intake Fans] → [GPUs] → [Rear Exhaust Fans]
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>         ↑                            ↑
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>    Cool Air                     Hot Air
+</code></pre></div></p>
+<p><strong>Fan Configuration:</strong>
+- Front: 2× 140mm intake @ 800-1000 RPM
+- Rear: 2× 120mm exhaust @ 1000-1200 RPM
+- Side: 1× 140mm intake (between GPUs)</p>
+<hr />
+<h3 id="gpu-cooling-considerations">GPU Cooling Considerations<a class="headerlink" href="#gpu-cooling-considerations" title="Permanent link">&para;</a></h3>
+<p><strong>GPU Spacing:</strong>
+- Minimum 40mm between GPUs
+- Stagger heights if possible
+- Direct cool air flow between cards</p>
+<p><strong>GPU Fan Curves (Adjust in NVIDIA Control Panel):</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>30°C: 30% fan speed
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>50°C: 40% fan speed
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>60°C: 50% fan speed
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>70°C: 65% fan speed
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>80°C: 85% fan speed
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>85°C: 100% fan speed
+</code></pre></div></p>
+<hr />
+<h3 id="thermal-monitoring">Thermal Monitoring<a class="headerlink" href="#thermal-monitoring" title="Permanent link">&para;</a></h3>
+<p><strong>Software:</strong>
+- <code>nvidia-smi</code> - GPU temps
+- <code>sensors</code> - CPU and motherboard temps
+- <code>nvitop</code> - Real-time GPU monitoring
+- <code>btop</code> - System-wide monitoring</p>
+<p><strong>Automated monitoring script:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="ch">#!/bin/bash</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">while</span><span class="w"> </span>true<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;=== </span><span class="k">$(</span>date<span class="k">)</span><span class="s2"> ===&quot;</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;CPU Temp: </span><span class="k">$(</span>sensors<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>Tctl<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="k">)</span><span class="s2">&quot;</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span>nvidia-smi<span class="w"> </span>--query-gpu<span class="o">=</span>temperature.gpu<span class="w"> </span>--format<span class="o">=</span>csv,noheader
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span>sleep<span class="w"> </span><span class="m">60</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="k">done</span>
+</code></pre></div></p>
+<hr />
+<h2 id="cable-management">Cable Management<a class="headerlink" href="#cable-management" title="Permanent link">&para;</a></h2>
+<h3 id="cable-organization-strategy">Cable Organization Strategy<a class="headerlink" href="#cable-organization-strategy" title="Permanent link">&para;</a></h3>
+<p><strong>Color Coding (Optional but Helpful):</strong>
+- Red: PSU1 power cables
+- Blue: PSU2 power cables
+- Yellow: PCIe risers
+- Black: Data cables (SATA, USB)</p>
+<p><strong>Routing Paths:</strong>
+1. <strong>Power cables:</strong> Along frame bottom and sides
+2. <strong>PCIe risers:</strong> Direct paths, no crossing
+3. <strong>Fan cables:</strong> Along vertical supports</p>
+<p><strong>Securing Methods:</strong>
+- Velcro ties: Every 6-8 inches
+- Zip ties: Permanent locations only
+- Cable clips: Attach to frame</p>
+<hr />
+<h2 id="testing-and-validation">Testing and Validation<a class="headerlink" href="#testing-and-validation" title="Permanent link">&para;</a></h2>
+<h3 id="post-assembly-testing">Post-Assembly Testing<a class="headerlink" href="#post-assembly-testing" title="Permanent link">&para;</a></h3>
+<p><strong>Time Required:</strong> 1-2 hours</p>
+<hr />
+<h3 id="test-1-bios-post">Test 1: BIOS POST<a class="headerlink" href="#test-1-bios-post" title="Permanent link">&para;</a></h3>
+<p><strong>✓ Pass Criteria:</strong>
+- System boots to BIOS
+- All components detected
+- No error beeps</p>
+<p><strong>If Failed:</strong>
+- Check all power connections
+- Reseat RAM
+- Remove all GPUs except one, test</p>
+<hr />
+<h3 id="test-2-memory-test">Test 2: Memory Test<a class="headerlink" href="#test-2-memory-test" title="Permanent link">&para;</a></h3>
+<p><strong>Run MemTest86:</strong>
+1. Download from memtest86.com
+2. Create bootable USB
+3. Boot from USB
+4. Run full test (4-8 hours)
+5. 0 errors = PASS</p>
+<hr />
+<h3 id="test-3-cpu-stress-test">Test 3: CPU Stress Test<a class="headerlink" href="#test-3-cpu-stress-test" title="Permanent link">&para;</a></h3>
+<p><strong>After OS installation:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Install stress-ng</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>stress-ng
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="c1"># Run CPU stress test</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>stress-ng<span class="w"> </span>--cpu<span class="w"> </span><span class="m">48</span><span class="w"> </span>--timeout<span class="w"> </span>300s<span class="w"> </span>--metrics
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="c1"># Monitor temps</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>watch<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>sensors
+</code></pre></div></p>
+<p><strong>✓ Pass Criteria:</strong>
+- CPU temp &lt; 85°C under load
+- No throttling
+- System stable for 5 minutes</p>
+<hr />
+<h3 id="test-4-gpu-detection">Test 4: GPU Detection<a class="headerlink" href="#test-4-gpu-detection" title="Permanent link">&para;</a></h3>
+<p><strong>Verify all GPUs detected:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>nvidia-smi<span class="w"> </span>-L
+</code></pre></div></p>
+<p><strong>Expected output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>GPU 0: NVIDIA GeForce RTX 5090
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>GPU 1: NVIDIA GeForce RTX 3090
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>GPU 2: NVIDIA GeForce RTX 3090
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>GPU 3: NVIDIA GeForce RTX 3090
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>GPU 4: NVIDIA GeForce RTX 3090
+</code></pre></div></p>
+<hr />
+<h3 id="test-5-gpu-stress-test">Test 5: GPU Stress Test<a class="headerlink" href="#test-5-gpu-stress-test" title="Permanent link">&para;</a></h3>
+<p><strong>Run on each GPU individually:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># GPU 0</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>nvidia-smi<span class="w"> </span>-i<span class="w"> </span><span class="m">0</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="c1"># Note idle temp</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="c1"># Install CUDA samples or use gpu-burn</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/wilicc/gpu-burn
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="nb">cd</span><span class="w"> </span>gpu-burn
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>make
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>./gpu_burn<span class="w"> </span><span class="m">300</span><span class="w">  </span><span class="c1"># 5 minute burn test</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="c1"># Monitor temps</span>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>watch<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>nvidia-smi
+</code></pre></div></p>
+<p><strong>✓ Pass Criteria:</strong>
+- GPU temp &lt; 85°C
+- No artifacts or crashes
+- Fans functioning</p>
+<p><strong>Repeat for all 5 GPUs</strong></p>
+<hr />
+<h3 id="test-6-multi-gpu-stress">Test 6: Multi-GPU Stress<a class="headerlink" href="#test-6-multi-gpu-stress" title="Permanent link">&para;</a></h3>
+<p><strong>Test all GPUs simultaneously:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Run gpu-burn on all GPUs</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>./gpu_burn<span class="w"> </span>-d<span class="w"> </span><span class="m">0</span>,1,2,3,4<span class="w"> </span><span class="m">300</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># Or use nvidia-smi dmon</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>nvidia-smi<span class="w"> </span>dmon<span class="w"> </span>-s<span class="w"> </span>pucvmet<span class="w"> </span>-d<span class="w"> </span><span class="m">1</span>
+</code></pre></div></p>
+<p><strong>✓ Pass Criteria:</strong>
+- All GPUs stable
+- PSUs handling load
+- No power cycling
+- Temps acceptable</p>
+<hr />
+<h3 id="test-7-storage-performance">Test 7: Storage Performance<a class="headerlink" href="#test-7-storage-performance" title="Permanent link">&para;</a></h3>
+<p><strong>Test NVMe speed:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c1"># Install fio</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>fio
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="c1"># Sequential read test</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>fio<span class="w"> </span>--name<span class="o">=</span>seqread<span class="w"> </span>--rw<span class="o">=</span><span class="nb">read</span><span class="w"> </span>--bs<span class="o">=</span>1M<span class="w"> </span>--size<span class="o">=</span>10G<span class="w"> </span>--numjobs<span class="o">=</span><span class="m">1</span><span class="w"> </span>--runtime<span class="o">=</span><span class="m">60</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="c1"># Sequential write test</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>fio<span class="w"> </span>--name<span class="o">=</span>seqwrite<span class="w"> </span>--rw<span class="o">=</span>write<span class="w"> </span>--bs<span class="o">=</span>1M<span class="w"> </span>--size<span class="o">=</span>10G<span class="w"> </span>--numjobs<span class="o">=</span><span class="m">1</span><span class="w"> </span>--runtime<span class="o">=</span><span class="m">60</span>
+</code></pre></div></p>
+<p><strong>✓ Pass Criteria:</strong>
+- Read: &gt;5,000 MB/s
+- Write: &gt;4,000 MB/s</p>
+<hr />
+<h3 id="test-8-network-if-configured">Test 8: Network (If Configured)<a class="headerlink" href="#test-8-network-if-configured" title="Permanent link">&para;</a></h3>
+<p><strong>Test 10GbE:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Install iperf3</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>iperf3
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># Server on one machine</span>
+<a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>iperf3<span class="w"> </span>-s
+<a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+<a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1"># Client on this machine</span>
+<a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>iperf3<span class="w"> </span>-c<span class="w"> </span>&lt;server-ip&gt;
+</code></pre></div></p>
+<p><strong>✓ Pass Criteria:</strong>
+- Throughput: &gt;9 Gbps
+- No packet loss</p>
+<hr />
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="common-issues-and-solutions">Common Issues and Solutions<a class="headerlink" href="#common-issues-and-solutions" title="Permanent link">&para;</a></h3>
+<h4 id="issue-system-wont-post">Issue: System Won't POST<a class="headerlink" href="#issue-system-wont-post" title="Permanent link">&para;</a></h4>
+<p><strong>Symptoms:</strong>
+- No display
+- No beeps
+- Fans spin but nothing happens</p>
+<p><strong>Solutions:</strong>
+1. <strong>Clear CMOS</strong>
+   - Remove CMOS battery for 30 seconds
+   - Or use CMOS clear jumper
+   - Reboot</p>
+<ol>
+<li><strong>Breadboard test</strong></li>
+<li>Remove all GPUs</li>
+<li>Keep only 1 stick of RAM</li>
+<li>Test outside of case</li>
+<li>
+<p>Add components back one at a time</p>
+</li>
+<li>
+<p><strong>Check power</strong></p>
+</li>
+<li>Verify 24-pin ATX seated</li>
+<li>Verify both 8-pin CPU power connected</li>
+<li>Try different PSU</li>
+</ol>
+<hr />
+<h4 id="issue-memory-not-detected">Issue: Memory Not Detected<a class="headerlink" href="#issue-memory-not-detected" title="Permanent link">&para;</a></h4>
+<p><strong>Symptoms:</strong>
+- BIOS shows less than 256GB
+- Beep codes
+- Memory training fails</p>
+<p><strong>Solutions:</strong>
+1. <strong>Reseat all DIMMs</strong>
+   - Remove and reinstall firmly
+   - Ensure latches click</p>
+<ol>
+<li><strong>Test individually</strong></li>
+<li>Install one DIMM in slot A1</li>
+<li>Boot and test</li>
+<li>
+<p>Mark working DIMMs</p>
+</li>
+<li>
+<p><strong>Update BIOS</strong></p>
+</li>
+<li>
+<p>Newer BIOS may improve compatibility</p>
+</li>
+<li>
+<p><strong>Check compatibility</strong></p>
+</li>
+<li>Verify DIMMs are ECC RDIMM</li>
+<li>All same speed (3200MHz)</li>
+</ol>
+<hr />
+<h4 id="issue-gpu-not-detected">Issue: GPU Not Detected<a class="headerlink" href="#issue-gpu-not-detected" title="Permanent link">&para;</a></h4>
+<p><strong>Symptoms:</strong>
+- nvidia-smi shows fewer than 5 GPUs
+- PCIe errors in BIOS</p>
+<p><strong>Solutions:</strong>
+1. <strong>Reseat GPU</strong>
+   - Remove and reinstall
+   - Check PCIe latch</p>
+<ol>
+<li><strong>Test direct vs riser</strong></li>
+<li>Remove riser, test GPU directly</li>
+<li>
+<p>Replace faulty riser</p>
+</li>
+<li>
+<p><strong>Check power</strong></p>
+</li>
+<li>Verify all PCIe power connected</li>
+<li>
+<p>Try different PSU cables</p>
+</li>
+<li>
+<p><strong>BIOS settings</strong></p>
+</li>
+<li>Enable "Above 4G Decoding"</li>
+<li>Enable "Re-Size BAR"</li>
+<li>PCIe Gen set to Auto or Gen4</li>
+</ol>
+<hr />
+<h4 id="issue-high-gpu-temperatures">Issue: High GPU Temperatures<a class="headerlink" href="#issue-high-gpu-temperatures" title="Permanent link">&para;</a></h4>
+<p><strong>Symptoms:</strong>
+- GPUs exceed 85°C under load
+- Thermal throttling</p>
+<p><strong>Solutions:</strong>
+1. <strong>Improve airflow</strong>
+   - Add intake fans
+   - Increase fan speed
+   - Space GPUs further apart</p>
+<ol>
+<li><strong>Check thermal paste</strong></li>
+<li>May need repaste (for used GPUs)</li>
+<li>
+<p>Use quality paste (Thermal Grizzly)</p>
+</li>
+<li>
+<p><strong>Reduce power limit</strong>
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>nvidia-smi<span class="w"> </span>-i<span class="w"> </span><span class="m">0</span><span class="w"> </span>-pl<span class="w"> </span><span class="m">300</span><span class="w">  </span><span class="c1"># Limit to 300W</span>
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Undervolt GPU</strong></p>
+</li>
+<li>Use MSI Afterburner</li>
+<li>Reduce voltage by 50-100mV</li>
+</ol>
+<hr />
+<h4 id="issue-system-crashes-under-load">Issue: System Crashes Under Load<a class="headerlink" href="#issue-system-crashes-under-load" title="Permanent link">&para;</a></h4>
+<p><strong>Symptoms:</strong>
+- Random reboots during inference
+- Power cycles
+- Black screen crashes</p>
+<p><strong>Solutions:</strong>
+1. <strong>PSU issue</strong>
+   - Check PSU capacity
+   - Verify all power cables
+   - Try balancing load differently</p>
+<ol>
+<li><strong>Memory error</strong></li>
+<li>Run MemTest86</li>
+<li>
+<p>Replace faulty DIMMs</p>
+</li>
+<li>
+<p><strong>GPU driver</strong></p>
+</li>
+<li>Update to latest NVIDIA driver</li>
+<li>
+<p>Try different driver version</p>
+</li>
+<li>
+<p><strong>Overheating</strong></p>
+</li>
+<li>Monitor temps during crash</li>
+<li>Improve cooling</li>
+</ol>
+<hr />
+<h4 id="issue-pcie-riser-problems">Issue: PCIe Riser Problems<a class="headerlink" href="#issue-pcie-riser-problems" title="Permanent link">&para;</a></h4>
+<p><strong>Symptoms:</strong>
+- GPU not detected on riser
+- Instability with risers
+- Lower performance</p>
+<p><strong>Solutions:</strong>
+1. <strong>Check riser quality</strong>
+   - Use PCIe 4.0 rated risers
+   - Replace cheap risers</p>
+<ol>
+<li><strong>Reduce PCIe speed</strong></li>
+<li>BIOS: Set to Gen3 instead of Gen4</li>
+<li>
+<p>Improves stability with lower-quality risers</p>
+</li>
+<li>
+<p><strong>Shorter risers</strong></p>
+</li>
+<li>Use shortest risers possible</li>
+<li>30cm max for stability</li>
+</ol>
+<hr />
+<h2 id="upgrade-path">Upgrade Path<a class="headerlink" href="#upgrade-path" title="Permanent link">&para;</a></h2>
+<h3 id="future-upgrade-options">Future Upgrade Options<a class="headerlink" href="#future-upgrade-options" title="Permanent link">&para;</a></h3>
+<p><strong>Short Term (1 year):</strong>
+- [ ] Add second 4TB NVMe drive
+- [ ] Upgrade to 512GB RAM (requires 8× 64GB DIMMs)
+- [ ] Add 10GbE network card (if not using onboard)</p>
+<p><strong>Medium Term (2-3 years):</strong>
+- [ ] Replace RTX 3090s with newer generation
+- [ ] Upgrade to faster NVMe (PCIe 5.0)
+- [ ] Add more powerful CPU cooler for overclocking</p>
+<p><strong>Long Term (3-5 years):</strong>
+- [ ] Upgrade to newer EPYC CPU (7004/7005 series)
+- [ ] Replace all GPUs with latest generation
+- [ ] Add redundant NVMe drives (RAID configuration)</p>
+<hr />
+<h3 id="compatibility-notes">Compatibility Notes<a class="headerlink" href="#compatibility-notes" title="Permanent link">&para;</a></h3>
+<p><strong>CPU Compatibility:</strong>
+- ROMED8-2T supports EPYC 7001/7002/7003
+- BIOS update required for 7003 series (Milan)
+- Consider EPYC 7543P (32-core) or 7643 (48-core) upgrades</p>
+<p><strong>RAM Compatibility:</strong>
+- Max: 2TB (8× 256GB LRDIMMs)
+- Upgrade to 512GB: Use 8× 64GB RDIMMs
+- Must be DDR4 ECC RDIMM or LRDIMM</p>
+<p><strong>GPU Compatibility:</strong>
+- Any PCIe GPU will work
+- Consider future RTX 6000 series
+- Professional GPUs (A6000, H100) also supported</p>
+<hr />
+<h2 id="additional-resources">Additional Resources<a class="headerlink" href="#additional-resources" title="Permanent link">&para;</a></h2>
+<h3 id="useful-links">Useful Links<a class="headerlink" href="#useful-links" title="Permanent link">&para;</a></h3>
+<p><strong>Motherboard:</strong>
+- <a href="https://www.asrock.com/server/amd/romed8-2t/">ASRock ROMED8-2T Product Page</a>
+- <a href="https://www.asrock.com/support/index.asp?cat=Manual">ROMED8-2T Manual</a>
+- <a href="https://www.asrock.com/support/download.asp?Model=ROMED8-2T">Latest BIOS Downloads</a></p>
+<p><strong>CPU:</strong>
+- <a href="https://www.amd.com/en/products/cpu/amd-epyc-7443p">AMD EPYC 7443P Specifications</a>
+- <a href="https://www.overclock.net/threads/epyc-overclocking.1783357/">EPYC Overclocking Guide</a></p>
+<p><strong>GPU:</strong>
+- <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/30-series/rtx-3090-3090ti/">NVIDIA RTX 3090 Specs</a>
+- <a href="https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/">NVIDIA RTX 5090 Specs</a>
+- <a href="https://docs.vllm.ai/en/latest/getting_started/installation.html">vLLM Supported GPUs</a></p>
+<p><strong>Communities:</strong>
+- <a href="https://reddit.com/r/homelab">r/homelab</a> - Home server builds
+- <a href="https://forums.servethehome.com/">ServeTheHome Forums</a> - Enterprise hardware
+- <a href="https://reddit.com/r/LocalLLaMA">r/LocalLLaMA</a> - Local LLM running
+- <a href="https://forum.level1techs.com/">Level1Techs Forum</a> - High-end builds</p>
+<p><strong>Guides:</strong>
+- <a href="https://www.servethehome.com/amd-epyc-7003-milan-review/">EPYC Server Build Guide</a>
+- <a href="https://timdettmers.com/2018/12/16/deep-learning-hardware-guide/">Multi-GPU Deep Learning Setup</a></p>
+<hr />
+<h2 id="final-checklist">Final Checklist<a class="headerlink" href="#final-checklist" title="Permanent link">&para;</a></h2>
+<h3 id="pre-purchase">Pre-Purchase<a class="headerlink" href="#pre-purchase" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Budget approved (~$8,000)</li>
+<li>[ ] eBay account created</li>
+<li>[ ] Workspace prepared</li>
+<li>[ ] Tools acquired</li>
+</ul>
+<h3 id="purchasing">Purchasing<a class="headerlink" href="#purchasing" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] ASRock ROMED8-2T ordered</li>
+<li>[ ] AMD EPYC 7443P ordered</li>
+<li>[ ] SP3 CPU cooler ordered</li>
+<li>[ ] 8× 32GB DDR4 ECC ordered</li>
+<li>[ ] 4× RTX 3090 ordered</li>
+<li>[ ] 1× RTX 5090 ordered</li>
+<li>[ ] 4TB NVMe ordered</li>
+<li>[ ] 2× 1600W PSU ordered</li>
+<li>[ ] 5× PCIe risers ordered</li>
+<li>[ ] Mining frame ordered</li>
+<li>[ ] Monitor, keyboard, mouse ordered</li>
+<li>[ ] Accessories ordered (paste, cables, fans)</li>
+</ul>
+<h3 id="assembly">Assembly<a class="headerlink" href="#assembly" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Frame assembled</li>
+<li>[ ] Motherboard installed</li>
+<li>[ ] CPU and cooler installed</li>
+<li>[ ] RAM installed (all 8 sticks)</li>
+<li>[ ] NVMe installed</li>
+<li>[ ] GPUs installed (all 5)</li>
+<li>[ ] Power connected correctly</li>
+<li>[ ] Fans installed and connected</li>
+<li>[ ] Cables managed</li>
+<li>[ ] Pre-power-on checklist complete</li>
+</ul>
+<h3 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] System POSTs successfully</li>
+<li>[ ] BIOS configured</li>
+<li>[ ] All 5 GPUs detected</li>
+<li>[ ] Memory test passed</li>
+<li>[ ] CPU stress test passed</li>
+<li>[ ] GPU stress test passed</li>
+<li>[ ] Temperatures acceptable</li>
+<li>[ ] OS installed (RHEL 10.1)</li>
+</ul>
+<h3 id="software-next-steps">Software (Next Steps)<a class="headerlink" href="#software-next-steps" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] NVIDIA drivers installed</li>
+<li>[ ] Docker installed</li>
+<li>[ ] vLLM configured</li>
+<li>[ ] Open WebUI running</li>
+<li>[ ] First model downloaded</li>
+<li>[ ] System producing inference</li>
+</ul>
+<hr />
+<p><strong>Build Complete!</strong></p>
+<p>You now have a professional-grade, multi-GPU LLM inference workstation capable of running the largest open-source language models.</p>
+<p><strong>Total GPU Memory:</strong> 128GB (96GB RTX 3090 + 32GB RTX 5090)<br />
+<strong>Total System Memory:</strong> 256GB DDR4<br />
+<strong>Total Compute:</strong> 24C/48T CPU + 74,240 CUDA cores<br />
+<strong>Total Cost:</strong> ~$8,000 (60-70% savings vs new)</p>
+<p><strong>Ready for:</strong> Llama 3.1 70B, Mixtral 8x22B, Qwen 72B, and more!</p>
+<hr />
+<p><strong>Last Updated:</strong> February 2026<br />
+<strong>Target Budget:</strong> $7,000 - $9,000 (used components)<br />
+<strong>Build Difficulty:</strong> Advanced (Estimated 6-8 hours)</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.indexes", "navigation.top", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

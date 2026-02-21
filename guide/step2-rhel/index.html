@@ -1,0 +1,4498 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Enterprise-Grade On-Premise LLM Inference Platform Installation Guide">
+      
+      
+        <meta name="author" content="Greg Blake">
+      
+      
+      
+        <link rel="prev" href="../step1-hardware/">
+      
+      
+        <link rel="next" href="../step3-nvidia/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.2">
+    
+    
+      
+        <title>Step 2: RHEL Install - IDA — On-Premise LLM Server Installation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#red-hat-enterprise-linux-101-installation-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="IDA — On-Premise LLM Server Installation" class="md-header__button md-logo" aria-label="IDA — On-Premise LLM Server Installation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            IDA — On-Premise LLM Server Installation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Step 2: RHEL Install
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gblake55/On-Premise-LLM-Server-Installation" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../architecture/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Architecture
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Deployment Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../production/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Production
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../security/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Security
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../maintenance/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Maintenance
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../appendix/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Appendix
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="IDA — On-Premise LLM Server Installation" class="md-nav__button md-logo" aria-label="IDA — On-Premise LLM Server Installation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    IDA — On-Premise LLM Server Installation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gblake55/On-Premise-LLM-Server-Installation" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment Guide
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Deployment Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step1-hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 1: Hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 2: RHEL Install
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 2: RHEL Install
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hardware-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hardware Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Software Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#information-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Information Needed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-1-red-hat-account-and-subscription" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 1: Red Hat Account and Subscription
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 1: Red Hat Account and Subscription">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-11-create-red-hat-account" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1.1: Create Red Hat Account
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-12-accept-terms-and-conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1.2: Accept Terms and Conditions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-13-verify-subscription-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1.3: Verify Subscription Status
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-2-download-rhel-101-iso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 2: Download RHEL 10.1 ISO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 2: Download RHEL 10.1 ISO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-21-access-download-portal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2.1: Access Download Portal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-22-select-rhel-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2.2: Select RHEL Version
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-23-download-dvd-iso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2.3: Download DVD ISO
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-24-verify-iso-integrity-optional-but-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2.4: Verify ISO Integrity (Optional but Recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-3-create-bootable-usb-with-balena-etcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 3: Create Bootable USB with Balena Etcher
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 3: Create Bootable USB with Balena Etcher">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-31-download-balena-etcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3.1: Download Balena Etcher
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-32-prepare-usb-drive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3.2: Prepare USB Drive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-33-flash-iso-to-usb-with-balena-etcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3.3: Flash ISO to USB with Balena Etcher
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-4-biosuefi-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 4: BIOS/UEFI Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 4: BIOS/UEFI Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-41-access-biosuefi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4.1: Access BIOS/UEFI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-42-configure-boot-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4.2: Configure Boot Order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-43-save-and-reboot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4.3: Save and Reboot
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-5-rhel-101-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 5: RHEL 10.1 Installation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 5: RHEL 10.1 Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-51-boot-from-installation-media" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.1: Boot from Installation Media
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-52-language-and-keyboard-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.2: Language and Keyboard Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-53-installation-summary-screen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.3: Installation Summary Screen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-54-time-date-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.4: Time &amp; Date Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-55-software-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.5: Software Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-56-installation-destination-critical-custom-partitioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.6: Installation Destination (Critical - Custom Partitioning)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-57-create-partition-scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.7: Create Partition Scheme
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-58-customize-partitions-for-llmdocker-workload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.8: Customize Partitions for LLM/Docker Workload
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5.8: Customize Partitions for LLM/Docker Workload">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#partition-1-boot-efi-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition 1: /boot (EFI System)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partition-2-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition 2: /boot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partition-3-swap-critical-large-for-llm-workloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition 3: swap (Critical - Large for LLM workloads)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partition-4-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition 4: / (Root)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partition-5-var-critical-docker-and-containers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition 5: /var (Critical - Docker and containers)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partition-6-home-user-data-and-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition 6: /home (User data and models)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-59-review-final-partition-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.9: Review Final Partition Layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-510-accept-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.10: Accept Changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-511-network-host-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.11: Network &amp; Host Name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-512-root-password" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.12: Root Password
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-513-user-creation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.13: User Creation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-514-begin-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.14: Begin Installation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-515-installation-complete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.15: Installation Complete
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-6-post-installation-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 6: Post-Installation Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 6: Post-Installation Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-61-initial-boot-and-license-agreement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6.1: Initial Boot and License Agreement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-62-first-login" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6.2: First Login
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-63-initial-gnome-setup-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6.3: Initial GNOME Setup (Optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-7-red-hat-subscription-attachment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 7: Red Hat Subscription Attachment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 7: Red Hat Subscription Attachment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-71-register-system-with-red-hat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7.1: Register System with Red Hat
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-72-attach-subscription" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7.2: Attach Subscription
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-73-verify-subscription" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7.3: Verify Subscription
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-74-enable-required-repositories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7.4: Enable Required Repositories
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-75-update-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7.5: Update System
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-8-active-directory-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 8: Active Directory Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 8: Active Directory Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-81-prerequisites-for-ad-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.1: Prerequisites for AD Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-82-install-required-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.2: Install Required Packages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-83-configure-system-hostname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.3: Configure System Hostname
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-84-verify-time-synchronization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.4: Verify Time Synchronization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-85-test-dns-resolution-to-ad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.5: Test DNS Resolution to AD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-86-discover-active-directory-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.6: Discover Active Directory Domain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-87-join-system-to-active-directory-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.7: Join System to Active Directory Domain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-88-verify-domain-join" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.8: Verify Domain Join
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-89-configure-sssd-for-optimal-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.9: Configure SSSD for Optimal Performance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-810-configure-pam-for-home-directory-creation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.10: Configure PAM for Home Directory Creation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-811-restart-sssd-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.11: Restart SSSD Service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-812-test-ad-user-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.12: Test AD User Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-813-test-ssh-login-with-ad-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.13: Test SSH Login with AD Credentials
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-814-configure-sudo-access-for-ad-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.14: Configure Sudo Access for AD Groups
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-9-verification-and-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 9: Verification and Testing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 9: Verification and Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-91-system-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9.1: System Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-92-partition-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9.2: Partition Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-93-ad-integration-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9.3: AD Integration Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-94-security-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9.4: Security Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#issue-cannot-join-ad-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Cannot Join AD Domain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-ad-user-login-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: AD User Login Fails
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-home-directory-not-created" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Home Directory Not Created
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-slow-login-with-ad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Slow Login with AD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-partition-not-mounted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Partition Not Mounted
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional Resources
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Additional Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#red-hat-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Red Hat Documentation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#active-directory-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Active Directory Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#community-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community Resources
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference Commands
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Quick Reference Commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#subscription-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subscription Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#active-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Active Directory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#system-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step3-nvidia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 3: NVIDIA Drivers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step4-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 4: App Stack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step5-webui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 5: WebUI & vLLM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step6-ad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 6: AD Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Production
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../appendix/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendix
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/nvidia-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/nvidia-old-driver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA Old Driver
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/redhat-nvidia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RHEL NVIDIA Instructions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hardware-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hardware Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Software Requirements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#information-needed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Information Needed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-1-red-hat-account-and-subscription" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 1: Red Hat Account and Subscription
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 1: Red Hat Account and Subscription">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-11-create-red-hat-account" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1.1: Create Red Hat Account
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-12-accept-terms-and-conditions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1.2: Accept Terms and Conditions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-13-verify-subscription-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1.3: Verify Subscription Status
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-2-download-rhel-101-iso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 2: Download RHEL 10.1 ISO
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 2: Download RHEL 10.1 ISO">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-21-access-download-portal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2.1: Access Download Portal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-22-select-rhel-version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2.2: Select RHEL Version
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-23-download-dvd-iso" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2.3: Download DVD ISO
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-24-verify-iso-integrity-optional-but-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2.4: Verify ISO Integrity (Optional but Recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-3-create-bootable-usb-with-balena-etcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 3: Create Bootable USB with Balena Etcher
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 3: Create Bootable USB with Balena Etcher">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-31-download-balena-etcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3.1: Download Balena Etcher
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-32-prepare-usb-drive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3.2: Prepare USB Drive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-33-flash-iso-to-usb-with-balena-etcher" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3.3: Flash ISO to USB with Balena Etcher
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-4-biosuefi-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 4: BIOS/UEFI Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 4: BIOS/UEFI Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-41-access-biosuefi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4.1: Access BIOS/UEFI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-42-configure-boot-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4.2: Configure Boot Order
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-43-save-and-reboot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4.3: Save and Reboot
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-5-rhel-101-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 5: RHEL 10.1 Installation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 5: RHEL 10.1 Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-51-boot-from-installation-media" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.1: Boot from Installation Media
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-52-language-and-keyboard-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.2: Language and Keyboard Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-53-installation-summary-screen" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.3: Installation Summary Screen
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-54-time-date-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.4: Time &amp; Date Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-55-software-selection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.5: Software Selection
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-56-installation-destination-critical-custom-partitioning" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.6: Installation Destination (Critical - Custom Partitioning)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-57-create-partition-scheme" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.7: Create Partition Scheme
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-58-customize-partitions-for-llmdocker-workload" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.8: Customize Partitions for LLM/Docker Workload
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5.8: Customize Partitions for LLM/Docker Workload">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#partition-1-boot-efi-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition 1: /boot (EFI System)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partition-2-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition 2: /boot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partition-3-swap-critical-large-for-llm-workloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition 3: swap (Critical - Large for LLM workloads)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partition-4-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition 4: / (Root)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partition-5-var-critical-docker-and-containers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition 5: /var (Critical - Docker and containers)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#partition-6-home-user-data-and-models" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partition 6: /home (User data and models)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-59-review-final-partition-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.9: Review Final Partition Layout
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-510-accept-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.10: Accept Changes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-511-network-host-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.11: Network &amp; Host Name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-512-root-password" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.12: Root Password
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-513-user-creation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.13: User Creation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-514-begin-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.14: Begin Installation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-515-installation-complete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5.15: Installation Complete
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-6-post-installation-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 6: Post-Installation Configuration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 6: Post-Installation Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-61-initial-boot-and-license-agreement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6.1: Initial Boot and License Agreement
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-62-first-login" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6.2: First Login
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-63-initial-gnome-setup-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6.3: Initial GNOME Setup (Optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-7-red-hat-subscription-attachment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 7: Red Hat Subscription Attachment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 7: Red Hat Subscription Attachment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-71-register-system-with-red-hat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7.1: Register System with Red Hat
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-72-attach-subscription" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7.2: Attach Subscription
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-73-verify-subscription" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7.3: Verify Subscription
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-74-enable-required-repositories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7.4: Enable Required Repositories
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-75-update-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 7.5: Update System
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-8-active-directory-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 8: Active Directory Integration
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 8: Active Directory Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-81-prerequisites-for-ad-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.1: Prerequisites for AD Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-82-install-required-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.2: Install Required Packages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-83-configure-system-hostname" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.3: Configure System Hostname
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-84-verify-time-synchronization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.4: Verify Time Synchronization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-85-test-dns-resolution-to-ad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.5: Test DNS Resolution to AD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-86-discover-active-directory-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.6: Discover Active Directory Domain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-87-join-system-to-active-directory-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.7: Join System to Active Directory Domain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-88-verify-domain-join" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.8: Verify Domain Join
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-89-configure-sssd-for-optimal-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.9: Configure SSSD for Optimal Performance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-810-configure-pam-for-home-directory-creation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.10: Configure PAM for Home Directory Creation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-811-restart-sssd-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.11: Restart SSSD Service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-812-test-ad-user-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.12: Test AD User Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-813-test-ssh-login-with-ad-credentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.13: Test SSH Login with AD Credentials
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-814-configure-sudo-access-for-ad-groups" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 8.14: Configure Sudo Access for AD Groups
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-9-verification-and-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part 9: Verification and Testing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 9: Verification and Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-91-system-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9.1: System Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-92-partition-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9.2: Partition Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-93-ad-integration-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9.3: AD Integration Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-94-security-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 9.4: Security Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#issue-cannot-join-ad-domain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Cannot Join AD Domain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-ad-user-login-fails" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: AD User Login Fails
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-home-directory-not-created" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Home Directory Not Created
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-slow-login-with-ad" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Slow Login with AD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#issue-partition-not-mounted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Issue: Partition Not Mounted
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional Resources
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Additional Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#red-hat-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Red Hat Documentation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#active-directory-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Active Directory Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#community-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community Resources
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference Commands
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Quick Reference Commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#subscription-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Subscription Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#active-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Active Directory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#system-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Management
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="red-hat-enterprise-linux-101-installation-guide">Red Hat Enterprise Linux 10.1 Installation Guide<a class="headerlink" href="#red-hat-enterprise-linux-101-installation-guide" title="Permanent link">&para;</a></h1>
+<p>Complete step-by-step guide for installing Red Hat Enterprise Linux 10.1 on your LLM inference workstation, including account creation, ISO preparation, installation with custom partitioning for Docker workloads, and Active Directory domain integration.</p>
+<hr />
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>This guide covers the complete installation process for Red Hat Enterprise Linux 10.1 on a multi-GPU LLM inference workstation. The installation includes:</p>
+<ul>
+<li><strong>Developer Subscription</strong>: Free for individual developers</li>
+<li><strong>Custom Partitioning</strong>: Optimized for Docker and LLM workloads</li>
+<li><strong>4TB NVMe Storage</strong>: Proper allocation for containers and models</li>
+<li><strong>Active Directory Integration</strong>: Enterprise authentication with domain.org</li>
+</ul>
+<p><strong>Target System:</strong>
+- 4TB NVMe drive
+- Multi-GPU configuration (5 GPUs)
+- 256GB RAM
+- AMD EPYC 7443P processor</p>
+<p><strong>Time Required:</strong> 2-3 hours (including downloads)</p>
+<hr />
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<h3 id="hardware-requirements">Hardware Requirements<a class="headerlink" href="#hardware-requirements" title="Permanent link">&para;</a></h3>
+<ul>
+<li>✅ Computer assembled and hardware tested</li>
+<li>✅ 4TB NVMe drive installed</li>
+<li>✅ Working monitor, keyboard, and mouse</li>
+<li>✅ Network connectivity (Ethernet recommended)</li>
+<li>✅ USB drive (16GB minimum) for installation media</li>
+</ul>
+<h3 id="software-requirements">Software Requirements<a class="headerlink" href="#software-requirements" title="Permanent link">&para;</a></h3>
+<ul>
+<li>✅ Windows, macOS, or Linux computer for preparation</li>
+<li>✅ Balena Etcher (for creating bootable USB)</li>
+<li>✅ Stable internet connection (minimum 10 Mbps for ISO download)</li>
+</ul>
+<h3 id="information-needed">Information Needed<a class="headerlink" href="#information-needed" title="Permanent link">&para;</a></h3>
+<ul>
+<li>✅ Email address for Red Hat account</li>
+<li>✅ Desired hostname for the system</li>
+<li>✅ Network configuration (static IP or DHCP)</li>
+<li>✅ Active Directory domain credentials (if integrating)</li>
+<li>✅ Active Directory domain: domain.org</li>
+</ul>
+<hr />
+<h2 id="part-1-red-hat-account-and-subscription">Part 1: Red Hat Account and Subscription<a class="headerlink" href="#part-1-red-hat-account-and-subscription" title="Permanent link">&para;</a></h2>
+<h3 id="step-11-create-red-hat-account">Step 1.1: Create Red Hat Account<a class="headerlink" href="#step-11-create-red-hat-account" title="Permanent link">&para;</a></h3>
+<p>Red Hat provides a <strong>free Developer Subscription</strong> that includes access to RHEL for individual use.</p>
+<p><strong>Navigate to Red Hat Developer Portal:</strong></p>
+<ol>
+<li>Open your web browser</li>
+<li>Go to: <code>https://developers.redhat.com/register</code></li>
+</ol>
+<p><strong>Complete Registration Form:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Required Information:
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>- Email address (will be your login)
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>- First name
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>- Last name
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>- Company (can use &quot;Individual&quot; or &quot;Self&quot;)
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>- Country
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>- Password (must be strong: 8+ characters, uppercase, lowercase, numbers)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>Optional:
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>- Job role
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>- Phone number
+</code></pre></div>
+<ol>
+<li>Click <strong>"Create my account"</strong></li>
+<li>Check your email for verification link</li>
+<li>Click verification link to activate account</li>
+</ol>
+<p><strong>Expected Time:</strong> 5 minutes</p>
+<hr />
+<h3 id="step-12-accept-terms-and-conditions">Step 1.2: Accept Terms and Conditions<a class="headerlink" href="#step-12-accept-terms-and-conditions" title="Permanent link">&para;</a></h3>
+<p>After verifying your email:</p>
+<ol>
+<li>Log in to <code>https://developers.redhat.com</code></li>
+<li>Navigate to <strong>"Products"</strong> → <strong>"Red Hat Enterprise Linux"</strong></li>
+<li>Accept the <strong>Terms and Conditions</strong> for Developer Subscription</li>
+<li>Subscription is automatically attached to your account</li>
+</ol>
+<p><strong>What You Get:</strong>
+- 16 system entitlements
+- Access to all RHEL versions
+- Developer support resources
+- No cost for non-production use</p>
+<hr />
+<h3 id="step-13-verify-subscription-status">Step 1.3: Verify Subscription Status<a class="headerlink" href="#step-13-verify-subscription-status" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Log in to: <code>https://access.redhat.com</code></li>
+<li>Click <strong>"Subscriptions"</strong> in top navigation</li>
+<li>You should see: <strong>"Red Hat Developer Subscription for Individuals"</strong></li>
+<li>Status: <strong>Active</strong></li>
+</ol>
+<hr />
+<h2 id="part-2-download-rhel-101-iso">Part 2: Download RHEL 10.1 ISO<a class="headerlink" href="#part-2-download-rhel-101-iso" title="Permanent link">&para;</a></h2>
+<h3 id="step-21-access-download-portal">Step 2.1: Access Download Portal<a class="headerlink" href="#step-21-access-download-portal" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Navigate to: <code>https://access.redhat.com/downloads</code></li>
+<li>Log in with your Red Hat account credentials</li>
+<li>Click on <strong>"Product Downloads"</strong></li>
+</ol>
+<hr />
+<h3 id="step-22-select-rhel-version">Step 2.2: Select RHEL Version<a class="headerlink" href="#step-22-select-rhel-version" title="Permanent link">&para;</a></h3>
+<ol>
+<li>In the Products list, click <strong>"Red Hat Enterprise Linux"</strong></li>
+<li>Click <strong>"All Red Hat Enterprise Linux Downloads"</strong> at bottom of page</li>
+<li>Select <strong>"Red Hat Enterprise Linux 10.1"</strong></li>
+</ol>
+<p><strong>Available ISO Options:</strong></p>
+<table>
+<thead>
+<tr>
+<th>ISO Type</th>
+<th>Size</th>
+<th>Description</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DVD ISO</strong></td>
+<td>~9.5 GB</td>
+<td>Full installation</td>
+<td><strong>Recommended - Offline install</strong></td>
+</tr>
+<tr>
+<td>Boot ISO</td>
+<td>~900 MB</td>
+<td>Network install</td>
+<td>Requires internet during install</td>
+</tr>
+<tr>
+<td>KVM Guest Image</td>
+<td>~1 GB</td>
+<td>Pre-configured VM</td>
+<td>Not for bare metal</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="step-23-download-dvd-iso">Step 2.3: Download DVD ISO<a class="headerlink" href="#step-23-download-dvd-iso" title="Permanent link">&para;</a></h3>
+<p><strong>Select the DVD ISO:</strong></p>
+<ol>
+<li>Click on <strong>"Red Hat Enterprise Linux 10.1 Binary DVD"</strong></li>
+<li>Architecture: <strong>x86_64</strong></li>
+<li>Click <strong>"Download Now"</strong></li>
+</ol>
+<p><strong>Download Details:</strong>
+- File: <code>rhel-10.1-x86_64-dvd.iso</code>
+- Size: Approximately 9.5 GB
+- Checksum: Provided on download page (save for verification)</p>
+<p><strong>Recommended Download Location:</strong>
+- Windows: <code>C:\Users\[Username]\Downloads</code>
+- macOS: <code>~/Downloads</code>
+- Linux: <code>~/Downloads</code></p>
+<p><strong>Download Time Estimates:</strong>
+- 100 Mbps: ~15 minutes
+- 50 Mbps: ~30 minutes
+- 25 Mbps: ~60 minutes</p>
+<hr />
+<h3 id="step-24-verify-iso-integrity-optional-but-recommended">Step 2.4: Verify ISO Integrity (Optional but Recommended)<a class="headerlink" href="#step-24-verify-iso-integrity-optional-but-recommended" title="Permanent link">&para;</a></h3>
+<p><strong>Download SHA256 Checksum:</strong></p>
+<ol>
+<li>On download page, copy the SHA256 checksum value</li>
+<li>Save to text file: <code>rhel-10.1-sha256.txt</code></li>
+</ol>
+<p><strong>Verify on Windows (PowerShell):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nb">cd </span><span class="n">Downloads</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">CertUtil</span> <span class="n">-hashfile</span> <span class="n">rhel</span><span class="p">-</span><span class="n">10</span><span class="p">.</span><span class="n">1-x86_64-dvd</span><span class="p">.</span><span class="n">iso</span> <span class="n">SHA256</span>
+</code></pre></div>
+<p><strong>Verify on macOS/Linux:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">cd</span><span class="w"> </span>~/Downloads
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>shasum<span class="w"> </span>-a<span class="w"> </span><span class="m">256</span><span class="w"> </span>rhel-10.1-x86_64-dvd.iso
+</code></pre></div>
+<p><strong>Compare output with checksum from Red Hat website. They must match exactly.</strong></p>
+<hr />
+<h2 id="part-3-create-bootable-usb-with-balena-etcher">Part 3: Create Bootable USB with Balena Etcher<a class="headerlink" href="#part-3-create-bootable-usb-with-balena-etcher" title="Permanent link">&para;</a></h2>
+<h3 id="step-31-download-balena-etcher">Step 3.1: Download Balena Etcher<a class="headerlink" href="#step-31-download-balena-etcher" title="Permanent link">&para;</a></h3>
+<p><strong>Navigate to Balena Etcher website:</strong></p>
+<ol>
+<li>Go to: <code>https://etcher.balena.io</code></li>
+<li>Download version for your operating system:</li>
+<li>Windows: <code>.exe</code> installer</li>
+<li>macOS: <code>.dmg</code> file</li>
+<li>Linux: <code>.AppImage</code> file</li>
+</ol>
+<p><strong>Install Balena Etcher:</strong></p>
+<ul>
+<li><strong>Windows</strong>: Run <code>.exe</code> and follow installer</li>
+<li><strong>macOS</strong>: Open <code>.dmg</code> and drag to Applications</li>
+<li><strong>Linux</strong>: Make AppImage executable:
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>chmod<span class="w"> </span>+x<span class="w"> </span>balenaEtcher*.AppImage
+</code></pre></div></li>
+</ul>
+<hr />
+<h3 id="step-32-prepare-usb-drive">Step 3.2: Prepare USB Drive<a class="headerlink" href="#step-32-prepare-usb-drive" title="Permanent link">&para;</a></h3>
+<p><strong>⚠️ WARNING: All data on USB drive will be erased!</strong></p>
+<p><strong>Requirements:</strong>
+- USB drive: 16GB minimum (32GB recommended)
+- USB 3.0 or higher (for faster installation)
+- Empty or backed up (all data will be lost)</p>
+<p><strong>Insert USB Drive:</strong></p>
+<ol>
+<li>Insert USB drive into your computer</li>
+<li><strong>Back up any important data</strong> from USB drive</li>
+<li>Note drive letter/device name:</li>
+<li>Windows: Typically <code>D:</code>, <code>E:</code>, or <code>F:</code></li>
+<li>macOS: <code>/Volumes/[USB_NAME]</code></li>
+<li>Linux: <code>/dev/sdX</code> (use <code>lsblk</code> to identify)</li>
+</ol>
+<hr />
+<h3 id="step-33-flash-iso-to-usb-with-balena-etcher">Step 3.3: Flash ISO to USB with Balena Etcher<a class="headerlink" href="#step-33-flash-iso-to-usb-with-balena-etcher" title="Permanent link">&para;</a></h3>
+<p><strong>Launch Balena Etcher:</strong></p>
+<ol>
+<li>Open Balena Etcher application</li>
+</ol>
+<p><strong>Step 1: Select Image</strong></p>
+<ol>
+<li>Click <strong>"Flash from file"</strong></li>
+<li>Navigate to downloads folder</li>
+<li>Select: <code>rhel-10.1-x86_64-dvd.iso</code></li>
+<li>Click <strong>"Open"</strong></li>
+</ol>
+<p><strong>Step 2: Select Target</strong></p>
+<ol>
+<li>Click <strong>"Select target"</strong></li>
+<li>Choose your USB drive from list</li>
+<li><strong>Verify</strong> you selected correct drive!</li>
+<li>Wrong selection will erase wrong drive</li>
+<li>Click <strong>"Select (1)"</strong> to confirm</li>
+</ol>
+<p><strong>Step 3: Flash</strong></p>
+<ol>
+<li>Click <strong>"Flash!"</strong></li>
+<li>Enter administrator password when prompted</li>
+<li>Wait for flashing process (5-10 minutes)</li>
+</ol>
+<p><strong>Progress Indicators:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Flashing...    [██████░░░░░░░░] 45%
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>Validating...  [████████████░░] 85%
+</code></pre></div></p>
+<ol>
+<li>When complete, you'll see: <strong>"Flash Complete!"</strong></li>
+<li>Click <strong>"OK"</strong></li>
+<li><strong>Safely eject USB drive</strong></li>
+</ol>
+<p><strong>Expected Time:</strong> 10-15 minutes</p>
+<hr />
+<h2 id="part-4-biosuefi-configuration">Part 4: BIOS/UEFI Configuration<a class="headerlink" href="#part-4-biosuefi-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="step-41-access-biosuefi">Step 4.1: Access BIOS/UEFI<a class="headerlink" href="#step-41-access-biosuefi" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Insert bootable USB</strong> into target computer</li>
+<li><strong>Power on</strong> the system</li>
+<li><strong>Press BIOS key</strong> during POST:</li>
+<li>ASRock motherboards: <strong>F2</strong> or <strong>DEL</strong></li>
+<li>Common alternatives: F1, F10, F12, ESC</li>
+</ol>
+<p><strong>If you miss the key press:</strong>
+- Restart and try again
+- Look for "Press X to enter Setup" message</p>
+<hr />
+<h3 id="step-42-configure-boot-order">Step 4.2: Configure Boot Order<a class="headerlink" href="#step-42-configure-boot-order" title="Permanent link">&para;</a></h3>
+<p><strong>Navigate to Boot Menu:</strong></p>
+<ol>
+<li>Use arrow keys to navigate BIOS</li>
+<li>Find <strong>"Boot"</strong> tab or <strong>"Boot Priority"</strong> section</li>
+</ol>
+<p><strong>Set Boot Order:</strong></p>
+<ol>
+<li>Move <strong>USB device</strong> to <strong>first position</strong></li>
+<li>Typical order:
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>1st Boot Device: USB Hard Disk (or UEFI: USB_DEVICE_NAME)
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>2nd Boot Device: NVMe Drive
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>3rd Boot Device: Network Boot
+</code></pre></div></li>
+</ol>
+<p><strong>Configure UEFI Settings (if applicable):</strong></p>
+<ol>
+<li><strong>Secure Boot</strong>: Disabled (recommended for RHEL 10.1 with custom drivers)</li>
+<li><strong>Boot Mode</strong>: UEFI (not Legacy/CSM)</li>
+<li><strong>Fast Boot</strong>: Disabled</li>
+</ol>
+<hr />
+<h3 id="step-43-save-and-reboot">Step 4.3: Save and Reboot<a class="headerlink" href="#step-43-save-and-reboot" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Press <strong>F10</strong> (or navigate to "Save &amp; Exit")</li>
+<li>Select <strong>"Save Changes and Reset"</strong></li>
+<li>Press <strong>Enter</strong> to confirm</li>
+</ol>
+<p><strong>System will reboot and boot from USB</strong></p>
+<hr />
+<h2 id="part-5-rhel-101-installation">Part 5: RHEL 10.1 Installation<a class="headerlink" href="#part-5-rhel-101-installation" title="Permanent link">&para;</a></h2>
+<h3 id="step-51-boot-from-installation-media">Step 5.1: Boot from Installation Media<a class="headerlink" href="#step-51-boot-from-installation-media" title="Permanent link">&para;</a></h3>
+<p><strong>RHEL Boot Menu:</strong></p>
+<p>After reboot, you'll see the Red Hat installer boot menu:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Install Red Hat Enterprise Linux 10.1
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>Test this media &amp; install Red Hat Enterprise Linux 10.1
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>Troubleshooting --&gt;
+</code></pre></div>
+<ol>
+<li>Select <strong>"Install Red Hat Enterprise Linux 10.1"</strong></li>
+<li>Press <strong>Enter</strong></li>
+</ol>
+<p><strong>Initial boot takes 30-60 seconds</strong></p>
+<hr />
+<h3 id="step-52-language-and-keyboard-selection">Step 5.2: Language and Keyboard Selection<a class="headerlink" href="#step-52-language-and-keyboard-selection" title="Permanent link">&para;</a></h3>
+<p><strong>Welcome Screen:</strong></p>
+<ol>
+<li>Select <strong>Language</strong>: English (United States)</li>
+<li>Click <strong>"Continue"</strong></li>
+</ol>
+<p><strong>Time Required:</strong> 1 minute</p>
+<hr />
+<h3 id="step-53-installation-summary-screen">Step 5.3: Installation Summary Screen<a class="headerlink" href="#step-53-installation-summary-screen" title="Permanent link">&para;</a></h3>
+<p>You'll see the main installation dashboard with multiple configuration sections:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>INSTALLATION SUMMARY
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>LOCALIZATION
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>  [!] Keyboard: English (US)
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>  [!] Language Support: English (United States)
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>  [!] Time &amp; Date: America/New_York
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>SOFTWARE
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>  [!] Installation Source: Local media
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>  [!] Software Selection: Server with GUI
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>SYSTEM
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>  [!] Installation Destination: No disks selected
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>  [!] Network &amp; Host Name: Not configured
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>  [!] Root Password: Not set
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>  [!] User Creation: No user created
+</code></pre></div>
+<p><strong>Items with [!] require configuration</strong></p>
+<hr />
+<h3 id="step-54-time-date-configuration">Step 5.4: Time &amp; Date Configuration<a class="headerlink" href="#step-54-time-date-configuration" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Click <strong>"Time &amp; Date"</strong></li>
+<li>Select your region and city</li>
+<li>Example: <strong>America/New_York</strong></li>
+<li><strong>Network Time</strong>: Toggle <strong>ON</strong> (recommended)</li>
+<li>Automatically syncs with NTP servers</li>
+<li>Click <strong>"Done"</strong></li>
+</ol>
+<hr />
+<h3 id="step-55-software-selection">Step 5.5: Software Selection<a class="headerlink" href="#step-55-software-selection" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Click <strong>"Software Selection"</strong></li>
+<li><strong>Base Environment</strong>: Select <strong>"Server with GUI"</strong></li>
+<li>Provides desktop environment for easier management</li>
+<li>Essential for monitoring GPUs visually</li>
+</ol>
+<p><strong>Add-Ons for Selected Environment</strong> (select these):
+- [x] Debugging Tools
+- [x] Development Tools (already selected for NVIDIA drivers)
+- [x] System Tools
+- [x] Network Servers (optional)</p>
+<ol>
+<li>Click <strong>"Done"</strong></li>
+</ol>
+<p><strong>Note:</strong> Additional software will be installed post-installation.</p>
+<hr />
+<h3 id="step-56-installation-destination-critical-custom-partitioning">Step 5.6: Installation Destination (Critical - Custom Partitioning)<a class="headerlink" href="#step-56-installation-destination-critical-custom-partitioning" title="Permanent link">&para;</a></h3>
+<p>This section is <strong>critical</strong> for Docker and LLM workloads.</p>
+<p><strong>⚠️ IMPORTANT: Custom partition sizing for Docker containers and large models</strong></p>
+<ol>
+<li>Click <strong>"Installation Destination"</strong></li>
+<li>Select your <strong>4TB NVMe drive</strong> (should show as 3.7 TB)</li>
+<li><strong>Storage Configuration</strong>: Select <strong>"Custom"</strong></li>
+<li>Click <strong>"Done"</strong></li>
+</ol>
+<p><strong>Manual Partitioning Screen Opens</strong></p>
+<hr />
+<h3 id="step-57-create-partition-scheme">Step 5.7: Create Partition Scheme<a class="headerlink" href="#step-57-create-partition-scheme" title="Permanent link">&para;</a></h3>
+<p><strong>Select Partitioning Scheme:</strong></p>
+<ol>
+<li><strong>New RHEL Installation</strong>: Click dropdown</li>
+<li>Select: <strong>"Standard Partition"</strong> or <strong>"LVM"</strong> (LVM recommended)</li>
+<li>Click <strong>"Click here to create them automatically"</strong></li>
+</ol>
+<p><strong>Auto-created partitions appear - now we customize them</strong></p>
+<hr />
+<h3 id="step-58-customize-partitions-for-llmdocker-workload">Step 5.8: Customize Partitions for LLM/Docker Workload<a class="headerlink" href="#step-58-customize-partitions-for-llmdocker-workload" title="Permanent link">&para;</a></h3>
+<p><strong>Delete and recreate with proper sizes for 4TB drive:</strong></p>
+<h4 id="partition-1-boot-efi-system">Partition 1: /boot (EFI System)<a class="headerlink" href="#partition-1-boot-efi-system" title="Permanent link">&para;</a></h4>
+<p><strong>Already created - leave as is:</strong>
+- <strong>Mount Point</strong>: <code>/boot/efi</code>
+- <strong>Size</strong>: 600 MB
+- <strong>File System</strong>: EFI System Partition</p>
+<hr />
+<h4 id="partition-2-boot">Partition 2: /boot<a class="headerlink" href="#partition-2-boot" title="Permanent link">&para;</a></h4>
+<p><strong>Already created - leave as is:</strong>
+- <strong>Mount Point</strong>: <code>/boot</code>
+- <strong>Size</strong>: 1 GB (1024 MB)
+- <strong>File System</strong>: xfs</p>
+<hr />
+<h4 id="partition-3-swap-critical-large-for-llm-workloads">Partition 3: swap (Critical - Large for LLM workloads)<a class="headerlink" href="#partition-3-swap-critical-large-for-llm-workloads" title="Permanent link">&para;</a></h4>
+<p><strong>Modify existing swap:</strong></p>
+<ol>
+<li>Select <code>swap</code> partition</li>
+<li><strong>Desired Capacity</strong>: <code>256 GB</code> (256000 MB)</li>
+<li>Large swap for memory-intensive LLM operations</li>
+<li>Allows safe handling of out-of-memory scenarios</li>
+<li>Click <strong>"Update Settings"</strong></li>
+</ol>
+<p><strong>Why 256GB swap:</strong>
+- System has 256GB RAM
+- Swap = 1× RAM for heavy workloads
+- Allows emergency memory overflow
+- Supports hibernation (optional)</p>
+<hr />
+<h4 id="partition-4-root">Partition 4: / (Root)<a class="headerlink" href="#partition-4-root" title="Permanent link">&para;</a></h4>
+<p><strong>Modify existing root:</strong></p>
+<ol>
+<li>Select <code>/</code> partition</li>
+<li><strong>Desired Capacity</strong>: <code>2.5 TB</code> (2500 GB = 2,560,000 MB)</li>
+<li>OS and applications</li>
+<li>User home directories</li>
+<li>System files</li>
+<li><strong>File System</strong>: <code>xfs</code> (recommended for RHEL)</li>
+<li>Click <strong>"Update Settings"</strong></li>
+</ol>
+<hr />
+<h4 id="partition-5-var-critical-docker-and-containers">Partition 5: /var (Critical - Docker and containers)<a class="headerlink" href="#partition-5-var-critical-docker-and-containers" title="Permanent link">&para;</a></h4>
+<p><strong>Create new /var partition:</strong></p>
+<ol>
+<li>Click <strong>"+" button</strong> to add new partition</li>
+<li><strong>Mount Point</strong>: <code>/var</code></li>
+<li><strong>Desired Capacity</strong>: <code>500 GB</code> (512,000 MB)</li>
+<li>Docker images: 100-200 GB</li>
+<li>Container volumes: 100-200 GB</li>
+<li>Logs and temporary files: 100 GB</li>
+<li><strong>File System</strong>: <code>xfs</code></li>
+<li>Click <strong>"Add mount point"</strong></li>
+</ol>
+<p><strong>Why separate /var with 500GB:</strong>
+- Docker stores images/containers in <code>/var/lib/docker</code>
+- Container data can grow very large
+- Prevents container storage from filling root partition
+- Isolates logs and variable data
+- Critical for production Docker workloads</p>
+<hr />
+<h4 id="partition-6-home-user-data-and-models">Partition 6: /home (User data and models)<a class="headerlink" href="#partition-6-home-user-data-and-models" title="Permanent link">&para;</a></h4>
+<p><strong>Create new /home partition:</strong></p>
+<ol>
+<li>Click <strong>"+"</strong> to add partition</li>
+<li><strong>Mount Point</strong>: <code>/home</code></li>
+<li><strong>Desired Capacity</strong>: Fill remaining space (~650 GB)</li>
+<li>User directories</li>
+<li>Downloaded models</li>
+<li>Development projects</li>
+<li>Datasets</li>
+<li><strong>File System</strong>: <code>xfs</code></li>
+<li>Click <strong>"Add mount point"</strong></li>
+</ol>
+<hr />
+<h3 id="step-59-review-final-partition-layout">Step 5.9: Review Final Partition Layout<a class="headerlink" href="#step-59-review-final-partition-layout" title="Permanent link">&para;</a></h3>
+<p><strong>Verify your partition scheme:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Device                 Mount Point    Size        Type
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>/dev/nvme0n1p1        /boot/efi      600 MB      vfat
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>/dev/nvme0n1p2        /boot          1 GB        xfs
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>/dev/nvme0n1p3        swap           256 GB      swap
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>/dev/nvme0n1p4        /              2.5 TB      xfs
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>/dev/nvme0n1p5        /var           500 GB      xfs
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>/dev/nvme0n1p6        /home          ~650 GB     xfs
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>-----------------------------------------------------------
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>Total:                               ~3.9 TB     (4TB drive)
+</code></pre></div>
+<p><strong>Partition Summary:</strong>
+- <strong>Total drive</strong>: 4TB (3.7 TB usable)
+- <strong>OS and apps</strong> (/): 2.5 TB
+- <strong>Docker and containers</strong> (/var): 500 GB
+- <strong>Swap</strong>: 256 GB
+- <strong>User data and models</strong> (/home): ~650 GB
+- <strong>Boot partitions</strong>: ~1.6 GB</p>
+<hr />
+<h3 id="step-510-accept-changes">Step 5.10: Accept Changes<a class="headerlink" href="#step-510-accept-changes" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Click <strong>"Done"</strong> (top left)</li>
+<li><strong>Summary of Changes</strong> dialog appears</li>
+<li>Review changes carefully</li>
+<li>Click <strong>"Accept Changes"</strong></li>
+</ol>
+<p><strong>⚠️ WARNING: This will format the drive. All data will be lost.</strong></p>
+<hr />
+<h3 id="step-511-network-host-name">Step 5.11: Network &amp; Host Name<a class="headerlink" href="#step-511-network-host-name" title="Permanent link">&para;</a></h3>
+<p><strong>Configure networking:</strong></p>
+<ol>
+<li>Click <strong>"Network &amp; Host Name"</strong></li>
+<li><strong>Host name</strong>: Enter your desired hostname</li>
+<li>Example: <code>llm-inference-01.domain.org</code></li>
+<li>Format: <code>hostname.domain.org</code></li>
+<li>Click <strong>"Apply"</strong></li>
+</ol>
+<p><strong>Configure Network Interface:</strong></p>
+<ol>
+<li>In left panel, select <strong>Ethernet connection</strong></li>
+<li>Toggle switch to <strong>ON</strong> (should turn green)</li>
+</ol>
+<p><strong>For Static IP (recommended for servers):</strong></p>
+<ol>
+<li>Click <strong>"Configure..."</strong></li>
+<li>Go to <strong>"IPv4 Settings"</strong> tab</li>
+<li><strong>Method</strong>: Select <strong>"Manual"</strong></li>
+<li>Click <strong>"Add"</strong> and enter:</li>
+<li><strong>Address</strong>: <code>192.168.1.100</code> (example - use your network)</li>
+<li><strong>Netmask</strong>: <code>255.255.255.0</code></li>
+<li><strong>Gateway</strong>: <code>192.168.1.1</code> (your router)</li>
+<li><strong>DNS servers</strong>: <code>192.168.1.10,192.168.1.11</code> (your AD DNS servers)</li>
+<li>Click <strong>"Save"</strong></li>
+</ol>
+<p><strong>For DHCP (automatic):</strong></p>
+<ol>
+<li>Leave as <strong>DHCP</strong> (default)</li>
+<li>
+<p>Still configure DNS to point to AD servers</p>
+</li>
+<li>
+<p>Click <strong>"Done"</strong></p>
+</li>
+</ol>
+<p><strong>Important for Active Directory:</strong>
+- DNS must point to Active Directory domain controllers
+- Example: <code>192.168.1.10</code> and <code>192.168.1.11</code>
+- Do NOT use public DNS (8.8.8.8) if joining AD</p>
+<hr />
+<h3 id="step-512-root-password">Step 5.12: Root Password<a class="headerlink" href="#step-512-root-password" title="Permanent link">&para;</a></h3>
+<p><strong>Set root password:</strong></p>
+<ol>
+<li>Click <strong>"Root Password"</strong></li>
+<li>Enter a <strong>strong password</strong>:</li>
+<li>Minimum 8 characters</li>
+<li>Mix of uppercase, lowercase, numbers, symbols</li>
+<li>Don't use dictionary words</li>
+<li><strong>Confirm password</strong> (re-enter)</li>
+<li>If weak password: Click <strong>"Done"</strong> twice to override</li>
+</ol>
+<p><strong>Password Requirements:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Weak:     admin123
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>Moderate: Admin@2026
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>Strong:   xK9#mP2!vL5@wN8q
+</code></pre></div></p>
+<ol>
+<li>Click <strong>"Done"</strong></li>
+</ol>
+<p><strong>⚠️ IMPORTANT: Save this password securely!</strong></p>
+<hr />
+<h3 id="step-513-user-creation">Step 5.13: User Creation<a class="headerlink" href="#step-513-user-creation" title="Permanent link">&para;</a></h3>
+<p><strong>Create administrative user:</strong></p>
+<ol>
+<li>Click <strong>"User Creation"</strong></li>
+<li><strong>Full name</strong>: <code>Administrator</code> (or your name)</li>
+<li><strong>User name</strong>: <code>admin</code> (or your preference)</li>
+<li><strong>Password</strong>: Enter strong password</li>
+<li><strong>Confirm password</strong>: Re-enter</li>
+<li><strong>Make this user administrator</strong>: ✓ Check this box</li>
+<li>Grants sudo access</li>
+<li>
+<p><strong>Require a password to use this account</strong>: ✓ Keep checked</p>
+</li>
+<li>
+<p>Click <strong>"Done"</strong></p>
+</li>
+</ol>
+<hr />
+<h3 id="step-514-begin-installation">Step 5.14: Begin Installation<a class="headerlink" href="#step-514-begin-installation" title="Permanent link">&para;</a></h3>
+<p><strong>Verify all items configured:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>✓ Keyboard: Configured
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>✓ Language Support: Configured
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>✓ Time &amp; Date: Configured
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>✓ Installation Source: Configured
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>✓ Software Selection: Server with GUI
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>✓ Installation Destination: Custom partitions configured
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>✓ Network &amp; Host Name: Configured
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>✓ Root Password: Set
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>✓ User Creation: User created
+</code></pre></div>
+<ol>
+<li>Click <strong>"Begin Installation"</strong> (blue button, bottom right)</li>
+</ol>
+<p><strong>Installation Progress:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Installing Red Hat Enterprise Linux 10.1
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>Installing software packages...
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>[████████████░░░░░░░░░░░░] 45%
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>Time remaining: 15 minutes (varies by hardware)
+</code></pre></div>
+<p><strong>Installation time:</strong>
+- Typical: 20-30 minutes
+- NVMe SSD: 15-20 minutes
+- SATA SSD: 30-45 minutes</p>
+<p><strong>During installation:</strong>
+- Progress bar shows package installation
+- You can't interact with installer
+- Do not power off system</p>
+<hr />
+<h3 id="step-515-installation-complete">Step 5.15: Installation Complete<a class="headerlink" href="#step-515-installation-complete" title="Permanent link">&para;</a></h3>
+<p><strong>When finished, you'll see:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Complete!
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>Red Hat Enterprise Linux is now successfully installed.
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>[ Reboot System ]
+</code></pre></div>
+<ol>
+<li>Remove USB installation drive</li>
+<li>Click <strong>"Reboot System"</strong></li>
+</ol>
+<p><strong>System will reboot into installed RHEL 10.1</strong></p>
+<hr />
+<h2 id="part-6-post-installation-configuration">Part 6: Post-Installation Configuration<a class="headerlink" href="#part-6-post-installation-configuration" title="Permanent link">&para;</a></h2>
+<h3 id="step-61-initial-boot-and-license-agreement">Step 6.1: Initial Boot and License Agreement<a class="headerlink" href="#step-61-initial-boot-and-license-agreement" title="Permanent link">&para;</a></h3>
+<p><strong>First boot after installation:</strong></p>
+<ol>
+<li>System boots to RHEL</li>
+<li><strong>Initial Setup</strong> screen appears</li>
+<li><strong>License Information</strong>: Click to open</li>
+<li><strong>Accept license agreement</strong>: ✓ Check box</li>
+<li>Click <strong>"Done"</strong></li>
+<li>Click <strong>"Finish Configuration"</strong></li>
+</ol>
+<hr />
+<h3 id="step-62-first-login">Step 6.2: First Login<a class="headerlink" href="#step-62-first-login" title="Permanent link">&para;</a></h3>
+<p><strong>Login Screen:</strong></p>
+<ol>
+<li>Click on your username</li>
+<li>Enter password</li>
+<li>Press <strong>Enter</strong></li>
+</ol>
+<p><strong>GNOME Desktop loads</strong></p>
+<hr />
+<h3 id="step-63-initial-gnome-setup-optional">Step 6.3: Initial GNOME Setup (Optional)<a class="headerlink" href="#step-63-initial-gnome-setup-optional" title="Permanent link">&para;</a></h3>
+<p><strong>Welcome to RHEL wizard:</strong></p>
+<ol>
+<li><strong>Privacy</strong>: Configure location services (optional)</li>
+<li><strong>Online Accounts</strong>: Skip (click <strong>"Skip"</strong>)</li>
+<li><strong>Ready to Go</strong>: Click <strong>"Start Using Red Hat Enterprise Linux"</strong></li>
+</ol>
+<p><strong>Desktop environment is now ready</strong></p>
+<hr />
+<h2 id="part-7-red-hat-subscription-attachment">Part 7: Red Hat Subscription Attachment<a class="headerlink" href="#part-7-red-hat-subscription-attachment" title="Permanent link">&para;</a></h2>
+<h3 id="step-71-register-system-with-red-hat">Step 7.1: Register System with Red Hat<a class="headerlink" href="#step-71-register-system-with-red-hat" title="Permanent link">&para;</a></h3>
+<p><strong>Open Terminal:</strong></p>
+<ul>
+<li>Click <strong>"Activities"</strong> → Search for <strong>"Terminal"</strong></li>
+<li>Or press <strong>Ctrl+Alt+T</strong></li>
+</ul>
+<p><strong>Register system:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>register<span class="w"> </span>--username<span class="w"> </span>YOUR_REDHAT_EMAIL
+</code></pre></div>
+<p><strong>Enter:</strong>
+1. Your Red Hat account password when prompted
+2. Your user password for <code>sudo</code></p>
+<p><strong>Expected output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>The system has been registered with ID: xxxxxxxxxx
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>The registered system name is: llm-inference-01.domain.org
+</code></pre></div></p>
+<hr />
+<h3 id="step-72-attach-subscription">Step 7.2: Attach Subscription<a class="headerlink" href="#step-72-attach-subscription" title="Permanent link">&para;</a></h3>
+<p><strong>Auto-attach subscription:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>attach<span class="w"> </span>--auto
+</code></pre></div>
+<p><strong>Expected output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>Installed Product Current Status:
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>Product Name: Red Hat Enterprise Linux for x86_64
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>Status:       Subscribed
+</code></pre></div></p>
+<hr />
+<h3 id="step-73-verify-subscription">Step 7.3: Verify Subscription<a class="headerlink" href="#step-73-verify-subscription" title="Permanent link">&para;</a></h3>
+<p><strong>Check subscription status:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>status
+</code></pre></div>
+<p><strong>Expected output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>+-------------------------------------------+
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>   System Status Details
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>+-------------------------------------------+
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>Overall Status: Current
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>System Purpose Status: Matched
+</code></pre></div></p>
+<hr />
+<h3 id="step-74-enable-required-repositories">Step 7.4: Enable Required Repositories<a class="headerlink" href="#step-74-enable-required-repositories" title="Permanent link">&para;</a></h3>
+<p><strong>Enable base repositories:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Enable BaseOS repository</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>repos<span class="w"> </span>--enable<span class="o">=</span>rhel-10-for-x86_64-baseos-rpms
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="c1"># Enable AppStream repository</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>repos<span class="w"> </span>--enable<span class="o">=</span>rhel-10-for-x86_64-appstream-rpms
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="c1"># Enable CodeReady Builder (for development)</span>
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>repos<span class="w"> </span>--enable<span class="o">=</span>codeready-builder-for-rhel-10-x86_64-rpms
+</code></pre></div>
+<p><strong>Verify repositories:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>repolist
+</code></pre></div>
+<p><strong>Expected output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>repo id                                     repo name
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>rhel-10-for-x86_64-baseos-rpms             Red Hat Enterprise Linux 10 for x86_64 - BaseOS
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>rhel-10-for-x86_64-appstream-rpms          Red Hat Enterprise Linux 10 for x86_64 - AppStream
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>codeready-builder-for-rhel-10-x86_64-rpms  CodeReady Linux Builder for RHEL 10
+</code></pre></div></p>
+<hr />
+<h3 id="step-75-update-system">Step 7.5: Update System<a class="headerlink" href="#step-75-update-system" title="Permanent link">&para;</a></h3>
+<p><strong>Perform initial system update:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># Update all packages</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>update<span class="w"> </span>-y
+</code></pre></div>
+<p><strong>This may take 10-20 minutes depending on connection speed</strong></p>
+<p><strong>Reboot after update (recommended):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>reboot
+</code></pre></div>
+<hr />
+<h2 id="part-8-active-directory-integration">Part 8: Active Directory Integration<a class="headerlink" href="#part-8-active-directory-integration" title="Permanent link">&para;</a></h2>
+<h3 id="step-81-prerequisites-for-ad-integration">Step 8.1: Prerequisites for AD Integration<a class="headerlink" href="#step-81-prerequisites-for-ad-integration" title="Permanent link">&para;</a></h3>
+<p><strong>Network Requirements:</strong></p>
+<ol>
+<li><strong>DNS Configuration</strong>: System must use AD DNS servers</li>
+<li><strong>Network Connectivity</strong>: Verify connection to domain controllers</li>
+<li><strong>Time Synchronization</strong>: System time must match AD</li>
+</ol>
+<p><strong>Verify DNS points to AD:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>cat<span class="w"> </span>/etc/resolv.conf
+</code></pre></div>
+<p><strong>Should show:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>nameserver 192.168.1.10  # AD Domain Controller 1
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>nameserver 192.168.1.11  # AD Domain Controller 2
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>search domain.org
+</code></pre></div></p>
+<p><strong>If not correct, edit:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>sudo<span class="w"> </span>nmcli<span class="w"> </span>connection<span class="w"> </span>modify<span class="w"> </span><span class="s2">&quot;System eth0&quot;</span><span class="w"> </span>ipv4.dns<span class="w"> </span><span class="s2">&quot;192.168.1.10 192.168.1.11&quot;</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>sudo<span class="w"> </span>nmcli<span class="w"> </span>connection<span class="w"> </span>modify<span class="w"> </span><span class="s2">&quot;System eth0&quot;</span><span class="w"> </span>ipv4.dns-search<span class="w"> </span><span class="s2">&quot;domain.org&quot;</span>
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>sudo<span class="w"> </span>nmcli<span class="w"> </span>connection<span class="w"> </span>up<span class="w"> </span><span class="s2">&quot;System eth0&quot;</span>
+</code></pre></div>
+<hr />
+<h3 id="step-82-install-required-packages">Step 8.2: Install Required Packages<a class="headerlink" href="#step-82-install-required-packages" title="Permanent link">&para;</a></h3>
+<p><strong>Install AD integration packages:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">    </span>realmd<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">    </span>sssd<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">    </span>oddjob<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="w">    </span>oddjob-mkhomedir<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="w">    </span>adcli<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="w">    </span>samba-common-tools<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="w">    </span>krb5-workstation<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="w">    </span>openldap-clients<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a><span class="w">    </span>policycoreutils-python-utils
+</code></pre></div>
+<p><strong>Package descriptions:</strong>
+- <code>realmd</code>: Domain discovery and join utility
+- <code>sssd</code>: System Security Services Daemon
+- <code>oddjob-mkhomedir</code>: Auto-create home directories
+- <code>adcli</code>: Active Directory command-line tool
+- <code>krb5-workstation</code>: Kerberos client tools
+- <code>samba-common-tools</code>: Samba utilities
+- <code>openldap-clients</code>: LDAP client utilities</p>
+<hr />
+<h3 id="step-83-configure-system-hostname">Step 8.3: Configure System Hostname<a class="headerlink" href="#step-83-configure-system-hostname" title="Permanent link">&para;</a></h3>
+<p><strong>Set fully qualified hostname:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="c1"># Set hostname</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>sudo<span class="w"> </span>hostnamectl<span class="w"> </span>set-hostname<span class="w"> </span>llm-inference-01.domain.org
+<a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a>
+<a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="c1"># Verify</span>
+<a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>hostnamectl
+</code></pre></div>
+<p><strong>Expected output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>   Static hostname: llm-inference-01.domain.org
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>         Icon name: computer-desktop
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>           Chassis: desktop
+<a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>  Operating System: Red Hat Enterprise Linux 10.1
+</code></pre></div></p>
+<p><strong>Update /etc/hosts:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/hosts
+</code></pre></div>
+<p><strong>Add/modify:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>127.0.0.1   localhost localhost.localdomain
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>192.168.1.100   llm-inference-01.domain.org llm-inference-01
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a># Remove any 127.0.1.1 entries for hostname
+</code></pre></div></p>
+<p>Save: <strong>Ctrl+O</strong>, Enter, <strong>Ctrl+X</strong></p>
+<hr />
+<h3 id="step-84-verify-time-synchronization">Step 8.4: Verify Time Synchronization<a class="headerlink" href="#step-84-verify-time-synchronization" title="Permanent link">&para;</a></h3>
+<p><strong>AD requires synchronized time (critical for Kerberos):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="c1"># Check current time</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>timedatectl
+<a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>
+<a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="c1"># Enable NTP synchronization</span>
+<a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>sudo<span class="w"> </span>timedatectl<span class="w"> </span>set-ntp<span class="w"> </span><span class="nb">true</span>
+<a id="__codelineno-32-6" name="__codelineno-32-6" href="#__codelineno-32-6"></a>
+<a id="__codelineno-32-7" name="__codelineno-32-7" href="#__codelineno-32-7"></a><span class="c1"># Verify synchronization</span>
+<a id="__codelineno-32-8" name="__codelineno-32-8" href="#__codelineno-32-8"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>chronyd
+</code></pre></div>
+<p><strong>Time difference must be less than 5 minutes from AD</strong></p>
+<hr />
+<h3 id="step-85-test-dns-resolution-to-ad">Step 8.5: Test DNS Resolution to AD<a class="headerlink" href="#step-85-test-dns-resolution-to-ad" title="Permanent link">&para;</a></h3>
+<p><strong>Verify DNS records:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="c1"># Test domain</span>
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>nslookup<span class="w"> </span>domain.org
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a>
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="c1"># Test domain controllers</span>
+<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a>nslookup<span class="w"> </span>dc1.domain.org
+<a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a>nslookup<span class="w"> </span>dc2.domain.org
+<a id="__codelineno-33-7" name="__codelineno-33-7" href="#__codelineno-33-7"></a>
+<a id="__codelineno-33-8" name="__codelineno-33-8" href="#__codelineno-33-8"></a><span class="c1"># Test SRV records (critical for AD)</span>
+<a id="__codelineno-33-9" name="__codelineno-33-9" href="#__codelineno-33-9"></a>dig<span class="w"> </span>-t<span class="w"> </span>SRV<span class="w"> </span>_ldap._tcp.domain.org
+<a id="__codelineno-33-10" name="__codelineno-33-10" href="#__codelineno-33-10"></a>dig<span class="w"> </span>-t<span class="w"> </span>SRV<span class="w"> </span>_kerberos._tcp.domain.org
+</code></pre></div>
+<p><strong>SRV records should return domain controller addresses</strong></p>
+<hr />
+<h3 id="step-86-discover-active-directory-domain">Step 8.6: Discover Active Directory Domain<a class="headerlink" href="#step-86-discover-active-directory-domain" title="Permanent link">&para;</a></h3>
+<p><strong>Use realmd to discover domain:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>sudo<span class="w"> </span>realm<span class="w"> </span>discover<span class="w"> </span>domain.org
+</code></pre></div>
+<p><strong>Expected output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>domain.org
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>  type: kerberos
+<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a>  realm-name: DOMAIN.ORG
+<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a>  domain-name: domain.org
+<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a>  configured: no
+<a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a>  server-software: active-directory
+<a id="__codelineno-35-7" name="__codelineno-35-7" href="#__codelineno-35-7"></a>  client-software: sssd
+<a id="__codelineno-35-8" name="__codelineno-35-8" href="#__codelineno-35-8"></a>  required-package: oddjob
+<a id="__codelineno-35-9" name="__codelineno-35-9" href="#__codelineno-35-9"></a>  required-package: oddjob-mkhomedir
+<a id="__codelineno-35-10" name="__codelineno-35-10" href="#__codelineno-35-10"></a>  required-package: sssd
+<a id="__codelineno-35-11" name="__codelineno-35-11" href="#__codelineno-35-11"></a>  required-package: adcli
+<a id="__codelineno-35-12" name="__codelineno-35-12" href="#__codelineno-35-12"></a>  required-package: samba-common-tools
+</code></pre></div></p>
+<p><strong>If discovery fails:</strong>
+- Verify DNS configuration
+- Check network connectivity to domain controllers
+- Verify firewall rules (ports 88, 389, 636, 464, 3268)</p>
+<hr />
+<h3 id="step-87-join-system-to-active-directory-domain">Step 8.7: Join System to Active Directory Domain<a class="headerlink" href="#step-87-join-system-to-active-directory-domain" title="Permanent link">&para;</a></h3>
+<p><strong>Join the domain:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>sudo<span class="w"> </span>realm<span class="w"> </span>join<span class="w"> </span>-U<span class="w"> </span>administrator<span class="w"> </span>domain.org
+</code></pre></div>
+<p><strong>You'll be prompted:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>Password for administrator:
+</code></pre></div></p>
+<p><strong>Enter your AD administrator password</strong></p>
+<p><strong>Successful join output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a> * Resolving: _ldap._tcp.domain.org
+<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a> * Performing LDAP DSE lookup on: 192.168.1.10
+<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a> * Successfully enrolled machine in realm
+</code></pre></div></p>
+<p><strong>Alternative - join with specific OU:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="c1"># Join to specific organizational unit</span>
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a>sudo<span class="w"> </span>realm<span class="w"> </span>join<span class="w"> </span>-U<span class="w"> </span>administrator<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="w">    </span>--computer-ou<span class="o">=</span><span class="s2">&quot;OU=Linux Servers,OU=Servers,DC=domain,DC=org&quot;</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a><span class="w">    </span>domain.org
+</code></pre></div>
+<hr />
+<h3 id="step-88-verify-domain-join">Step 8.8: Verify Domain Join<a class="headerlink" href="#step-88-verify-domain-join" title="Permanent link">&para;</a></h3>
+<p><strong>Check realm status:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>sudo<span class="w"> </span>realm<span class="w"> </span>list
+</code></pre></div>
+<p><strong>Expected output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>domain.org
+<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a>  type: kerberos
+<a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a>  realm-name: DOMAIN.ORG
+<a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a>  domain-name: domain.org
+<a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a>  configured: kerberos-member
+<a id="__codelineno-41-6" name="__codelineno-41-6" href="#__codelineno-41-6"></a>  server-software: active-directory
+<a id="__codelineno-41-7" name="__codelineno-41-7" href="#__codelineno-41-7"></a>  client-software: sssd
+<a id="__codelineno-41-8" name="__codelineno-41-8" href="#__codelineno-41-8"></a>  required-package: oddjob
+<a id="__codelineno-41-9" name="__codelineno-41-9" href="#__codelineno-41-9"></a>  required-package: oddjob-mkhomedir
+<a id="__codelineno-41-10" name="__codelineno-41-10" href="#__codelineno-41-10"></a>  required-package: sssd
+<a id="__codelineno-41-11" name="__codelineno-41-11" href="#__codelineno-41-11"></a>  required-package: adcli
+<a id="__codelineno-41-12" name="__codelineno-41-12" href="#__codelineno-41-12"></a>  required-package: samba-common-tools
+<a id="__codelineno-41-13" name="__codelineno-41-13" href="#__codelineno-41-13"></a>  login-formats: %U@domain.org
+<a id="__codelineno-41-14" name="__codelineno-41-14" href="#__codelineno-41-14"></a>  login-policy: allow-realm-logins
+</code></pre></div></p>
+<p><strong>Key indicator:</strong> <code>configured: kerberos-member</code></p>
+<hr />
+<h3 id="step-89-configure-sssd-for-optimal-performance">Step 8.9: Configure SSSD for Optimal Performance<a class="headerlink" href="#step-89-configure-sssd-for-optimal-performance" title="Permanent link">&para;</a></h3>
+<p><strong>Edit SSSD configuration:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/sssd/sssd.conf
+</code></pre></div>
+<p><strong>Optimize configuration:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="k">[sssd]</span>
+<a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a><span class="na">domains</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">domain.org</span>
+<a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a><span class="na">config_file_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">2</span>
+<a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a><span class="na">services</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">nss, pam, ssh</span>
+<a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a>
+<a id="__codelineno-43-6" name="__codelineno-43-6" href="#__codelineno-43-6"></a><span class="k">[domain/domain.org]</span>
+<a id="__codelineno-43-7" name="__codelineno-43-7" href="#__codelineno-43-7"></a><span class="c1"># Domain configuration</span>
+<a id="__codelineno-43-8" name="__codelineno-43-8" href="#__codelineno-43-8"></a><span class="na">ad_domain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">domain.org</span>
+<a id="__codelineno-43-9" name="__codelineno-43-9" href="#__codelineno-43-9"></a><span class="na">krb5_realm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">DOMAIN.ORG</span>
+<a id="__codelineno-43-10" name="__codelineno-43-10" href="#__codelineno-43-10"></a><span class="na">realmd_tags</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">manages-system joined-with-adcli</span>
+<a id="__codelineno-43-11" name="__codelineno-43-11" href="#__codelineno-43-11"></a><span class="na">cache_credentials</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">True</span>
+<a id="__codelineno-43-12" name="__codelineno-43-12" href="#__codelineno-43-12"></a><span class="na">id_provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">ad</span>
+<a id="__codelineno-43-13" name="__codelineno-43-13" href="#__codelineno-43-13"></a><span class="na">krb5_store_password_if_offline</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">True</span>
+<a id="__codelineno-43-14" name="__codelineno-43-14" href="#__codelineno-43-14"></a><span class="na">default_shell</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/bin/bash</span>
+<a id="__codelineno-43-15" name="__codelineno-43-15" href="#__codelineno-43-15"></a><span class="na">ldap_id_mapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">True</span>
+<a id="__codelineno-43-16" name="__codelineno-43-16" href="#__codelineno-43-16"></a>
+<a id="__codelineno-43-17" name="__codelineno-43-17" href="#__codelineno-43-17"></a><span class="c1"># Allow simple usernames (no domain required)</span>
+<a id="__codelineno-43-18" name="__codelineno-43-18" href="#__codelineno-43-18"></a><span class="na">use_fully_qualified_names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">False</span>
+<a id="__codelineno-43-19" name="__codelineno-43-19" href="#__codelineno-43-19"></a>
+<a id="__codelineno-43-20" name="__codelineno-43-20" href="#__codelineno-43-20"></a><span class="c1"># Home directory configuration</span>
+<a id="__codelineno-43-21" name="__codelineno-43-21" href="#__codelineno-43-21"></a><span class="na">fallback_homedir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/home/%u</span>
+<a id="__codelineno-43-22" name="__codelineno-43-22" href="#__codelineno-43-22"></a><span class="na">override_homedir</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/home/%u</span>
+<a id="__codelineno-43-23" name="__codelineno-43-23" href="#__codelineno-43-23"></a>
+<a id="__codelineno-43-24" name="__codelineno-43-24" href="#__codelineno-43-24"></a><span class="c1"># Performance tuning</span>
+<a id="__codelineno-43-25" name="__codelineno-43-25" href="#__codelineno-43-25"></a><span class="na">ldap_referrals</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">false</span>
+<a id="__codelineno-43-26" name="__codelineno-43-26" href="#__codelineno-43-26"></a><span class="na">ldap_id_mapping</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">True</span>
+<a id="__codelineno-43-27" name="__codelineno-43-27" href="#__codelineno-43-27"></a>
+<a id="__codelineno-43-28" name="__codelineno-43-28" href="#__codelineno-43-28"></a><span class="c1"># Enumerate users (useful for small domains)</span>
+<a id="__codelineno-43-29" name="__codelineno-43-29" href="#__codelineno-43-29"></a><span class="na">enumerate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">False</span>
+<a id="__codelineno-43-30" name="__codelineno-43-30" href="#__codelineno-43-30"></a>
+<a id="__codelineno-43-31" name="__codelineno-43-31" href="#__codelineno-43-31"></a><span class="c1"># Access control - limit to specific groups</span>
+<a id="__codelineno-43-32" name="__codelineno-43-32" href="#__codelineno-43-32"></a><span class="c1"># access_provider = simple</span>
+<a id="__codelineno-43-33" name="__codelineno-43-33" href="#__codelineno-43-33"></a><span class="c1"># simple_allow_groups = linux-admins, llm-users</span>
+</code></pre></div>
+<p><strong>Save:</strong> Ctrl+O, Enter, Ctrl+X</p>
+<p><strong>Set proper permissions:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a>sudo<span class="w"> </span>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>/etc/sssd/sssd.conf
+<a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a>sudo<span class="w"> </span>chown<span class="w"> </span>root:root<span class="w"> </span>/etc/sssd/sssd.conf
+</code></pre></div>
+<hr />
+<h3 id="step-810-configure-pam-for-home-directory-creation">Step 8.10: Configure PAM for Home Directory Creation<a class="headerlink" href="#step-810-configure-pam-for-home-directory-creation" title="Permanent link">&para;</a></h3>
+<p><strong>Ensure home directories are auto-created:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a>sudo<span class="w"> </span>authselect<span class="w"> </span><span class="k">select</span><span class="w"> </span>sssd<span class="w"> </span>with-mkhomedir<span class="w"> </span>--force
+</code></pre></div>
+<p><strong>Or manually enable:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>oddjobd
+</code></pre></div>
+<hr />
+<h3 id="step-811-restart-sssd-service">Step 8.11: Restart SSSD Service<a class="headerlink" href="#step-811-restart-sssd-service" title="Permanent link">&para;</a></h3>
+<p><strong>Restart SSSD to apply changes:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="c1"># Restart SSSD</span>
+<a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>sssd
+<a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a>
+<a id="__codelineno-47-4" name="__codelineno-47-4" href="#__codelineno-47-4"></a><span class="c1"># Enable SSSD at boot</span>
+<a id="__codelineno-47-5" name="__codelineno-47-5" href="#__codelineno-47-5"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>sssd
+<a id="__codelineno-47-6" name="__codelineno-47-6" href="#__codelineno-47-6"></a>
+<a id="__codelineno-47-7" name="__codelineno-47-7" href="#__codelineno-47-7"></a><span class="c1"># Check status</span>
+<a id="__codelineno-47-8" name="__codelineno-47-8" href="#__codelineno-47-8"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>sssd
+</code></pre></div>
+<p><strong>Expected status:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a>● sssd.service - System Security Services Daemon
+<a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a>   Loaded: loaded (/usr/lib/systemd/system/sssd.service; enabled)
+<a id="__codelineno-48-3" name="__codelineno-48-3" href="#__codelineno-48-3"></a>   Active: active (running) since ...
+</code></pre></div></p>
+<hr />
+<h3 id="step-812-test-ad-user-authentication">Step 8.12: Test AD User Authentication<a class="headerlink" href="#step-812-test-ad-user-authentication" title="Permanent link">&para;</a></h3>
+<p><strong>Verify AD user lookup:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a><span class="c1"># Look up AD user (replace with actual AD username)</span>
+<a id="__codelineno-49-2" name="__codelineno-49-2" href="#__codelineno-49-2"></a>id<span class="w"> </span>username
+<a id="__codelineno-49-3" name="__codelineno-49-3" href="#__codelineno-49-3"></a>
+<a id="__codelineno-49-4" name="__codelineno-49-4" href="#__codelineno-49-4"></a><span class="c1"># Look up AD user with domain</span>
+<a id="__codelineno-49-5" name="__codelineno-49-5" href="#__codelineno-49-5"></a>id<span class="w"> </span>username@domain.org
+<a id="__codelineno-49-6" name="__codelineno-49-6" href="#__codelineno-49-6"></a>
+<a id="__codelineno-49-7" name="__codelineno-49-7" href="#__codelineno-49-7"></a><span class="c1"># Get user information</span>
+<a id="__codelineno-49-8" name="__codelineno-49-8" href="#__codelineno-49-8"></a>getent<span class="w"> </span>passwd<span class="w"> </span>username
+</code></pre></div>
+<p><strong>Expected output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a>uid=1234567890(username) gid=1234567890(domain users) groups=1234567890(domain users),1234567891(linux-admins)
+</code></pre></div></p>
+<p><strong>Test AD group lookup:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a>getent<span class="w"> </span>group<span class="w"> </span><span class="s2">&quot;domain users&quot;</span>
+<a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a>getent<span class="w"> </span>group<span class="w"> </span><span class="s2">&quot;linux-admins&quot;</span>
+</code></pre></div>
+<hr />
+<h3 id="step-813-test-ssh-login-with-ad-credentials">Step 8.13: Test SSH Login with AD Credentials<a class="headerlink" href="#step-813-test-ssh-login-with-ad-credentials" title="Permanent link">&para;</a></h3>
+<p><strong>From another machine, test SSH:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a>ssh<span class="w"> </span>username@192.168.1.100
+</code></pre></div>
+<p><strong>Or test locally:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a>su<span class="w"> </span>-<span class="w"> </span>username
+</code></pre></div>
+<p><strong>Enter AD password when prompted</strong></p>
+<p><strong>Successful login creates home directory automatically:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a>Creating home directory for username.
+<a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a>username@llm-inference-01:~$
+</code></pre></div></p>
+<hr />
+<h3 id="step-814-configure-sudo-access-for-ad-groups">Step 8.14: Configure Sudo Access for AD Groups<a class="headerlink" href="#step-814-configure-sudo-access-for-ad-groups" title="Permanent link">&para;</a></h3>
+<p><strong>Grant sudo access to AD group:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a>sudo<span class="w"> </span>visudo<span class="w"> </span>-f<span class="w"> </span>/etc/sudoers.d/ad-admins
+</code></pre></div>
+<p><strong>Add:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a><span class="c1"># Allow AD linux-admins group full sudo access</span>
+<a id="__codelineno-56-2" name="__codelineno-56-2" href="#__codelineno-56-2"></a>%linux-admins<span class="w"> </span><span class="nv">ALL</span><span class="o">=(</span>ALL<span class="o">)</span><span class="w"> </span>ALL
+<a id="__codelineno-56-3" name="__codelineno-56-3" href="#__codelineno-56-3"></a>
+<a id="__codelineno-56-4" name="__codelineno-56-4" href="#__codelineno-56-4"></a><span class="c1"># Or without password (use with caution)</span>
+<a id="__codelineno-56-5" name="__codelineno-56-5" href="#__codelineno-56-5"></a><span class="c1"># %linux-admins ALL=(ALL) NOPASSWD: ALL</span>
+</code></pre></div></p>
+<p><strong>Save:</strong> Ctrl+X, Y, Enter</p>
+<p><strong>Test sudo access:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a><span class="c1"># As AD user</span>
+<a id="__codelineno-57-2" name="__codelineno-57-2" href="#__codelineno-57-2"></a>sudo<span class="w"> </span>whoami
+</code></pre></div>
+<p>Should output: <code>root</code></p>
+<hr />
+<h2 id="part-9-verification-and-testing">Part 9: Verification and Testing<a class="headerlink" href="#part-9-verification-and-testing" title="Permanent link">&para;</a></h2>
+<h3 id="step-91-system-verification">Step 9.1: System Verification<a class="headerlink" href="#step-91-system-verification" title="Permanent link">&para;</a></h3>
+<p><strong>Verify all core components:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="c1"># Check RHEL version</span>
+<a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a>cat<span class="w"> </span>/etc/redhat-release
+<a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a>
+<a id="__codelineno-58-4" name="__codelineno-58-4" href="#__codelineno-58-4"></a><span class="c1"># Check subscription</span>
+<a id="__codelineno-58-5" name="__codelineno-58-5" href="#__codelineno-58-5"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>status
+<a id="__codelineno-58-6" name="__codelineno-58-6" href="#__codelineno-58-6"></a>
+<a id="__codelineno-58-7" name="__codelineno-58-7" href="#__codelineno-58-7"></a><span class="c1"># Check hostname</span>
+<a id="__codelineno-58-8" name="__codelineno-58-8" href="#__codelineno-58-8"></a>hostnamectl
+<a id="__codelineno-58-9" name="__codelineno-58-9" href="#__codelineno-58-9"></a>
+<a id="__codelineno-58-10" name="__codelineno-58-10" href="#__codelineno-58-10"></a><span class="c1"># Check network</span>
+<a id="__codelineno-58-11" name="__codelineno-58-11" href="#__codelineno-58-11"></a>ip<span class="w"> </span>addr<span class="w"> </span>show
+<a id="__codelineno-58-12" name="__codelineno-58-12" href="#__codelineno-58-12"></a>ping<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><span class="w"> </span>google.com
+<a id="__codelineno-58-13" name="__codelineno-58-13" href="#__codelineno-58-13"></a>
+<a id="__codelineno-58-14" name="__codelineno-58-14" href="#__codelineno-58-14"></a><span class="c1"># Check DNS</span>
+<a id="__codelineno-58-15" name="__codelineno-58-15" href="#__codelineno-58-15"></a>nslookup<span class="w"> </span>domain.org
+<a id="__codelineno-58-16" name="__codelineno-58-16" href="#__codelineno-58-16"></a>
+<a id="__codelineno-58-17" name="__codelineno-58-17" href="#__codelineno-58-17"></a><span class="c1"># Check AD membership</span>
+<a id="__codelineno-58-18" name="__codelineno-58-18" href="#__codelineno-58-18"></a>sudo<span class="w"> </span>realm<span class="w"> </span>list
+</code></pre></div>
+<hr />
+<h3 id="step-92-partition-verification">Step 9.2: Partition Verification<a class="headerlink" href="#step-92-partition-verification" title="Permanent link">&para;</a></h3>
+<p><strong>Verify partition layout:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a><span class="c1"># Show disk usage</span>
+<a id="__codelineno-59-2" name="__codelineno-59-2" href="#__codelineno-59-2"></a>df<span class="w"> </span>-h
+<a id="__codelineno-59-3" name="__codelineno-59-3" href="#__codelineno-59-3"></a>
+<a id="__codelineno-59-4" name="__codelineno-59-4" href="#__codelineno-59-4"></a><span class="c1"># Show partition table</span>
+<a id="__codelineno-59-5" name="__codelineno-59-5" href="#__codelineno-59-5"></a>sudo<span class="w"> </span>fdisk<span class="w"> </span>-l<span class="w"> </span>/dev/nvme0n1
+<a id="__codelineno-59-6" name="__codelineno-59-6" href="#__codelineno-59-6"></a>
+<a id="__codelineno-59-7" name="__codelineno-59-7" href="#__codelineno-59-7"></a><span class="c1"># Verify swap</span>
+<a id="__codelineno-59-8" name="__codelineno-59-8" href="#__codelineno-59-8"></a>sudo<span class="w"> </span>swapon<span class="w"> </span>--show
+<a id="__codelineno-59-9" name="__codelineno-59-9" href="#__codelineno-59-9"></a>free<span class="w"> </span>-h
+</code></pre></div>
+<p><strong>Expected output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a>Filesystem      Size  Used Avail Use% Mounted on
+<a id="__codelineno-60-2" name="__codelineno-60-2" href="#__codelineno-60-2"></a>/dev/nvme0n1p4  2.5T  8.2G  2.5T   1% /
+<a id="__codelineno-60-3" name="__codelineno-60-3" href="#__codelineno-60-3"></a>/dev/nvme0n1p5  500G  1.5G  499G   1% /var
+<a id="__codelineno-60-4" name="__codelineno-60-4" href="#__codelineno-60-4"></a>/dev/nvme0n1p6  650G  2.1G  648G   1% /home
+<a id="__codelineno-60-5" name="__codelineno-60-5" href="#__codelineno-60-5"></a>/dev/nvme0n1p2  1.0G  250M  750M  25% /boot
+<a id="__codelineno-60-6" name="__codelineno-60-6" href="#__codelineno-60-6"></a>/dev/nvme0n1p1  600M  12M   588M   2% /boot/efi
+</code></pre></div></p>
+<p><strong>Verify swap:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a>NAME           TYPE  SIZE USED PRIO
+<a id="__codelineno-61-2" name="__codelineno-61-2" href="#__codelineno-61-2"></a>/dev/nvme0n1p3 partition 256G   0B   -2
+</code></pre></div></p>
+<hr />
+<h3 id="step-93-ad-integration-verification">Step 9.3: AD Integration Verification<a class="headerlink" href="#step-93-ad-integration-verification" title="Permanent link">&para;</a></h3>
+<p><strong>Complete AD test:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a><span class="c1"># Test Kerberos</span>
+<a id="__codelineno-62-2" name="__codelineno-62-2" href="#__codelineno-62-2"></a>kinit<span class="w"> </span>administrator@DOMAIN.ORG
+<a id="__codelineno-62-3" name="__codelineno-62-3" href="#__codelineno-62-3"></a>klist
+<a id="__codelineno-62-4" name="__codelineno-62-4" href="#__codelineno-62-4"></a>
+<a id="__codelineno-62-5" name="__codelineno-62-5" href="#__codelineno-62-5"></a><span class="c1"># Test LDAP search</span>
+<a id="__codelineno-62-6" name="__codelineno-62-6" href="#__codelineno-62-6"></a>ldapsearch<span class="w"> </span>-x<span class="w"> </span>-H<span class="w"> </span>ldap://dc1.domain.org<span class="w"> </span>-b<span class="w"> </span><span class="s2">&quot;DC=domain,DC=org&quot;</span><span class="w"> </span><span class="s2">&quot;(sAMAccountName=username)&quot;</span>
+<a id="__codelineno-62-7" name="__codelineno-62-7" href="#__codelineno-62-7"></a>
+<a id="__codelineno-62-8" name="__codelineno-62-8" href="#__codelineno-62-8"></a><span class="c1"># Test group membership</span>
+<a id="__codelineno-62-9" name="__codelineno-62-9" href="#__codelineno-62-9"></a>groups<span class="w"> </span>username
+<a id="__codelineno-62-10" name="__codelineno-62-10" href="#__codelineno-62-10"></a>
+<a id="__codelineno-62-11" name="__codelineno-62-11" href="#__codelineno-62-11"></a><span class="c1"># Test SSH key from AD (if configured)</span>
+<a id="__codelineno-62-12" name="__codelineno-62-12" href="#__codelineno-62-12"></a>getent<span class="w"> </span>sshkey<span class="w"> </span>username
+</code></pre></div>
+<hr />
+<h3 id="step-94-security-verification">Step 9.4: Security Verification<a class="headerlink" href="#step-94-security-verification" title="Permanent link">&para;</a></h3>
+<p><strong>Check firewall status:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-63-1" name="__codelineno-63-1" href="#__codelineno-63-1"></a>sudo<span class="w"> </span>firewall-cmd<span class="w"> </span>--state
+<a id="__codelineno-63-2" name="__codelineno-63-2" href="#__codelineno-63-2"></a>sudo<span class="w"> </span>firewall-cmd<span class="w"> </span>--list-all
+</code></pre></div>
+<p><strong>Check SELinux:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-64-1" name="__codelineno-64-1" href="#__codelineno-64-1"></a>getenforce
+<a id="__codelineno-64-2" name="__codelineno-64-2" href="#__codelineno-64-2"></a><span class="c1"># Should show: Enforcing</span>
+</code></pre></div>
+<hr />
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="issue-cannot-join-ad-domain">Issue: Cannot Join AD Domain<a class="headerlink" href="#issue-cannot-join-ad-domain" title="Permanent link">&para;</a></h3>
+<p><strong>Symptoms:</strong>
+- <code>realm join</code> fails with authentication error
+- "Couldn't authenticate to active directory" message</p>
+<p><strong>Solutions:</strong></p>
+<p><strong>1. Verify DNS:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-65-1" name="__codelineno-65-1" href="#__codelineno-65-1"></a><span class="c1"># DNS must resolve AD domain</span>
+<a id="__codelineno-65-2" name="__codelineno-65-2" href="#__codelineno-65-2"></a>nslookup<span class="w"> </span>domain.org
+<a id="__codelineno-65-3" name="__codelineno-65-3" href="#__codelineno-65-3"></a>dig<span class="w"> </span>-t<span class="w"> </span>SRV<span class="w"> </span>_ldap._tcp.domain.org
+</code></pre></div></p>
+<p><strong>2. Check time sync:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-66-1" name="__codelineno-66-1" href="#__codelineno-66-1"></a><span class="c1"># Time must be within 5 minutes of AD</span>
+<a id="__codelineno-66-2" name="__codelineno-66-2" href="#__codelineno-66-2"></a>timedatectl
+<a id="__codelineno-66-3" name="__codelineno-66-3" href="#__codelineno-66-3"></a>sudo<span class="w"> </span>chronyd<span class="w"> </span>-q<span class="w"> </span><span class="s1">&#39;server dc1.domain.org iburst&#39;</span>
+</code></pre></div></p>
+<p><strong>3. Verify network connectivity:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-67-1" name="__codelineno-67-1" href="#__codelineno-67-1"></a><span class="c1"># Test LDAP port</span>
+<a id="__codelineno-67-2" name="__codelineno-67-2" href="#__codelineno-67-2"></a>telnet<span class="w"> </span>dc1.domain.org<span class="w"> </span><span class="m">389</span>
+<a id="__codelineno-67-3" name="__codelineno-67-3" href="#__codelineno-67-3"></a>
+<a id="__codelineno-67-4" name="__codelineno-67-4" href="#__codelineno-67-4"></a><span class="c1"># Test Kerberos port</span>
+<a id="__codelineno-67-5" name="__codelineno-67-5" href="#__codelineno-67-5"></a>telnet<span class="w"> </span>dc1.domain.org<span class="w"> </span><span class="m">88</span>
+</code></pre></div></p>
+<p><strong>4. Check AD permissions:</strong>
+- Verify user has rights to join computers to domain
+- Check computer account quota in AD</p>
+<p><strong>5. Try manual Kerberos test:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-68-1" name="__codelineno-68-1" href="#__codelineno-68-1"></a>kinit<span class="w"> </span>administrator@DOMAIN.ORG
+<a id="__codelineno-68-2" name="__codelineno-68-2" href="#__codelineno-68-2"></a>klist
+</code></pre></div></p>
+<hr />
+<h3 id="issue-ad-user-login-fails">Issue: AD User Login Fails<a class="headerlink" href="#issue-ad-user-login-fails" title="Permanent link">&para;</a></h3>
+<p><strong>Symptoms:</strong>
+- Can't SSH or login with AD credentials
+- "Authentication failure" message</p>
+<p><strong>Solutions:</strong></p>
+<p><strong>1. Verify user lookup:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-69-1" name="__codelineno-69-1" href="#__codelineno-69-1"></a>id<span class="w"> </span>username
+<a id="__codelineno-69-2" name="__codelineno-69-2" href="#__codelineno-69-2"></a>getent<span class="w"> </span>passwd<span class="w"> </span>username
+</code></pre></div></p>
+<p><strong>2. Check SSSD status:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-70-1" name="__codelineno-70-1" href="#__codelineno-70-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>sssd
+<a id="__codelineno-70-2" name="__codelineno-70-2" href="#__codelineno-70-2"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>sssd<span class="w"> </span>-f
+</code></pre></div></p>
+<p><strong>3. Clear SSSD cache:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-71-1" name="__codelineno-71-1" href="#__codelineno-71-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>sssd
+<a id="__codelineno-71-2" name="__codelineno-71-2" href="#__codelineno-71-2"></a>sudo<span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>/var/lib/sss/db/*
+<a id="__codelineno-71-3" name="__codelineno-71-3" href="#__codelineno-71-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>sssd
+</code></pre></div></p>
+<p><strong>4. Verify PAM configuration:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-72-1" name="__codelineno-72-1" href="#__codelineno-72-1"></a>authselect<span class="w"> </span>current
+<a id="__codelineno-72-2" name="__codelineno-72-2" href="#__codelineno-72-2"></a>sudo<span class="w"> </span>authselect<span class="w"> </span><span class="k">select</span><span class="w"> </span>sssd<span class="w"> </span>with-mkhomedir<span class="w"> </span>--force
+</code></pre></div></p>
+<hr />
+<h3 id="issue-home-directory-not-created">Issue: Home Directory Not Created<a class="headerlink" href="#issue-home-directory-not-created" title="Permanent link">&para;</a></h3>
+<p><strong>Symptoms:</strong>
+- AD user logs in but no home directory exists
+- "Could not chdir to home directory" error</p>
+<p><strong>Solutions:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-73-1" name="__codelineno-73-1" href="#__codelineno-73-1"></a><span class="c1"># Verify oddjobd is running</span>
+<a id="__codelineno-73-2" name="__codelineno-73-2" href="#__codelineno-73-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>oddjobd
+<a id="__codelineno-73-3" name="__codelineno-73-3" href="#__codelineno-73-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>--now<span class="w"> </span>oddjobd
+<a id="__codelineno-73-4" name="__codelineno-73-4" href="#__codelineno-73-4"></a>
+<a id="__codelineno-73-5" name="__codelineno-73-5" href="#__codelineno-73-5"></a><span class="c1"># Manually create home directory</span>
+<a id="__codelineno-73-6" name="__codelineno-73-6" href="#__codelineno-73-6"></a>sudo<span class="w"> </span>mkhomedir_helper<span class="w"> </span>username
+<a id="__codelineno-73-7" name="__codelineno-73-7" href="#__codelineno-73-7"></a>
+<a id="__codelineno-73-8" name="__codelineno-73-8" href="#__codelineno-73-8"></a><span class="c1"># Check PAM configuration</span>
+<a id="__codelineno-73-9" name="__codelineno-73-9" href="#__codelineno-73-9"></a>grep<span class="w"> </span>mkhomedir<span class="w"> </span>/etc/pam.d/system-auth
+<a id="__codelineno-73-10" name="__codelineno-73-10" href="#__codelineno-73-10"></a><span class="c1"># Should contain: session optional pam_oddjob_mkhomedir.so</span>
+</code></pre></div>
+<hr />
+<h3 id="issue-slow-login-with-ad">Issue: Slow Login with AD<a class="headerlink" href="#issue-slow-login-with-ad" title="Permanent link">&para;</a></h3>
+<p><strong>Symptoms:</strong>
+- Login takes 30+ seconds
+- Slow response for <code>id</code> command</p>
+<p><strong>Solutions:</strong></p>
+<p><strong>1. Disable enumeration:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-74-1" name="__codelineno-74-1" href="#__codelineno-74-1"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/sssd/sssd.conf
+<a id="__codelineno-74-2" name="__codelineno-74-2" href="#__codelineno-74-2"></a><span class="c1"># Set: enumerate = False</span>
+<a id="__codelineno-74-3" name="__codelineno-74-3" href="#__codelineno-74-3"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>sssd
+</code></pre></div></p>
+<p><strong>2. Reduce DNS timeout:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-75-1" name="__codelineno-75-1" href="#__codelineno-75-1"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/sssd/sssd.conf
+<a id="__codelineno-75-2" name="__codelineno-75-2" href="#__codelineno-75-2"></a><span class="c1"># Add under [domain/domain.org]:</span>
+<a id="__codelineno-75-3" name="__codelineno-75-3" href="#__codelineno-75-3"></a><span class="nv">dns_resolver_timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span>
+<a id="__codelineno-75-4" name="__codelineno-75-4" href="#__codelineno-75-4"></a><span class="nv">ldap_network_timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span>
+<a id="__codelineno-75-5" name="__codelineno-75-5" href="#__codelineno-75-5"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>sssd
+</code></pre></div></p>
+<p><strong>3. Configure SSSD caching:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-76-1" name="__codelineno-76-1" href="#__codelineno-76-1"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/sssd/sssd.conf
+<a id="__codelineno-76-2" name="__codelineno-76-2" href="#__codelineno-76-2"></a><span class="c1"># Add:</span>
+<a id="__codelineno-76-3" name="__codelineno-76-3" href="#__codelineno-76-3"></a><span class="nv">entry_cache_timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">300</span>
+<a id="__codelineno-76-4" name="__codelineno-76-4" href="#__codelineno-76-4"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>sssd
+</code></pre></div></p>
+<hr />
+<h3 id="issue-partition-not-mounted">Issue: Partition Not Mounted<a class="headerlink" href="#issue-partition-not-mounted" title="Permanent link">&para;</a></h3>
+<p><strong>Symptoms:</strong>
+- <code>/var</code> or <code>/home</code> shows wrong size
+- "No space left on device" on root</p>
+<p><strong>Solutions:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-77-1" name="__codelineno-77-1" href="#__codelineno-77-1"></a><span class="c1"># Check mounts</span>
+<a id="__codelineno-77-2" name="__codelineno-77-2" href="#__codelineno-77-2"></a>mount<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nvme
+<a id="__codelineno-77-3" name="__codelineno-77-3" href="#__codelineno-77-3"></a>
+<a id="__codelineno-77-4" name="__codelineno-77-4" href="#__codelineno-77-4"></a><span class="c1"># Check /etc/fstab</span>
+<a id="__codelineno-77-5" name="__codelineno-77-5" href="#__codelineno-77-5"></a>cat<span class="w"> </span>/etc/fstab
+<a id="__codelineno-77-6" name="__codelineno-77-6" href="#__codelineno-77-6"></a>
+<a id="__codelineno-77-7" name="__codelineno-77-7" href="#__codelineno-77-7"></a><span class="c1"># Manually mount if missing</span>
+<a id="__codelineno-77-8" name="__codelineno-77-8" href="#__codelineno-77-8"></a>sudo<span class="w"> </span>mount<span class="w"> </span>-a
+<a id="__codelineno-77-9" name="__codelineno-77-9" href="#__codelineno-77-9"></a>
+<a id="__codelineno-77-10" name="__codelineno-77-10" href="#__codelineno-77-10"></a><span class="c1"># Regenerate fstab if corrupted</span>
+<a id="__codelineno-77-11" name="__codelineno-77-11" href="#__codelineno-77-11"></a>sudo<span class="w"> </span>blkid
+<a id="__codelineno-77-12" name="__codelineno-77-12" href="#__codelineno-77-12"></a><span class="c1"># Add missing entries to /etc/fstab</span>
+</code></pre></div>
+<hr />
+<h2 id="additional-resources">Additional Resources<a class="headerlink" href="#additional-resources" title="Permanent link">&para;</a></h2>
+<h3 id="red-hat-documentation">Red Hat Documentation<a class="headerlink" href="#red-hat-documentation" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/10/html/performing_a_standard_rhel_installation/">RHEL 10.1 Installation Guide</a></li>
+<li><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/10/html/integrating_rhel_systems_directly_with_windows_active_directory/">Integrating RHEL with Active Directory</a></li>
+<li><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/10/html/managing_storage_devices/">Storage Administration Guide</a></li>
+<li><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/10/html/security_hardening/">Security Hardening Guide</a></li>
+</ul>
+<h3 id="active-directory-integration">Active Directory Integration<a class="headerlink" href="#active-directory-integration" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://sssd.io/docs/users/ad_provider.html">SSSD Configuration</a></li>
+<li><a href="https://www.freedesktop.org/software/realmd/">Realmd Documentation</a></li>
+<li><a href="https://web.mit.edu/kerberos/krb5-latest/doc/">Kerberos Configuration</a></li>
+</ul>
+<h3 id="community-resources">Community Resources<a class="headerlink" href="#community-resources" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://access.redhat.com">Red Hat Customer Portal</a></li>
+<li><a href="https://developers.redhat.com/forums">Red Hat Developer Forums</a></li>
+<li><a href="https://reddit.com/r/redhat">RHEL Subreddit</a></li>
+</ul>
+<hr />
+<h2 id="quick-reference-commands">Quick Reference Commands<a class="headerlink" href="#quick-reference-commands" title="Permanent link">&para;</a></h2>
+<h3 id="subscription-management">Subscription Management<a class="headerlink" href="#subscription-management" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-78-1" name="__codelineno-78-1" href="#__codelineno-78-1"></a><span class="c1"># Register system</span>
+<a id="__codelineno-78-2" name="__codelineno-78-2" href="#__codelineno-78-2"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>register<span class="w"> </span>--username<span class="w"> </span>EMAIL
+<a id="__codelineno-78-3" name="__codelineno-78-3" href="#__codelineno-78-3"></a>
+<a id="__codelineno-78-4" name="__codelineno-78-4" href="#__codelineno-78-4"></a><span class="c1"># Attach subscription</span>
+<a id="__codelineno-78-5" name="__codelineno-78-5" href="#__codelineno-78-5"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>attach<span class="w"> </span>--auto
+<a id="__codelineno-78-6" name="__codelineno-78-6" href="#__codelineno-78-6"></a>
+<a id="__codelineno-78-7" name="__codelineno-78-7" href="#__codelineno-78-7"></a><span class="c1"># Check status</span>
+<a id="__codelineno-78-8" name="__codelineno-78-8" href="#__codelineno-78-8"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>status
+<a id="__codelineno-78-9" name="__codelineno-78-9" href="#__codelineno-78-9"></a>
+<a id="__codelineno-78-10" name="__codelineno-78-10" href="#__codelineno-78-10"></a><span class="c1"># List repositories</span>
+<a id="__codelineno-78-11" name="__codelineno-78-11" href="#__codelineno-78-11"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>repolist
+<a id="__codelineno-78-12" name="__codelineno-78-12" href="#__codelineno-78-12"></a>
+<a id="__codelineno-78-13" name="__codelineno-78-13" href="#__codelineno-78-13"></a><span class="c1"># Enable repository</span>
+<a id="__codelineno-78-14" name="__codelineno-78-14" href="#__codelineno-78-14"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>repos<span class="w"> </span>--enable<span class="o">=</span>REPO_ID
+</code></pre></div>
+<h3 id="active-directory">Active Directory<a class="headerlink" href="#active-directory" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-79-1" name="__codelineno-79-1" href="#__codelineno-79-1"></a><span class="c1"># Discover domain</span>
+<a id="__codelineno-79-2" name="__codelineno-79-2" href="#__codelineno-79-2"></a>sudo<span class="w"> </span>realm<span class="w"> </span>discover<span class="w"> </span>domain.org
+<a id="__codelineno-79-3" name="__codelineno-79-3" href="#__codelineno-79-3"></a>
+<a id="__codelineno-79-4" name="__codelineno-79-4" href="#__codelineno-79-4"></a><span class="c1"># Join domain</span>
+<a id="__codelineno-79-5" name="__codelineno-79-5" href="#__codelineno-79-5"></a>sudo<span class="w"> </span>realm<span class="w"> </span>join<span class="w"> </span>-U<span class="w"> </span>administrator<span class="w"> </span>domain.org
+<a id="__codelineno-79-6" name="__codelineno-79-6" href="#__codelineno-79-6"></a>
+<a id="__codelineno-79-7" name="__codelineno-79-7" href="#__codelineno-79-7"></a><span class="c1"># Leave domain</span>
+<a id="__codelineno-79-8" name="__codelineno-79-8" href="#__codelineno-79-8"></a>sudo<span class="w"> </span>realm<span class="w"> </span>leave<span class="w"> </span>domain.org
+<a id="__codelineno-79-9" name="__codelineno-79-9" href="#__codelineno-79-9"></a>
+<a id="__codelineno-79-10" name="__codelineno-79-10" href="#__codelineno-79-10"></a><span class="c1"># List domains</span>
+<a id="__codelineno-79-11" name="__codelineno-79-11" href="#__codelineno-79-11"></a>sudo<span class="w"> </span>realm<span class="w"> </span>list
+<a id="__codelineno-79-12" name="__codelineno-79-12" href="#__codelineno-79-12"></a>
+<a id="__codelineno-79-13" name="__codelineno-79-13" href="#__codelineno-79-13"></a><span class="c1"># Test user lookup</span>
+<a id="__codelineno-79-14" name="__codelineno-79-14" href="#__codelineno-79-14"></a>id<span class="w"> </span>username
+<a id="__codelineno-79-15" name="__codelineno-79-15" href="#__codelineno-79-15"></a>getent<span class="w"> </span>passwd<span class="w"> </span>username
+<a id="__codelineno-79-16" name="__codelineno-79-16" href="#__codelineno-79-16"></a>
+<a id="__codelineno-79-17" name="__codelineno-79-17" href="#__codelineno-79-17"></a><span class="c1"># Check SSSD status</span>
+<a id="__codelineno-79-18" name="__codelineno-79-18" href="#__codelineno-79-18"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>sssd
+<a id="__codelineno-79-19" name="__codelineno-79-19" href="#__codelineno-79-19"></a>
+<a id="__codelineno-79-20" name="__codelineno-79-20" href="#__codelineno-79-20"></a><span class="c1"># Clear SSSD cache</span>
+<a id="__codelineno-79-21" name="__codelineno-79-21" href="#__codelineno-79-21"></a>sudo<span class="w"> </span>sss_cache<span class="w"> </span>-E
+</code></pre></div>
+<h3 id="system-management">System Management<a class="headerlink" href="#system-management" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-80-1" name="__codelineno-80-1" href="#__codelineno-80-1"></a><span class="c1"># Check partitions</span>
+<a id="__codelineno-80-2" name="__codelineno-80-2" href="#__codelineno-80-2"></a>df<span class="w"> </span>-h
+<a id="__codelineno-80-3" name="__codelineno-80-3" href="#__codelineno-80-3"></a>sudo<span class="w"> </span>fdisk<span class="w"> </span>-l
+<a id="__codelineno-80-4" name="__codelineno-80-4" href="#__codelineno-80-4"></a>
+<a id="__codelineno-80-5" name="__codelineno-80-5" href="#__codelineno-80-5"></a><span class="c1"># Check swap</span>
+<a id="__codelineno-80-6" name="__codelineno-80-6" href="#__codelineno-80-6"></a>free<span class="w"> </span>-h
+<a id="__codelineno-80-7" name="__codelineno-80-7" href="#__codelineno-80-7"></a>sudo<span class="w"> </span>swapon<span class="w"> </span>--show
+<a id="__codelineno-80-8" name="__codelineno-80-8" href="#__codelineno-80-8"></a>
+<a id="__codelineno-80-9" name="__codelineno-80-9" href="#__codelineno-80-9"></a><span class="c1"># Update system</span>
+<a id="__codelineno-80-10" name="__codelineno-80-10" href="#__codelineno-80-10"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>update
+<a id="__codelineno-80-11" name="__codelineno-80-11" href="#__codelineno-80-11"></a>
+<a id="__codelineno-80-12" name="__codelineno-80-12" href="#__codelineno-80-12"></a><span class="c1"># Check services</span>
+<a id="__codelineno-80-13" name="__codelineno-80-13" href="#__codelineno-80-13"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>SERVICE_NAME
+<a id="__codelineno-80-14" name="__codelineno-80-14" href="#__codelineno-80-14"></a>
+<a id="__codelineno-80-15" name="__codelineno-80-15" href="#__codelineno-80-15"></a><span class="c1"># View logs</span>
+<a id="__codelineno-80-16" name="__codelineno-80-16" href="#__codelineno-80-16"></a>sudo<span class="w"> </span>journalctl<span class="w"> </span>-u<span class="w"> </span>SERVICE_NAME<span class="w"> </span>-f
+</code></pre></div>
+<hr />
+<p><strong>Installation Complete!</strong> 🎉</p>
+<p>Your RHEL 10.1 system is now:
+- ✅ Installed with optimized partitioning for Docker/LLM workloads
+- ✅ Registered with Red Hat subscription
+- ✅ Integrated with Active Directory domain (domain.org)
+- ✅ Ready for NVIDIA driver installation
+- ✅ Ready for Docker and vLLM deployment</p>
+<p><strong>Next Steps:</strong>
+1. Install NVIDIA drivers (see: NVIDIA-driver-installation.md)
+2. Run step2.sh script for LLM software stack
+3. Deploy Docker containers with Open WebUI and vLLM</p>
+<hr />
+<p><strong>Last Updated:</strong> February 2026<br />
+<strong>RHEL Version:</strong> 10.1<br />
+<strong>Domain:</strong> domain.org<br />
+<strong>Storage:</strong> 4TB NVMe with Docker-optimized partitioning</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.indexes", "navigation.top", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

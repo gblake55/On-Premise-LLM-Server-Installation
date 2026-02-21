@@ -1,0 +1,2583 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Enterprise-Grade On-Premise LLM Inference Platform Installation Guide">
+      
+      
+        <meta name="author" content="Greg Blake">
+      
+      
+      
+        <link rel="prev" href="../step2-rhel/">
+      
+      
+        <link rel="next" href="../step4-apps/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.2">
+    
+    
+      
+        <title>Step 3: NVIDIA Drivers - IDA — On-Premise LLM Server Installation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#nvidia-driver-installation-guide-for-rhel-101" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="IDA — On-Premise LLM Server Installation" class="md-header__button md-logo" aria-label="IDA — On-Premise LLM Server Installation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            IDA — On-Premise LLM Server Installation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Step 3: NVIDIA Drivers
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/gblake55/On-Premise-LLM-Server-Installation" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../architecture/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Architecture
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Deployment Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../production/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Production
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../security/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Security
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../maintenance/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Maintenance
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../appendix/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Appendix
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="IDA — On-Premise LLM Server Installation" class="md-nav__button md-logo" aria-label="IDA — On-Premise LLM Server Installation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    IDA — On-Premise LLM Server Installation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/gblake55/On-Premise-LLM-Server-Installation" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deployment Guide
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Deployment Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step1-hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 1: Hardware
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step2-rhel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 2: RHEL Install
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 3: NVIDIA Drivers
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 3: NVIDIA Drivers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#important-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Important Notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation Steps
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation Steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-fix-rhel-10-gpg-key-issue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Fix RHEL 10 GPG Key Issue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-enable-required-repositories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Enable Required Repositories
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-install-kernel-development-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Install Kernel Development Packages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-install-epel-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Install EPEL Repository
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-download-and-install-nvidia-driver-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Download and Install NVIDIA Driver Repository
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-install-nvidia-open-kernel-driver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Install NVIDIA Open Kernel Driver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-download-and-install-cuda-toolkit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Download and Install CUDA Toolkit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-configure-dracut-for-nvidia-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Configure Dracut for NVIDIA Modules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-reboot-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Reboot System
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-post-installation-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Post-Installation Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-set-cuda-environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Set CUDA Environment Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enable-persistence-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enable Persistence Mode
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Enable Persistence Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-nvidia-persistenced" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install nvidia-persistenced
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enable-and-start-the-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enable and Start the Service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify-persistence-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify Persistence Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gpg-key-errors-persist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPG Key Errors Persist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nvidia-driver-not-loading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVIDIA Driver Not Loading
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multiple-gpu-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multiple GPU Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cuda-toolkit-not-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CUDA Toolkit Not Found
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nouveau-driver-conflicts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nouveau Driver Conflicts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selinux-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SELinux Considerations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rebuild-initramfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rebuild Initramfs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#driver-version-conflicts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Driver Version Conflicts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#known-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Known Issues
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Known Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rhel-10-specific-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RHEL 10 Specific Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-gpu-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-GPU Considerations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#driver-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Driver Updates
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative-rhel-101-simplified-installation-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alternative: RHEL 10.1+ Simplified Installation Method
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Alternative: RHEL 10.1+ Simplified Installation Method">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation-steps_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advantages-of-this-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advantages of this Method
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installing-specific-driver-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installing Specific Driver Versions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cuda-toolkit-installation-rhel-101" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CUDA Toolkit Installation (RHEL 10.1+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional Resources
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Additional Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#version-specific-downloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version-Specific Downloads
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        License
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contributing
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step4-apps/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 4: App Stack
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step5-webui/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 5: WebUI & vLLM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step6-ad/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Step 6: AD Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../production/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Production
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../security/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Security
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../maintenance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Maintenance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../appendix/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appendix
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appendix
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/nvidia-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA Notes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/nvidia-old-driver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    NVIDIA Old Driver
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../appendix/redhat-nvidia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RHEL NVIDIA Instructions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#important-notes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Important Notes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation Steps
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation Steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-fix-rhel-10-gpg-key-issue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Fix RHEL 10 GPG Key Issue
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-enable-required-repositories" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Enable Required Repositories
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-install-kernel-development-packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Install Kernel Development Packages
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-install-epel-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Install EPEL Repository
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-download-and-install-nvidia-driver-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Download and Install NVIDIA Driver Repository
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-install-nvidia-open-kernel-driver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Install NVIDIA Open Kernel Driver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-download-and-install-cuda-toolkit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Download and Install CUDA Toolkit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-configure-dracut-for-nvidia-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Configure Dracut for NVIDIA Modules
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-reboot-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Reboot System
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-post-installation-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Post-Installation Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-set-cuda-environment-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Set CUDA Environment Variables
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#enable-persistence-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enable Persistence Mode
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Enable Persistence Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-nvidia-persistenced" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Install nvidia-persistenced
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enable-and-start-the-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enable and Start the Service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify-persistence-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify Persistence Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gpg-key-errors-persist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPG Key Errors Persist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nvidia-driver-not-loading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVIDIA Driver Not Loading
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multiple-gpu-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multiple GPU Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cuda-toolkit-not-found" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CUDA Toolkit Not Found
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nouveau-driver-conflicts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nouveau Driver Conflicts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selinux-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SELinux Considerations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rebuild-initramfs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rebuild Initramfs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#driver-version-conflicts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Driver Version Conflicts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#known-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Known Issues
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Known Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rhel-10-specific-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RHEL 10 Specific Issues
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#multi-gpu-considerations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-GPU Considerations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#driver-updates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Driver Updates
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternative-rhel-101-simplified-installation-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alternative: RHEL 10.1+ Simplified Installation Method
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Alternative: RHEL 10.1+ Simplified Installation Method">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation-steps_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation Steps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advantages-of-this-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advantages of this Method
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installing-specific-driver-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installing Specific Driver Versions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cuda-toolkit-installation-rhel-101" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CUDA Toolkit Installation (RHEL 10.1+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional Resources
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Additional Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#version-specific-downloads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Version-Specific Downloads
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-reference-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Reference Commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        License
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#contributing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Contributing
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="nvidia-driver-installation-guide-for-rhel-101">NVIDIA Driver Installation Guide for RHEL 10.1<a class="headerlink" href="#nvidia-driver-installation-guide-for-rhel-101" title="Permanent link">&para;</a></h1>
+<p>Complete guide for installing NVIDIA drivers and CUDA Toolkit on Red Hat Enterprise Linux 10.1 for multi-GPU configurations (RTX 3090, RTX 5090, and other modern NVIDIA GPUs).</p>
+<hr />
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Fresh installation of Red Hat Enterprise Linux 10.1</li>
+<li>Active Red Hat subscription (required)</li>
+<li>Root or sudo access</li>
+<li>Internet connectivity</li>
+<li>Multiple NVIDIA GPUs (e.g., RTX 3090, RTX 5090)</li>
+<li>Secure Boot disabled (recommended)</li>
+</ul>
+<hr />
+<h2 id="important-notes">Important Notes<a class="headerlink" href="#important-notes" title="Permanent link">&para;</a></h2>
+<p>⚠️ <strong>RHEL 10.1+ Simplified Installation Available</strong></p>
+<p>If you're running RHEL 10.1 or later, Red Hat now provides a simplified installation method using the <code>rhel-drivers</code> tool. This is the <strong>recommended approach</strong> as it:
+- Uses drivers built and signed by Red Hat
+- Works with Secure Boot enabled
+- Automatically handles dependencies
+- Provides a one-command installation</p>
+<p>See the "Alternative: RHEL 10.1+ Simplified Method" section below for details.</p>
+<p>⚠️ <strong>RHEL 10.0 GPG Key Issue</strong></p>
+<p>RHEL 10.0 has a known GPG key issue that must be resolved before proceeding with driver installation. This guide includes the fix as the first step.</p>
+<p>⚠️ <strong>Open vs Proprietary Driver</strong></p>
+<p>This guide uses the <strong>NVIDIA Open Kernel Driver</strong> (<code>nvidia-open</code>), which is recommended for modern GPUs including RTX 3090 and RTX 5090. Note:
+- Open drivers are supported on Turing architecture and newer (RTX 2000 series+)
+- For older GPUs (Maxwell, Pascal, Volta), use proprietary drivers instead</p>
+<p>⚠️ <strong>Secure Boot Considerations</strong></p>
+<p>The method in this guide uses locally downloaded drivers that are not Red Hat signed:
+- <strong>Secure Boot must be disabled</strong> for this method
+- For Secure Boot support, use the RHEL 10.1+ simplified method or precompiled signed drivers</p>
+<hr />
+<h2 id="installation-steps">Installation Steps<a class="headerlink" href="#installation-steps" title="Permanent link">&para;</a></h2>
+<h3 id="1-fix-rhel-10-gpg-key-issue">1. Fix RHEL 10 GPG Key Issue<a class="headerlink" href="#1-fix-rhel-10-gpg-key-issue" title="Permanent link">&para;</a></h3>
+<p><strong>Important:</strong> This step must be completed before proceeding with driver installation.</p>
+<p>RHEL 10 has a known bug where DNF transactions fail with GPG key errors. This must be resolved first.</p>
+<p><strong>Reference:</strong> <a href="https://access.redhat.com/solutions/7090648">Red Hat Article - DNF transaction fails with GPG key errors</a></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Attempt initial upgrade (may fail with GPG errors)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>upgrade
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Clean DNF cache</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>clean<span class="w"> </span>all
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Check for the specific advisory</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>updateinfo<span class="w"> </span>list<span class="w"> </span>RHBA-2025:21017
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Locate the redhat-release package</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>repoquery<span class="w"> </span>--location<span class="w"> </span>redhat-release
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># Update with the advisory, bypassing GPG check</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>sudo<span class="w"> </span>sudo<span class="w"> </span>dnf<span class="w"> </span>update<span class="w"> </span>--advisory<span class="o">=</span>RHBA-2025:21017<span class="w"> </span>--nogpgcheck
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="c1"># Run upgrade again to ensure system is up to date</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>upgrade
+</code></pre></div>
+<p>After this fix, DNF operations should work normally without GPG key errors.</p>
+<h3 id="2-enable-required-repositories">2. Enable Required Repositories<a class="headerlink" href="#2-enable-required-repositories" title="Permanent link">&para;</a></h3>
+<p>Enable the necessary Red Hat repositories for kernel development and additional packages.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Enable AppStream repository (will take a 5 minutes to respond)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>repos<span class="w"> </span>--enable<span class="o">=</span>rhel-10-for-x86_64-appstream-rpms
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Enable BaseOS repository (will take a 5 minutes to respond)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>repos<span class="w"> </span>--enable<span class="o">=</span>rhel-10-for-x86_64-baseos-rpms
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Enable CodeReady Builder repository (for development packages) (will take a 5 minutes to respond)</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>repos<span class="w"> </span>--enable<span class="o">=</span>codeready-builder-for-rhel-10-x86_64-rpms
+</code></pre></div>
+<p><strong>Verify repositories are enabled:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>dnf<span class="w"> </span>repolist
+</code></pre></div>
+<h3 id="3-install-kernel-development-packages">3. Install Kernel Development Packages<a class="headerlink" href="#3-install-kernel-development-packages" title="Permanent link">&para;</a></h3>
+<p>Install the kernel headers and development packages that match your running kernel.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>kernel-devel-matched<span class="w"> </span>kernel-headers
+</code></pre></div>
+<p><strong>Note:</strong> The <code>kernel-devel-matched</code> package ensures compatibility with your current running kernel. If you encounter issues, you can install the specific version:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Check your current kernel version</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>uname<span class="w"> </span>-r
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Install specific kernel development packages</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>kernel-devel-<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span><span class="w"> </span>kernel-headers-<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span>
+</code></pre></div>
+<p>This ensures the kernel modules can be built properly for your current kernel version.</p>
+<h3 id="4-install-epel-repository">4. Install EPEL Repository<a class="headerlink" href="#4-install-epel-repository" title="Permanent link">&para;</a></h3>
+<p>EPEL (Extra Packages for Enterprise Linux) provides additional packages not included in RHEL.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm
+</code></pre></div>
+<h3 id="5-download-and-install-nvidia-driver-repository">5. Download and Install NVIDIA Driver Repository<a class="headerlink" href="#5-download-and-install-nvidia-driver-repository" title="Permanent link">&para;</a></h3>
+<p>Download the NVIDIA driver local repository RPM and install it.</p>
+<p><strong>Download the driver repository:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Driver version 590.48.01 (adjust version as needed)</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>sudo<span class="w"> </span>wget<span class="w"> </span>https://developer.download.nvidia.com/compute/nvidia-driver/590.48.01/local_installers/nvidia-driver-local-repo-rhel10-590.48.01-1.0-1.x86_64.rpm
+</code></pre></div>
+<p><strong>Install the repository:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>sudo<span class="w"> </span>rpm<span class="w"> </span>-i<span class="w"> </span>nvidia-driver-local-repo-rhel10-590.48.01-1.0-1.x86_64.rpm
+</code></pre></div>
+<p><strong>Clean DNF cache:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>clean<span class="w"> </span>all
+</code></pre></div>
+<h3 id="6-install-nvidia-open-kernel-driver">6. Install NVIDIA Open Kernel Driver<a class="headerlink" href="#6-install-nvidia-open-kernel-driver" title="Permanent link">&para;</a></h3>
+<p>Install the NVIDIA open kernel driver, which provides better compatibility with modern RHEL systems.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>dnf<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span>nvidia-open-590
+</code></pre></div>
+<p>This will install:
+- NVIDIA open kernel modules
+- NVIDIA driver libraries
+- Required dependencies</p>
+<p>The installation may take several minutes to complete.</p>
+<h3 id="7-download-and-install-cuda-toolkit">7. Download and Install CUDA Toolkit<a class="headerlink" href="#7-download-and-install-cuda-toolkit" title="Permanent link">&para;</a></h3>
+<p>Download and install the CUDA Toolkit (version 13.1.1 in this example).</p>
+<p><strong>Download CUDA repository:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>sudo<span class="w"> </span>wget<span class="w"> </span>https://developer.download.nvidia.com/compute/cuda/13.1.1/local_installers/cuda-repo-rhel10-13-1-local-13.1.1_590.48.01-1.x86_64.rpm
+</code></pre></div>
+<p><strong>Install CUDA repository:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>sudo<span class="w"> </span>rpm<span class="w"> </span>-i<span class="w"> </span>cuda-repo-rhel10-13-1-local-13.1.1_590.48.01-1.x86_64.rpm
+</code></pre></div>
+<p><strong>Clean DNF cache:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>clean<span class="w"> </span>all
+</code></pre></div>
+<p><strong>Install CUDA Toolkit:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span>cuda-toolkit-13-1
+</code></pre></div>
+<p>This installs:
+- CUDA compiler (nvcc)
+- CUDA libraries
+- CUDA samples and documentation
+- Development tools</p>
+<h3 id="8-configure-dracut-for-nvidia-modules">8. Configure Dracut for NVIDIA Modules<a class="headerlink" href="#8-configure-dracut-for-nvidia-modules" title="Permanent link">&para;</a></h3>
+<p>Configure dracut to include NVIDIA kernel modules in the initial RAM filesystem (initramfs). This ensures the drivers load early in the boot process.</p>
+<p><strong>First, blacklist the Nouveau driver (conflicts with NVIDIA):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>sudo<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;cat &gt; /etc/modprobe.d/blacklist-nouveau.conf &lt;&lt; EOF</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="s1">blacklist nouveau</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="s1">options nouveau modeset=0</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="s1">EOF&#39;</span>
+</code></pre></div>
+<p><strong>Create dracut configuration file:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/usr/lib/dracut/dracut.conf.d/99-nvidia.conf
+</code></pre></div>
+<p><strong>Add the following content:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nv">add_drivers</span><span class="o">+=</span><span class="s2">&quot; nvidia nvidia-drm nvidia-modeset nvidia-uvm &quot;</span>
+</code></pre></div>
+<p><strong>Note:</strong> Only include the <code>add_drivers</code> line. Do not add an <code>omit_drivers</code> line.</p>
+<p><strong>Save and exit</strong> (Ctrl+X, then Y, then Enter)</p>
+<p><strong>Rebuild the initramfs:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>sudo<span class="w"> </span>dracut<span class="w"> </span>-fv<span class="w"> </span>--add-drivers<span class="w"> </span><span class="s2">&quot;nvidia nvidia-drm nvidia-modeset nvidia-uvm&quot;</span>
+</code></pre></div>
+<p>This command:
+- <code>-f</code> forces a rebuild
+- <code>-v</code> provides verbose output
+- <code>--add-drivers</code> explicitly includes the NVIDIA modules</p>
+<h3 id="9-reboot-system">9. Reboot System<a class="headerlink" href="#9-reboot-system" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>reboot
+</code></pre></div>
+<h3 id="10-post-installation-verification">10. Post-Installation Verification<a class="headerlink" href="#10-post-installation-verification" title="Permanent link">&para;</a></h3>
+<p>After reboot, verify the NVIDIA driver and CUDA Toolkit are properly installed and functional.</p>
+<p><strong>Check loaded kernel modules:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nvidia
+</code></pre></div>
+<p><strong>Expected output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>nvidia_uvm           1523712  0
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>nvidia_drm             73728  0
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>nvidia_modeset       1306624  1 nvidia_drm
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>nvidia              56426496  2 nvidia_uvm,nvidia_modeset
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>drm_kms_helper        176128  4 qxl,nvidia_drm
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>drm                   565248  7 drm_kms_helper,qxl,nvidia,drm_ttm_helper,nvidia_drm,ttm
+</code></pre></div></p>
+<p><strong>Verify NVIDIA driver with nvidia-smi:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>sudo<span class="w"> </span>nvidia-smi
+</code></pre></div>
+<p><strong>Expected output (example with multiple GPUs):</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>+---------------------------------------------------------------------------------------+
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>| NVIDIA-SMI 590.48.01      Driver Version: 590.48.01      CUDA Version: 13.1          |
+<a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>|-----------------------------------------+----------------------+----------------------+
+<a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>| GPU  Name                 Persistence-M | Bus-Id        Disp.A | Volatile Uncorr. ECC |
+<a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>| Fan  Temp   Perf          Pwr:Usage/Cap |         Memory-Usage | GPU-Util  Compute M. |
+<a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>|                                         |                      |               MIG M. |
+<a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>|=========================================+======================+======================|
+<a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>|   0  NVIDIA GeForce RTX 3090        Off | 00000000:01:00.0 Off |                  N/A |
+<a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>| 30%   35C    P8              25W / 350W |      0MiB / 24576MiB |      0%      Default |
+<a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a>+-----------------------------------------+----------------------+----------------------+
+<a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>|   1  NVIDIA GeForce RTX 5090        Off | 00000000:02:00.0 Off |                  N/A |
+<a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a>| 30%   33C    P8              28W / 450W |      0MiB / 32768MiB |      0%      Default |
+<a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a>+-----------------------------------------+----------------------+----------------------+
+</code></pre></div></p>
+<h3 id="11-set-cuda-environment-variables">11. Set CUDA Environment Variables<a class="headerlink" href="#11-set-cuda-environment-variables" title="Permanent link">&para;</a></h3>
+<p><strong>Important:</strong> This configuration is required for <code>nvcc</code> to work properly.</p>
+<p>Add to <code>~/.bashrc</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/usr/local/cuda-13.1/bin:<span class="nv">$PATH</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/usr/local/cuda-13.1/lib64:<span class="nv">$LD_LIBRARY_PATH</span>
+</code></pre></div>
+<p>Then reload:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
+</code></pre></div>
+<p><strong>Verify CUDA compiler installation:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>nvcc<span class="w"> </span>--version
+</code></pre></div>
+<p><strong>Expected output:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>nvcc: NVIDIA (R) Cuda compiler driver
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>Copyright (c) 2005-2024 NVIDIA Corporation
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>Built on Wed_Oct_30_01:18:48_PDT_2024
+<a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a>Cuda compilation tools, release 13.1, V13.1.1
+<a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a>Build cuda_13.1.r13.1/compiler.34431801_0
+</code></pre></div></p>
+<p><strong>Check driver module information:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>modinfo<span class="w"> </span>nvidia
+</code></pre></div>
+<p><strong>Test CUDA with a simple deviceQuery (if CUDA samples installed):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="nb">cd</span><span class="w"> </span>/usr/local/cuda-13.1/extras/demo_suite
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>./deviceQuery
+</code></pre></div>
+<p><strong>Configure CUDA environment variables (important!):</strong></p>
+<p>Add CUDA to your PATH and LD_LIBRARY_PATH:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export PATH=/usr/local/cuda-13.1/bin:$PATH&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export LD_LIBRARY_PATH=/usr/local/cuda-13.1/lib64:$LD_LIBRARY_PATH&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
+</code></pre></div>
+<p>For system-wide configuration:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>sudo<span class="w"> </span>bash<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;cat &gt; /etc/profile.d/cuda.sh &lt;&lt; EOF</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="s1">export PATH=/usr/local/cuda-13.1/bin:\$PATH</span>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a><span class="s1">export LD_LIBRARY_PATH=/usr/local/cuda-13.1/lib64:\$LD_LIBRARY_PATH</span>
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="s1">EOF&#39;</span>
+</code></pre></div>
+<hr />
+<h2 id="enable-persistence-mode">Enable Persistence Mode<a class="headerlink" href="#enable-persistence-mode" title="Permanent link">&para;</a></h2>
+<p>Persistence mode keeps the NVIDIA driver loaded, reducing initialization time for subsequent GPU operations.</p>
+<h3 id="install-nvidia-persistenced">Install nvidia-persistenced<a class="headerlink" href="#install-nvidia-persistenced" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>nvidia-persistenced
+</code></pre></div>
+<h3 id="enable-and-start-the-service">Enable and Start the Service<a class="headerlink" href="#enable-and-start-the-service" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>nvidia-persistenced
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>nvidia-persistenced
+</code></pre></div>
+<h3 id="verify-persistence-mode">Verify Persistence Mode<a class="headerlink" href="#verify-persistence-mode" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>nvidia-persistenced
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>sudo<span class="w"> </span>nvidia-smi
+</code></pre></div>
+<p>You should see <code>Persistence-M: On</code> for all NVIDIA GPUs in the nvidia-smi output.</p>
+<hr />
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="gpg-key-errors-persist">GPG Key Errors Persist<a class="headerlink" href="#gpg-key-errors-persist" title="Permanent link">&para;</a></h3>
+<p>If you continue to see GPG key errors after following Step 1:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="c1"># Force clean all DNF metadata</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>clean<span class="w"> </span>all
+<a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a>sudo<span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>/var/cache/dnf
+<a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a>
+<a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a><span class="c1"># Try update again</span>
+<a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>update<span class="w"> </span>--nogpgcheck
+</code></pre></div>
+<h3 id="nvidia-driver-not-loading">NVIDIA Driver Not Loading<a class="headerlink" href="#nvidia-driver-not-loading" title="Permanent link">&para;</a></h3>
+<p><strong>Check kernel messages:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>dmesg<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>nvidia
+</code></pre></div>
+<p><strong>Check systemd journal:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>journalctl<span class="w"> </span>-b<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>nvidia
+</code></pre></div>
+<p><strong>Verify dracut configuration was applied:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>lsinitrd<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nvidia
+</code></pre></div>
+<p>You should see the NVIDIA modules listed in the initramfs.</p>
+<h3 id="multiple-gpu-issues">Multiple GPU Issues<a class="headerlink" href="#multiple-gpu-issues" title="Permanent link">&para;</a></h3>
+<p><strong>Verify all GPUs are detected:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>nvidia-smi<span class="w"> </span>-L
+</code></pre></div>
+<p><strong>Check PCIe bus configuration:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>lspci<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>nvidia
+</code></pre></div>
+<p><strong>Monitor GPU topology:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>nvidia-smi<span class="w"> </span>topo<span class="w"> </span>-m
+</code></pre></div>
+<h3 id="cuda-toolkit-not-found">CUDA Toolkit Not Found<a class="headerlink" href="#cuda-toolkit-not-found" title="Permanent link">&para;</a></h3>
+<p><strong>Set CUDA environment variables:</strong></p>
+<p>Add to <code>~/.bashrc</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/usr/local/cuda-13.1/bin:<span class="nv">$PATH</span>
+<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/usr/local/cuda-13.1/lib64:<span class="nv">$LD_LIBRARY_PATH</span>
+</code></pre></div>
+<p>Then reload:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
+</code></pre></div>
+<h3 id="nouveau-driver-conflicts">Nouveau Driver Conflicts<a class="headerlink" href="#nouveau-driver-conflicts" title="Permanent link">&para;</a></h3>
+<p>If the system still loads the Nouveau driver:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="c1"># Verify Nouveau is disabled</span>
+<a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a>lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nouveau
+<a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a>
+<a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a><span class="c1"># If Nouveau is loaded, ensure blacklist is correct</span>
+<a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a>cat<span class="w"> </span>/etc/modprobe.d/blacklist-nouveau.conf
+<a id="__codelineno-43-6" name="__codelineno-43-6" href="#__codelineno-43-6"></a>
+<a id="__codelineno-43-7" name="__codelineno-43-7" href="#__codelineno-43-7"></a><span class="c1"># Rebuild initramfs again</span>
+<a id="__codelineno-43-8" name="__codelineno-43-8" href="#__codelineno-43-8"></a>sudo<span class="w"> </span>dracut<span class="w"> </span>-fv
+<a id="__codelineno-43-9" name="__codelineno-43-9" href="#__codelineno-43-9"></a>sudo<span class="w"> </span>reboot
+</code></pre></div>
+<h3 id="selinux-considerations">SELinux Considerations<a class="headerlink" href="#selinux-considerations" title="Permanent link">&para;</a></h3>
+<p>SELinux may interfere with NVIDIA driver loading. Check status:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a>getenforce
+</code></pre></div>
+<p>If experiencing issues, you can temporarily set to permissive mode for testing:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a>sudo<span class="w"> </span>setenforce<span class="w"> </span><span class="m">0</span>
+</code></pre></div>
+<p>To make it permanent (not recommended for production):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a>sudo<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s1">&#39;s/SELINUX=enforcing/SELINUX=permissive/&#39;</span><span class="w"> </span>/etc/selinux/config
+</code></pre></div>
+<p><strong>Note:</strong> It's better to create proper SELinux policies than disable it entirely.</p>
+<h3 id="rebuild-initramfs">Rebuild Initramfs<a class="headerlink" href="#rebuild-initramfs" title="Permanent link">&para;</a></h3>
+<p>If drivers are not loading at boot:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="c1"># Rebuild initramfs for current kernel</span>
+<a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a>sudo<span class="w"> </span>dracut<span class="w"> </span>-fv
+<a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a>
+<a id="__codelineno-47-4" name="__codelineno-47-4" href="#__codelineno-47-4"></a><span class="c1"># Or rebuild for specific kernel</span>
+<a id="__codelineno-47-5" name="__codelineno-47-5" href="#__codelineno-47-5"></a>sudo<span class="w"> </span>dracut<span class="w"> </span>-fv<span class="w"> </span>/boot/initramfs-<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span>.img<span class="w"> </span><span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span>
+</code></pre></div>
+<h3 id="driver-version-conflicts">Driver Version Conflicts<a class="headerlink" href="#driver-version-conflicts" title="Permanent link">&para;</a></h3>
+<p>If you need to switch driver versions:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="c1"># Remove current driver</span>
+<a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a>dnf<span class="w"> </span>remove<span class="w"> </span>nvidia-open-*
+<a id="__codelineno-48-3" name="__codelineno-48-3" href="#__codelineno-48-3"></a>
+<a id="__codelineno-48-4" name="__codelineno-48-4" href="#__codelineno-48-4"></a><span class="c1"># Clean cache</span>
+<a id="__codelineno-48-5" name="__codelineno-48-5" href="#__codelineno-48-5"></a>dnf<span class="w"> </span>clean<span class="w"> </span>all
+<a id="__codelineno-48-6" name="__codelineno-48-6" href="#__codelineno-48-6"></a>
+<a id="__codelineno-48-7" name="__codelineno-48-7" href="#__codelineno-48-7"></a><span class="c1"># Install different version</span>
+<a id="__codelineno-48-8" name="__codelineno-48-8" href="#__codelineno-48-8"></a>dnf<span class="w"> </span>install<span class="w"> </span>nvidia-open-&lt;version&gt;
+</code></pre></div>
+<hr />
+<h2 id="known-issues">Known Issues<a class="headerlink" href="#known-issues" title="Permanent link">&para;</a></h2>
+<h3 id="rhel-10-specific-issues">RHEL 10 Specific Issues<a class="headerlink" href="#rhel-10-specific-issues" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>GPG Key Bug</strong>: Fixed in RHBA-2025:21017 advisory (addressed in Step 1)</li>
+<li><strong>Kernel Updates</strong>: After kernel updates, you may need to rebuild initramfs:
+  <div class="highlight"><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a>sudo<span class="w"> </span>dracut<span class="w"> </span>-fv
+<a id="__codelineno-49-2" name="__codelineno-49-2" href="#__codelineno-49-2"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>reboot
+</code></pre></div></li>
+</ul>
+<h3 id="multi-gpu-considerations">Multi-GPU Considerations<a class="headerlink" href="#multi-gpu-considerations" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Power Requirements</strong>: Ensure adequate PSU capacity</li>
+<li>RTX 3090: ~350W per card</li>
+<li>RTX 5090: ~450W per card</li>
+<li>
+<p>Recommended: 1200W+ PSU for dual GPU setup</p>
+</li>
+<li>
+<p><strong>PCIe Bandwidth</strong>: Check motherboard specifications</p>
+</li>
+<li>Both GPUs should run at PCIe 4.0 x16 or x8 minimum</li>
+<li>
+<p>Some boards reduce lanes when multiple slots are populated</p>
+</li>
+<li>
+<p><strong>Cooling</strong>: Multi-GPU configurations generate significant heat</p>
+</li>
+<li>Ensure proper case ventilation</li>
+<li>Monitor temperatures with <code>nvidia-smi dmon</code></li>
+</ul>
+<h3 id="driver-updates">Driver Updates<a class="headerlink" href="#driver-updates" title="Permanent link">&para;</a></h3>
+<p>When updating NVIDIA drivers:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="c1"># Update driver</span>
+<a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a>dnf<span class="w"> </span>update<span class="w"> </span>nvidia-open-*
+<a id="__codelineno-50-3" name="__codelineno-50-3" href="#__codelineno-50-3"></a>
+<a id="__codelineno-50-4" name="__codelineno-50-4" href="#__codelineno-50-4"></a><span class="c1"># Rebuild initramfs</span>
+<a id="__codelineno-50-5" name="__codelineno-50-5" href="#__codelineno-50-5"></a>sudo<span class="w"> </span>dracut<span class="w"> </span>-fv
+<a id="__codelineno-50-6" name="__codelineno-50-6" href="#__codelineno-50-6"></a>
+<a id="__codelineno-50-7" name="__codelineno-50-7" href="#__codelineno-50-7"></a><span class="c1"># Reboot</span>
+<a id="__codelineno-50-8" name="__codelineno-50-8" href="#__codelineno-50-8"></a>sudo<span class="w"> </span>systemctl<span class="w"> </span>reboot
+</code></pre></div>
+<hr />
+<h2 id="alternative-rhel-101-simplified-installation-method">Alternative: RHEL 10.1+ Simplified Installation Method<a class="headerlink" href="#alternative-rhel-101-simplified-installation-method" title="Permanent link">&para;</a></h2>
+<p><strong>For RHEL 10.1 and later, Red Hat provides a much simpler installation method using <code>rhel-drivers</code>.</strong></p>
+<h3 id="prerequisites_1">Prerequisites<a class="headerlink" href="#prerequisites_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>RHEL 10.1 or later</li>
+<li>Active Red Hat subscription</li>
+<li>Compatible NVIDIA GPU (Turing architecture or newer for open drivers)</li>
+</ul>
+<h3 id="installation-steps_1">Installation Steps<a class="headerlink" href="#installation-steps_1" title="Permanent link">&para;</a></h3>
+<p><strong>1. Install the rhel-drivers package:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>rhel-drivers
+</code></pre></div>
+<p><strong>2. Install NVIDIA drivers with one command:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a>sudo<span class="w"> </span>rhel-drivers<span class="w"> </span>install<span class="w"> </span>nvidia
+<a id="__codelineno-52-2" name="__codelineno-52-2" href="#__codelineno-52-2"></a>sudo<span class="w"> </span>reboot
+</code></pre></div>
+<p><strong>3. Verify installation:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a>nvidia-smi
+</code></pre></div>
+<h3 id="advantages-of-this-method">Advantages of this Method<a class="headerlink" href="#advantages-of-this-method" title="Permanent link">&para;</a></h3>
+<ul>
+<li>✅ Drivers are built and signed by Red Hat</li>
+<li>✅ Works with Secure Boot enabled</li>
+<li>✅ Automatic dependency handling</li>
+<li>✅ No manual repository configuration needed</li>
+<li>✅ No EPEL required</li>
+<li>✅ Tested and validated driver/kernel combinations</li>
+<li>✅ Prevents kernel updates that break the driver</li>
+</ul>
+<h3 id="installing-specific-driver-versions">Installing Specific Driver Versions<a class="headerlink" href="#installing-specific-driver-versions" title="Permanent link">&para;</a></h3>
+<p>If you need a specific driver version instead of the latest:</p>
+<p><strong>Enable the supplementary repository:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>repos<span class="w"> </span>--enable<span class="o">=</span>rhel-10-for-x86_64-supplementary-rpms
+<a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a>sudo<span class="w"> </span>subscription-manager<span class="w"> </span>repos<span class="w"> </span>--enable<span class="o">=</span>rhel-10-for-x86_64-extensions-rpms
+</code></pre></div>
+<p><strong>Install specific version:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>kmod-nvidia-&lt;version&gt;<span class="w"> </span>nvidia-driver-&lt;version&gt;
+<a id="__codelineno-55-2" name="__codelineno-55-2" href="#__codelineno-55-2"></a>sudo<span class="w"> </span>reboot
+</code></pre></div>
+<h3 id="cuda-toolkit-installation-rhel-101">CUDA Toolkit Installation (RHEL 10.1+)<a class="headerlink" href="#cuda-toolkit-installation-rhel-101" title="Permanent link">&para;</a></h3>
+<p>After installing the driver with <code>rhel-drivers</code>, install CUDA Toolkit:</p>
+<p><strong>Enable EPEL for dependencies:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>https://dl.fedoraproject.org/pub/epel/epel-release-latest-10.noarch.rpm
+</code></pre></div>
+<p><strong>Download and install CUDA repository:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a>wget<span class="w"> </span>https://developer.download.nvidia.com/compute/cuda/13.1.1/local_installers/cuda-repo-rhel10-13-1-local-13.1.1_590.48.01-1.x86_64.rpm
+<a id="__codelineno-57-2" name="__codelineno-57-2" href="#__codelineno-57-2"></a>sudo<span class="w"> </span>rpm<span class="w"> </span>-i<span class="w"> </span>cuda-repo-rhel10-13-1-local-13.1.1_590.48.01-1.x86_64.rpm
+<a id="__codelineno-57-3" name="__codelineno-57-3" href="#__codelineno-57-3"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>clean<span class="w"> </span>all
+<a id="__codelineno-57-4" name="__codelineno-57-4" href="#__codelineno-57-4"></a>sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>cuda-toolkit-13-1
+</code></pre></div>
+<p><strong>Set environment variables:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export PATH=/usr/local/cuda-13.1/bin:$PATH&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
+<a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;export LD_LIBRARY_PATH=/usr/local/cuda-13.1/lib64:$LD_LIBRARY_PATH&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
+<a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a><span class="nb">source</span><span class="w"> </span>~/.bashrc
+</code></pre></div>
+<hr />
+<h2 id="additional-resources">Additional Resources<a class="headerlink" href="#additional-resources" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://docs.nvidia.com/cuda/cuda-installation-guide-linux/">NVIDIA Driver Documentation</a></li>
+<li><a href="https://github.com/NVIDIA/open-gpu-kernel-modules">NVIDIA Open GPU Kernel Modules</a></li>
+<li><a href="https://access.redhat.com/solutions/7090648">Red Hat GPG Key Issue Solution</a></li>
+<li><a href="https://www.redhat.com/en/blog/introducing-new-and-simplified-ai-accelerator-driver-experience-rhel">Red Hat AI Accelerator Driver Guide</a></li>
+<li><a href="https://developer.nvidia.com/blog/nvidia-open-gpu-datacenter-drivers-for-rhel9-signed-by-red-hat">NVIDIA Open GPU Drivers Signed by Red Hat</a></li>
+<li><a href="https://docs.nvidia.com/cuda/">CUDA Toolkit Documentation</a></li>
+<li><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/10/">RHEL 10 Release Notes</a></li>
+</ul>
+<h3 id="version-specific-downloads">Version-Specific Downloads<a class="headerlink" href="#version-specific-downloads" title="Permanent link">&para;</a></h3>
+<ul>
+<li><a href="https://www.nvidia.com/Download/index.aspx">NVIDIA Driver Downloads</a></li>
+<li><a href="https://developer.nvidia.com/cuda-toolkit-archive">CUDA Toolkit Archive</a></li>
+</ul>
+<hr />
+<h2 id="quick-reference-commands">Quick Reference Commands<a class="headerlink" href="#quick-reference-commands" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a><span class="c1"># Check driver status</span>
+<a id="__codelineno-59-2" name="__codelineno-59-2" href="#__codelineno-59-2"></a>nvidia-smi
+<a id="__codelineno-59-3" name="__codelineno-59-3" href="#__codelineno-59-3"></a>
+<a id="__codelineno-59-4" name="__codelineno-59-4" href="#__codelineno-59-4"></a><span class="c1"># Monitor GPU usage</span>
+<a id="__codelineno-59-5" name="__codelineno-59-5" href="#__codelineno-59-5"></a>watch<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>nvidia-smi
+<a id="__codelineno-59-6" name="__codelineno-59-6" href="#__codelineno-59-6"></a>
+<a id="__codelineno-59-7" name="__codelineno-59-7" href="#__codelineno-59-7"></a><span class="c1"># Check loaded modules</span>
+<a id="__codelineno-59-8" name="__codelineno-59-8" href="#__codelineno-59-8"></a>lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nvidia
+<a id="__codelineno-59-9" name="__codelineno-59-9" href="#__codelineno-59-9"></a>
+<a id="__codelineno-59-10" name="__codelineno-59-10" href="#__codelineno-59-10"></a><span class="c1"># View GPU details</span>
+<a id="__codelineno-59-11" name="__codelineno-59-11" href="#__codelineno-59-11"></a>nvidia-smi<span class="w"> </span>-q
+<a id="__codelineno-59-12" name="__codelineno-59-12" href="#__codelineno-59-12"></a>
+<a id="__codelineno-59-13" name="__codelineno-59-13" href="#__codelineno-59-13"></a><span class="c1"># Check CUDA version</span>
+<a id="__codelineno-59-14" name="__codelineno-59-14" href="#__codelineno-59-14"></a>nvcc<span class="w"> </span>--version
+<a id="__codelineno-59-15" name="__codelineno-59-15" href="#__codelineno-59-15"></a>
+<a id="__codelineno-59-16" name="__codelineno-59-16" href="#__codelineno-59-16"></a><span class="c1"># Monitor temperatures and power</span>
+<a id="__codelineno-59-17" name="__codelineno-59-17" href="#__codelineno-59-17"></a>nvidia-smi<span class="w"> </span>dmon
+<a id="__codelineno-59-18" name="__codelineno-59-18" href="#__codelineno-59-18"></a>
+<a id="__codelineno-59-19" name="__codelineno-59-19" href="#__codelineno-59-19"></a><span class="c1"># GPU topology (multi-GPU)</span>
+<a id="__codelineno-59-20" name="__codelineno-59-20" href="#__codelineno-59-20"></a>nvidia-smi<span class="w"> </span>topo<span class="w"> </span>-m
+</code></pre></div>
+<hr />
+<h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
+<p>This guide is provided as-is for educational and informational purposes. Written by Greg Blake.</p>
+<h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h2>
+<p>Contributions, corrections, and improvements are welcome. Please submit a pull request or open an issue.</p>
+<hr />
+<p><strong>Last Updated:</strong> February 2026<br />
+<strong>RHEL Version:</strong> 10<br />
+<strong>Driver Version:</strong> 590.48.01<br />
+<strong>CUDA Version:</strong> 13.1.1<br />
+<strong>Tested GPUs:</strong> RTX 3090, RTX 5090<br />
+<strong>Installation Method:</strong> NVIDIA Open Kernel Driver</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.indexes", "navigation.top", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
